@@ -34,8 +34,45 @@ class Random_Announcements_Plugin {
 
     public function register_settings() {
         //wordpress zapisuje sam bezpieczine
-        register_setting('random_announcements_group', $this->option_name);
+        register_setting('random_announcements_group', $this->option_name, array('sanitize_callback' => array($this, 'handle_upload')));
     }
+
+    public function handle_upload($input) {
+        if (!function_exists('wp_handle_upload')) {
+            require_once(ABSPATH . 'wp-admin/includes/file.php');
+        }
+
+        $file_input_name = 'audio-' . $this->option_name;
+
+        if (isset($_FILES[$file_input_name])) {
+            // tablica plikow wgranych z ogloszen w polu audio-...
+            $files = $_FILES[$file_input_name];
+
+            // nazwy plików od usera
+            foreach ($files['name'] as $key => $value) {
+                if (!empty($files['name'][$key]) && $files['error'][$key] === UPLOAD_ERR_OK) {
+                    $file = array(
+                        'name' => $files['name'][$key],
+                        'type' => $files['type'][$key],
+                        'tmp_name' => $files['tmp_name'][$key],
+                        'error' => $files['error'][$key],
+                        'size' => $files['size'][$key],
+                    );
+
+                    // mozna by sie pokusic o sprawdzanie mimow
+                    $upload_result = wp_handle_upload($file, array('test_form' => false));
+                    if ($upload_result && !isset($upload_result['error'])) {
+                        $audio_url = $upload_result['url'];
+                        $input[$key] .= "\n" . '[audio src="' . esc_url($audio_url) . '" loop = "on" autoplay = 1]';
+                    }
+                }
+            }
+
+        }
+
+        return $input;
+    }
+
 
     public function settings_page_html() {
         if (!current_user_can('manage_options')) {
@@ -51,9 +88,10 @@ class Random_Announcements_Plugin {
         ?>
         <div class="wrap">
             <h1>Panel Ogłoszeń</h1>
+            <?php settings_errors('random_announcements_group'); ?>
             <p>Skonfiguruj listę ogłoszeń zapisanych w kodzie HTML. Wtyczka automatycznie wylosuje jedno z nich i doda je przed treścią każdego wpisu (między tytułem a treścią).</p>
             
-            <form action="options.php" method="post">
+            <form action="options.php" method="post" enctype="multipart/form-data">
                 <?php
                 settings_fields('random_announcements_group');
                 ?>
@@ -61,7 +99,6 @@ class Random_Announcements_Plugin {
                 <div id="announcements-wrapper">
                     <?php
                     if (empty($announcements)) {
-                        
                         $this->render_textarea('');
                     } else {
                         foreach ($announcements as $announcement) {
@@ -92,8 +129,9 @@ class Random_Announcements_Plugin {
                 div.style.border = '1px solid #ccd0d4';
                 
                 
-                div.innerHTML = '<textarea name="<?php echo esc_js($this->option_name); ?>[]" rows="6" style="width:100%; font-family: monospace;" placeholder="Wprowadź kod HTML ogłoszenia..."></textarea><br>' + 
-                                '<button type="button" class="button remove-announcement" style="margin-top: 10px; color: #b32d2e; border-color: #b32d2e;">Usuń ogłoszenie</button>';
+                div.innerHTML = '<textarea name="<?php echo esc_js($this->option_name); ?>[]" rows="6" style="width:100%; font-family: monospace;" placeholder="Wprowadź kod HTML ogłoszenia..."></textarea><br>' +
+                                '<button type="button" class="button remove-announcement" style="margin-top: 10px; color: #b32d2e; border-color: #b32d2e;">Usuń ogłoszenie</button>' +
+                                '<br>wgraj plik audio:<br><input type="file" name="audio-<?php echo esc_js($this->option_name); ?>[]", accept="audio/*"/>';
                 wrapper.appendChild(div);
             });
 
