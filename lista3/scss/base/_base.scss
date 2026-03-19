@@ -1,0 +1,56 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-main;
+  background-color: $background-color;
+  color: $text-color;
+  line-height: 1.6;
+}
+
+.hero {
+  @include flex-center;
+  flex-direction: column;
+  background: linear-gradient(135deg, $primary-color, $secondary-color, $accent-color);
+  padding: ($spacing-unit * 5) ($spacing-unit * 2);
+  text-align: center;
+  border-bottom-left-radius: 50% 10%;
+  border-bottom-right-radius: 50% 10%;
+  margin-bottom: ($spacing-unit * 4);
+}
+
+.title {
+  font-size: ($base-font-size * 3) + 10px;
+  font-weight: $font-weight-heavy;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: $spacing-unit;
+}
+
+.subtitle {
+  font-size: $base-font-size * 1.25;
+  font-weight: $font-weight-bold;
+  color: #fff;
+  opacity: 0.9;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 ($spacing-unit * 2);
+}
+
+.footer {
+  text-align: center;
+  padding: ($spacing-unit * 3);
+  margin-top: ($spacing-unit * 4);
+  font-weight: $font-weight-bold;
+  color: $text-color;
+  background-color: $secondary-color;
+}
