@@ -33,7 +33,6 @@ class Random_Announcements_Plugin {
     }
 
     public function register_settings() {
-        //wordpress zapisuje sam bezpieczine
         register_setting('random_announcements_group', $this->option_name, array('sanitize_callback' => array($this, 'handle_upload')));
     }
 
@@ -59,7 +58,6 @@ class Random_Announcements_Plugin {
                         'size' => $files['size'][$key],
                     );
 
-                    // mozna by sie pokusic o sprawdzanie mimow
                     $upload_result = wp_handle_upload($file, array('test_form' => false));
                     if ($upload_result && !isset($upload_result['error'])) {
                         $audio_url = $upload_result['url'];
@@ -155,7 +153,7 @@ class Random_Announcements_Plugin {
     }
 
     public function prepend_announcement($content) {
-        if (is_single() && is_main_query() && get_post_type() === 'post') {
+        if (is_single() ) { //&& is_main_query() && get_post_type() === 'post'
             
             $announcements = get_option($this->option_name, array());
             $announcements = array_filter($announcements, function($val) {
