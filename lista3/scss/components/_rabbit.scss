@@ -1,0 +1,121 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.rabbit-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -100px;
+  position: relative;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.rabbit {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  animation: peek-up 4s infinite ease-in-out;
+  transform: translateY(100%);
+
+
+  &-head {
+    width: 100px;
+    height: 100px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 0;
+    left: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+
+    .rabbit-eye-l,
+    .rabbit-eye-r {
+      width: 8px;
+      height: 8px;
+      background-color: #333;
+      border-radius: 50%;
+      position: absolute;
+      top: 35px;
+    }
+
+    .rabbit-eye-l {
+      left: 25px;
+    }
+
+    .rabbit-eye-r {
+      right: 25px;
+    }
+
+    .rabbit-nose {
+      width: 12px;
+      height: 8px;
+      background-color: #ff99aa;
+      border-radius: 50%;
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+
+      &::after {
+        content: '';
+        width: 16px;
+        height: 8px;
+        border-bottom: 1.5px solid #eee;
+        border-radius: 50%;
+        position: absolute;
+        top: 2px;
+        left: -2px;
+      }
+    }
+  }
+
+  &-ear-l,
+  &-ear-r {
+    width: 30px;
+    height: 80px;
+    background-color: white;
+    border-radius: 50% 50% 0 0;
+    position: absolute;
+    top: -40px;
+    z-index: 1;
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 15px;
+      height: 60px;
+      background-color: #ff99aa;
+      border-radius: 50% 50% 0 0;
+      top: 10px;
+      left: 7.5px;
+      opacity: 0.5;
+    }
+  }
+
+  &-ear-l {
+    left: 20px;
+    transform: rotate(-15deg);
+  }
+
+  &-ear-r {
+    right: 20px;
+    transform: rotate(15deg);
+  }
+}
+
+@keyframes peek-up {
+
+  0%,
+  15%,
+  85%,
+  100% {
+    transform: translateY(100%);
+  }
+
+  35%,
+  65% {
+    transform: translateY(20px);
+  }
+}
