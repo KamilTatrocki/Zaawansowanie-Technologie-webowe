@@ -1,0 +1,17 @@
+{
+  "name": "lista4",
+  "version": "1.0.0",
+  "description": "ZTW lista 4",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "http-server -c-1"
+  },
+  "author": "Kamil Tatrocki & Jacek Jeczeń",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^5.3.8",
+    "http-server": "^14.1.1",
+    "mdb-ui-kit": "^9.3.0"
+  }
+}
