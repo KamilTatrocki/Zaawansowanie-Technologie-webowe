@@ -10,7 +10,7 @@ function HomeBody() {
         <div className="col-lg-6">
         <SectionDivider text={"Nazwa firmy - O nas"}/>
         <section>
-            <p>
+            <p className="scroll-animate scroll-fade-left">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque massa odio, commodo quis pretium ac,
             ultricies ut risus. Nam tincidunt massa laoreet dolor mattis, ut finibus augue sollicitudin. Aliquam eget tellus at metus
             rutrum pharetra vitae a erat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam tellus lorem, tincidunt vel tellus et,
@@ -18,13 +18,13 @@ function HomeBody() {
             Integer pulvinar eget libero nec condimentum. Vivamus placerat aliquam turpis nec tincidunt. Vivamus tincidunt, sem eu imperdiet bibendum,
                 magna ligula finibus neque, nec feugiat nisl nibh non enim.
             </p>
-            <p>
+            <p className="scroll-animate scroll-fade-right delay-200">
             Suspendisse potenti. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Aliquam eu urna sodales,
             venenatis ligula eget, fringilla velit. Sed posuere lacus eu erat interdum, sed blandit ante sollicitudin. Sed non magna vel nulla
             </p>
         </section>
         <SectionDivider text={"Poznaj nasz team"}/>
-          <section>
+          <section className="scroll-animate scroll-zoom-in delay-100">
             <Carousel>
                 <Card image={"https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp"} header={"CEO"} body={"JACEK JECZEŃ"}></Card>
                 <Card image={"https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp"} header={"SEO"} body={"KAMIL TATROCKI - almost ceo "}></Card>
@@ -32,7 +32,7 @@ function HomeBody() {
             </Carousel>
           </section>
           <SectionDivider text="FAQ"/>
-            <section>
+            <section className="scroll-animate scroll-fade-up delay-100">
               <Faq/>
             </section>
         </div>
