@@ -26,9 +26,9 @@ function HomeBody() {
         <SectionDivider text={"Poznaj nasz team"}/>
           <section>
             <Carousel>
-                <Card image={"https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp"} header={"Test image 1"} body={"Description for test image 1"}></Card>
-                <Card image={"https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp"} header={"Test image 2"} body={"Description for test image 2"}></Card>
-                <Card image={"https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp"} header={"Test image 3"} body={"Description for test image 3"}></Card>
+                <Card image={"https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp"} header={"CEO"} body={"JACEK JECZEŃ"}></Card>
+                <Card image={"https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp"} header={"SEO"} body={"KAMIL TATROCKI - almost ceo "}></Card>
+                <Card image={"https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp"} header={"BOSS"} body={"We dont have :/"}></Card>
             </Carousel>
           </section>
           <SectionDivider text="FAQ"/>

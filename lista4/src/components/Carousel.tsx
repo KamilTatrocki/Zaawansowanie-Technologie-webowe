@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import {type ReactNode, useState } from 'react';
 
 import { Carousel as Car, initMDB } from "mdb-ui-kit/js/mdb.es.min.js";
 import { useEffect } from 'react';
