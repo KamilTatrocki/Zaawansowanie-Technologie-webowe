@@ -23,6 +23,7 @@ ChartJS.register(
 const PopularDestinationsChart: React.FC = () => {
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'top' as const,
@@ -50,7 +51,9 @@ const PopularDestinationsChart: React.FC = () => {
   return (
     <div className="container mt-5">
       <div className="card shadow-4-strong rounded-5 p-4">
-        <Bar options={options} data={data} />
+        <div style={{ position: 'relative', width: '100%', height: '400px' }}>
+          <Bar options={options} data={data} />
+        </div>
       </div>
     </div>
   );
