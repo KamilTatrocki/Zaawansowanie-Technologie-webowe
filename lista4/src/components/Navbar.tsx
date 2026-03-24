@@ -1,7 +1,7 @@
 
 function Navbar() {
     return (
-        <nav className="navbar navbar-expand-lg bg-body-tertiary">
+        <nav className="navbar navbar-expand-lg bg-body-tertiary animate-on-load delay-100">
             <div className="container-fluid">
                 <button
                 data-mdb-collapse-init

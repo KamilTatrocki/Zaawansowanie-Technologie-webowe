@@ -10,7 +10,7 @@ function ContactBody() {
         <div className="col-lg-6">
 
         <SectionDivider text={"Napisz do nas maila!"}/>
-        <section>
+        <section className="scroll-animate scroll-fade-right delay-100">
           <div className="d-flex justify-content-center">
             <form id="contact-form"> {/*action="mail.php" method="POST"*/}
             <div data-mdb-input-init className="form-outline mb-4">
@@ -41,7 +41,7 @@ function ContactBody() {
         </section>
 
         <SectionDivider text={"Lub znajdź nas tutaj"} />
-          <section>
+          <section className="scroll-animate scroll-fade-left delay-200">
             <Map/>
           </section>
         </div>

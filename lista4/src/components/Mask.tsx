@@ -10,7 +10,7 @@ function Mask() {
             />
         <div className="mask" style={{ backgroundColor: `hsla(0, 0%, 0%, 0.6)` }}>
             <div className="d-flex justify-content-center align-items-center h-100">
-                <figure className="text-center">
+                <figure className="text-center animate-on-load delay-200">
                 <blockquote className="blockquote text-white">
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
                 </blockquote>

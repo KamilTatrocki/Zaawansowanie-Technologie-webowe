@@ -1,0 +1,67 @@
+.scroll-animate {
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.scroll-fade-up {
+  transform: translateY(40px);
+}
+
+.scroll-fade-down {
+  transform: translateY(-40px);
+}
+
+.scroll-fade-left {
+  transform: translateX(-40px);
+}
+
+.scroll-fade-right {
+  transform: translateX(40px);
+}
+
+.scroll-zoom-in {
+  transform: scale(0.9);
+}
+
+.scroll-animate.is-visible {
+  opacity: 1;
+  transform: translateY(0) translateX(0) scale(1);
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-on-load {
+  opacity: 0;
+  animation: fadeInDown 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+
+.delay-100 {
+  transition-delay: 0.1s;
+  animation-delay: 0.1s;
+}
+
+.delay-200 {
+  transition-delay: 0.2s;
+  animation-delay: 0.2s;
+}
+
+.delay-300 {
+  transition-delay: 0.3s;
+  animation-delay: 0.3s;
+}
+
+.delay-400 {
+  transition-delay: 0.4s;
+  animation-delay: 0.4s;
+}
