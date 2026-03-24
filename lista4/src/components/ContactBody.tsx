@@ -14,22 +14,22 @@ function ContactBody() {
           <div className="d-flex justify-content-center">
             <form id="contact-form"> {/*action="mail.php" method="POST"*/}
             <div data-mdb-input-init className="form-outline mb-4">
-                <input type="text" id="name" name="name" className="form-control" />
+                <input type="text" id="name" name="name" className="form-control border border-secondary" />
                 <label className="form-label" htmlFor="name">Name</label>
             </div>
 
             <div data-mdb-input-init className="form-outline mb-4">
-                <input type="email" id="email" name="email" className="form-control" />
+                <input type="email" id="email" name="email" className="form-control border border-secondary" />
                 <label className="form-label" htmlFor="email">Email address</label>
             </div>
 
             <div data-mdb-input-init className="form-outline mb-4">
-                <input type="text" id="subject" name="subject" className="form-control" />
+                <input type="text" id="subject" name="subject" className="form-control border border-secondary" />
                 <label className="form-label" htmlFor="subject">Subject</label>
             </div>
 
             <div data-mdb-input-init className="form-outline mb-4">
-              <textarea className="form-control" id="message" name="message" rows={4}></textarea>
+              <textarea className="form-control border border-secondary" id="message" name="message" rows={4}></textarea>
                 <label className="form-label" htmlFor="message">Message</label>
             </div>
 
