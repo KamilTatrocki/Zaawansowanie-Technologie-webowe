@@ -1,0 +1,14 @@
+.DS_Store
+.idea
+*.log
+tmp/
+
+lista4/*.tern-port
+lista4/node_modules/
+lista4/npm-debug.log*
+lista4/yarn-debug.log*
+lista4/yarn-error.log*
+lista4/*.tsbuildinfo
+lista4/.npm
+lista4/.eslintcache
+lista4/node_modules
