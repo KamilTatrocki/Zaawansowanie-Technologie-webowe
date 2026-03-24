@@ -1,4 +1,4 @@
-import logo_image from '../assets/office.jpeg'
+import logo_image from '../assets/office.jpg'
 
 function Mask() {
     return (
