@@ -1,12 +1,15 @@
 package org.example.library.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.library.dto.RentalDto;
+import org.example.library.dto.DtoMapper;
 import org.example.library.model.Rental;
 import org.example.library.service.RentalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/rentals")
@@ -16,23 +19,25 @@ public class RentalController {
     private final RentalService rentalService;
 
     @GetMapping
-    public List<Rental> getAllRentals() {
-        return rentalService.findAll();
+    public List<RentalDto> getAllRentals() {
+        return rentalService.findAll().stream()
+                .map(DtoMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Rental> getRentalById(@PathVariable Long id) {
-        return ResponseEntity.ok(rentalService.findById(id));
+    public ResponseEntity<RentalDto> getRentalById(@PathVariable Long id) {
+        return ResponseEntity.ok(DtoMapper.toDto(rentalService.findById(id)));
     }
 
     @PostMapping
-    public Rental createRental(@RequestBody Rental rental) {
-        return rentalService.save(rental);
+    public RentalDto createRental(@RequestBody Rental rental) {
+        return DtoMapper.toDto(rentalService.save(rental));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Rental> updateRental(@PathVariable Long id, @RequestBody Rental rentalDetails) {
-        return ResponseEntity.ok(rentalService.update(id, rentalDetails));
+    public ResponseEntity<RentalDto> updateRental(@PathVariable Long id, @RequestBody Rental rentalDetails) {
+        return ResponseEntity.ok(DtoMapper.toDto(rentalService.update(id, rentalDetails)));
     }
 
     @DeleteMapping("/{id}")
@@ -42,12 +47,12 @@ public class RentalController {
     }
     
     @PostMapping("/rent")
-    public ResponseEntity<Rental> rentBook(@RequestParam Long bookId, @RequestParam Long userId) {
-        return ResponseEntity.ok(rentalService.rentBook(bookId, userId));
+    public ResponseEntity<RentalDto> rentBook(@RequestParam Long bookId, @RequestParam Long userId) {
+        return ResponseEntity.ok(DtoMapper.toDto(rentalService.rentBook(bookId, userId)));
     }
     
     @PostMapping("/{id}/return")
-    public ResponseEntity<Rental> returnBook(@PathVariable Long id) {
-        return ResponseEntity.ok(rentalService.returnBook(id));
+    public ResponseEntity<RentalDto> returnBook(@PathVariable Long id) {
+        return ResponseEntity.ok(DtoMapper.toDto(rentalService.returnBook(id)));
     }
 }

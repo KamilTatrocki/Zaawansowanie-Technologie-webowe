@@ -1,12 +1,15 @@
 package org.example.library.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.library.dto.BookCopyDto;
+import org.example.library.dto.DtoMapper;
 import org.example.library.model.BookCopy;
 import org.example.library.service.BookCopyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/book-copies")
@@ -16,23 +19,25 @@ public class BookCopyController {
     private final BookCopyService bookCopyService;
 
     @GetMapping
-    public List<BookCopy> getAllBookCopies() {
-        return bookCopyService.findAll();
+    public List<BookCopyDto> getAllBookCopies() {
+        return bookCopyService.findAll().stream()
+                .map(DtoMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookCopy> getBookCopyById(@PathVariable Long id) {
-        return ResponseEntity.ok(bookCopyService.findById(id));
+    public ResponseEntity<BookCopyDto> getBookCopyById(@PathVariable Long id) {
+        return ResponseEntity.ok(DtoMapper.toDto(bookCopyService.findById(id)));
     }
 
     @PostMapping
-    public BookCopy createBookCopy(@RequestBody BookCopy bookCopy) {
-        return bookCopyService.save(bookCopy);
+    public BookCopyDto createBookCopy(@RequestBody BookCopy bookCopy) {
+        return DtoMapper.toDto(bookCopyService.save(bookCopy));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookCopy> updateBookCopy(@PathVariable Long id, @RequestBody BookCopy bookCopyDetails) {
-        return ResponseEntity.ok(bookCopyService.update(id, bookCopyDetails));
+    public ResponseEntity<BookCopyDto> updateBookCopy(@PathVariable Long id, @RequestBody BookCopy bookCopyDetails) {
+        return ResponseEntity.ok(DtoMapper.toDto(bookCopyService.update(id, bookCopyDetails)));
     }
 
     @DeleteMapping("/{id}")

@@ -1,12 +1,15 @@
 package org.example.library.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.library.dto.AuthorDto;
+import org.example.library.dto.DtoMapper;
 import org.example.library.model.Author;
 import org.example.library.service.AuthorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/authors")
@@ -16,23 +19,25 @@ public class AuthorController {
     private final AuthorService authorService;
 
     @GetMapping
-    public List<Author> getAllAuthors() {
-        return authorService.findAll();
+    public List<AuthorDto> getAllAuthors() {
+        return authorService.findAll().stream()
+                .map(DtoMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Author> getAuthorById(@PathVariable Long id) {
-        return ResponseEntity.ok(authorService.findById(id));
+    public ResponseEntity<AuthorDto> getAuthorById(@PathVariable Long id) {
+        return ResponseEntity.ok(DtoMapper.toDto(authorService.findById(id)));
     }
 
     @PostMapping
-    public Author createAuthor(@RequestBody Author author) {
-        return authorService.save(author);
+    public AuthorDto createAuthor(@RequestBody Author author) {
+        return DtoMapper.toDto(authorService.save(author));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Author> updateAuthor(@PathVariable Long id, @RequestBody Author authorDetails) {
-        return ResponseEntity.ok(authorService.update(id, authorDetails));
+    public ResponseEntity<AuthorDto> updateAuthor(@PathVariable Long id, @RequestBody Author authorDetails) {
+        return ResponseEntity.ok(DtoMapper.toDto(authorService.update(id, authorDetails)));
     }
 
     @DeleteMapping("/{id}")
