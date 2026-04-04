@@ -1,4 +1,4 @@
-package org.example.library;
+package org.example.library.config;
 
 import org.example.library.model.*;
 import org.example.library.repository.*;
