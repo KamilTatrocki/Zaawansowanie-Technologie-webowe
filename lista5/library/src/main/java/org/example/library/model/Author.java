@@ -2,7 +2,7 @@ package org.example.library.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +24,7 @@ public class Author {
     @Column(nullable = false)
     private String lastName;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Book> books = new ArrayList<>();
 

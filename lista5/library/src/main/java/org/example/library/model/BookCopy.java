@@ -2,7 +2,7 @@ package org.example.library.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -24,6 +24,7 @@ public class BookCopy {
 
     private boolean isAvailable = true;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "bookCopy")
     private List<Rental> rentals;
 }

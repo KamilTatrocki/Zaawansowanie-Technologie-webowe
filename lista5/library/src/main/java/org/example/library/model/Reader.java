@@ -1,4 +1,5 @@
 package org.example.library.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +23,7 @@ public class Reader {
     @Column(nullable = false)
     private String lastName;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "reader", cascade = CascadeType.ALL)
     private List<Rental> rentals = new ArrayList<>();
 

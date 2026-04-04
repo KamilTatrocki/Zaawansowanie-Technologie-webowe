@@ -3,7 +3,7 @@ package org.example.library.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +29,7 @@ public class Book {
     @Column(nullable = false)
     private int pages;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookCopy> copies;
 
