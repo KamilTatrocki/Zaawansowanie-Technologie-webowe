@@ -1,22 +1,9 @@
 services:
-  db:
-    image: postgres
-    restart: always
+  postgres:
+    image: 'postgres:latest'
     environment:
-      POSTGRES_USER: ztw_l5
-      POSTGRES_PASSWORD: ztw_l5
-      POSTGRES_DB: app_db
-    volumes:
-          - ../db-data:/var/lib/postgresql
+      - 'POSTGRES_DB=library_db'
+      - 'POSTGRES_PASSWORD=password'
+      - 'POSTGRES_USER=user'
     ports:
-      - 5433:5432
-  # jakbyśmy chcieli ukryć hasło, to można je wgrać z pliku
-  # przykład: https://github.com/docker/awesome-compose/blob/master/nginx-golang-postgres/compose.yaml
-
-  # To jest do monitorowania bazy, cos jak php my admin.
-  # Było w przykładzie  dla compose postgresa
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8079:8080
+      - '5432:5432'
