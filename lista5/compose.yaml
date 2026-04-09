@@ -1,0 +1,25 @@
+
+# Use postgres/example user/password credentials
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER: ztw_l5
+      - POSTGRES_PASSWORD: ztw_l5
+      - POSTGRES_DB: app_db
+    volumes:
+          - db-data:/var/lib/postgresql/data
+
+  # jakbyśmy chcieli ukryć hasło, to można je wgrać z pliku
+  # przykład: https://github.com/docker/awesome-compose/blob/master/nginx-golang-postgres/compose.yaml
+
+  # To jest do monitorowania bazy, cos jak php my admin.
+  # Było w przykładzie  dla compose postgresa
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8079:8080
