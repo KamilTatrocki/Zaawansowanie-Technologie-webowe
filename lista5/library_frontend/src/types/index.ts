@@ -21,7 +21,21 @@ export interface Reader {
 export interface BookCopy {
     id: number
     bookTitle: string
-    isAvailable: boolean
+    available: boolean
+}
+
+export interface BookCopyCreatePayload {
+    book: {
+        id: number
+        title: string
+        author: {
+            id: number
+            firstName: string
+            lastName: string
+        }
+        pages: number
+    }
+    available: boolean
 }
 
 export interface Rental {
