@@ -2,9 +2,14 @@ package org.example.library.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.library.dto.RentalDto;
+import org.example.library.dto.RentalCreateDto;
 import org.example.library.dto.DtoMapper;
 import org.example.library.model.Rental;
+import org.example.library.model.BookCopy;
+import org.example.library.model.Reader;
 import org.example.library.service.RentalService;
+import org.example.library.service.BookCopyService;
+import org.example.library.service.ReaderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +22,8 @@ import java.util.stream.Collectors;
 public class RentalController {
 
     private final RentalService rentalService;
+    private final BookCopyService bookCopyService;
+    private final ReaderService readerService;
 
     @GetMapping
     public List<RentalDto> getAllRentals() {
@@ -31,12 +38,30 @@ public class RentalController {
     }
 
     @PostMapping
-    public RentalDto createRental(@RequestBody Rental rental) {
+    public RentalDto createRental(@RequestBody RentalCreateDto rentalDto) {
+        BookCopy bookCopy = bookCopyService.findById(rentalDto.getBookCopyId());
+        Reader reader = readerService.findById(rentalDto.getReaderId());
+        Rental rental = Rental.builder()
+                .bookCopy(bookCopy)
+                .reader(reader)
+                .rentalDate(rentalDto.getRentalDate())
+                .returnDate(rentalDto.getReturnDate())
+                .returned(rentalDto.getReturned() != null ? rentalDto.getReturned() : false)
+                .build();
         return DtoMapper.toDto(rentalService.save(rental));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RentalDto> updateRental(@PathVariable Long id, @RequestBody Rental rentalDetails) {
+    public ResponseEntity<RentalDto> updateRental(@PathVariable Long id, @RequestBody RentalCreateDto rentalDto) {
+        BookCopy bookCopy = bookCopyService.findById(rentalDto.getBookCopyId());
+        Reader reader = readerService.findById(rentalDto.getReaderId());
+        Rental rentalDetails = Rental.builder()
+                .bookCopy(bookCopy)
+                .reader(reader)
+                .rentalDate(rentalDto.getRentalDate())
+                .returnDate(rentalDto.getReturnDate())
+                .returned(rentalDto.getReturned() != null ? rentalDto.getReturned() : false)
+                .build();
         return ResponseEntity.ok(DtoMapper.toDto(rentalService.update(id, rentalDetails)));
     }
 

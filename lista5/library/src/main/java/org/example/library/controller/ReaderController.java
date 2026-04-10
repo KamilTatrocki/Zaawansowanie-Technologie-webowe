@@ -2,6 +2,7 @@ package org.example.library.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.library.dto.ReaderDto;
+import org.example.library.dto.ReaderCreateDto;
 import org.example.library.dto.DtoMapper;
 import org.example.library.model.Reader;
 import org.example.library.service.ReaderService;
@@ -31,12 +32,20 @@ public class ReaderController {
     }
 
     @PostMapping
-    public ReaderDto createReader(@RequestBody Reader reader) {
+    public ReaderDto createReader(@RequestBody ReaderCreateDto readerDto) {
+        Reader reader = Reader.builder()
+                .firstName(readerDto.getFirstName())
+                .lastName(readerDto.getLastName())
+                .build();
         return DtoMapper.toDto(readerService.save(reader));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReaderDto> updateReader(@PathVariable Long id, @RequestBody Reader readerDetails) {
+    public ResponseEntity<ReaderDto> updateReader(@PathVariable Long id, @RequestBody ReaderCreateDto readerDto) {
+        Reader readerDetails = Reader.builder()
+                .firstName(readerDto.getFirstName())
+                .lastName(readerDto.getLastName())
+                .build();
         return ResponseEntity.ok(DtoMapper.toDto(readerService.update(id, readerDetails)));
     }
 
