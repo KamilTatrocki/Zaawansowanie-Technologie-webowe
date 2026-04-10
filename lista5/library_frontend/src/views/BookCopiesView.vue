@@ -7,12 +7,12 @@ import * as bookCopiesApi from '@/api/bookCopies'
 const copies = ref<BookCopy[]>([])
 const showForm = ref(false)
 const editingId = ref<number | null>(null)
-const form = ref({ bookTitle: '', isAvailable: true })
+const form = ref({ bookTitle: '', available: true })
 
 const columns = [
   { key: 'id', label: 'ID' },
   { key: 'bookTitle', label: 'Book Title' },
-  { key: 'isAvailable', label: 'Available' },
+  { key: 'available', label: 'Available' },
 ]
 
 onMounted(loadCopies)
@@ -23,13 +23,13 @@ async function loadCopies() {
 
 function openCreate() {
   editingId.value = null
-  form.value = { bookTitle: '', isAvailable: true }
+  form.value = { bookTitle: '', available: true }
   showForm.value = true
 }
 
 function openEdit(row: Record<string, any>) {
   editingId.value = row.id
-  form.value = { bookTitle: row.bookTitle, isAvailable: row.isAvailable }
+  form.value = { bookTitle: row.bookTitle, available: row.available }
   showForm.value = true
 }
 
@@ -65,7 +65,7 @@ async function handleDelete(row: Record<string, any>) {
           <input v-model="form.bookTitle" required />
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" v-model="form.isAvailable" />
+          <input type="checkbox" v-model="form.available" />
           Available
         </label>
         <div class="form-actions">
