@@ -18,8 +18,8 @@ public class DataSeeder implements CommandLineRunner {
     private final RentalRepository rentalRepository;
 
     public DataSeeder(AuthorRepository authorRepository, BookRepository bookRepository,
-                      BookCopyRepository bookCopyRepository, ReaderRepository readerRepository,
-                      RentalRepository rentalRepository) {
+            BookCopyRepository bookCopyRepository, ReaderRepository readerRepository,
+            RentalRepository rentalRepository) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
         this.bookCopyRepository = bookCopyRepository;
@@ -52,11 +52,11 @@ public class DataSeeder implements CommandLineRunner {
         bookRepository.saveAll(List.of(b1, b2, b3, b4, b5));
 
         // Book Copies
-        BookCopy c1 = BookCopy.builder().book(b1).isAvailable(true).build();
-        BookCopy c2 = BookCopy.builder().book(b1).isAvailable(false).build();
-        BookCopy c3 = BookCopy.builder().book(b2).isAvailable(true).build();
-        BookCopy c4 = BookCopy.builder().book(b3).isAvailable(false).build();
-        BookCopy c5 = BookCopy.builder().book(b4).isAvailable(true).build();
+        BookCopy c1 = BookCopy.builder().book(b1).available(true).build();
+        BookCopy c2 = BookCopy.builder().book(b1).available(false).build();
+        BookCopy c3 = BookCopy.builder().book(b2).available(true).build();
+        BookCopy c4 = BookCopy.builder().book(b3).available(false).build();
+        BookCopy c5 = BookCopy.builder().book(b4).available(true).build();
         bookCopyRepository.saveAll(List.of(c1, c2, c3, c4, c5));
 
         // Readers
@@ -68,11 +68,16 @@ public class DataSeeder implements CommandLineRunner {
         readerRepository.saveAll(List.of(r1, r2, r3, r4, r5));
 
         // Rentals
-        Rental rnt1 = Rental.builder().bookCopy(c2).reader(r1).rentalDate(LocalDateTime.now().minusDays(10)).returned(false).build();
-        Rental rnt2 = Rental.builder().bookCopy(c4).reader(r2).rentalDate(LocalDateTime.now().minusDays(5)).returned(false).build();
-        Rental rnt3 = Rental.builder().bookCopy(c1).reader(r3).rentalDate(LocalDateTime.now().minusDays(20)).returnDate(LocalDateTime.now().minusDays(2)).returned(true).build();
-        Rental rnt4 = Rental.builder().bookCopy(c3).reader(r4).rentalDate(LocalDateTime.now().minusDays(15)).returnDate(LocalDateTime.now().minusDays(1)).returned(true).build();
-        Rental rnt5 = Rental.builder().bookCopy(c5).reader(r5).rentalDate(LocalDateTime.now().minusDays(30)).returnDate(LocalDateTime.now().minusDays(10)).returned(true).build();
+        Rental rnt1 = Rental.builder().bookCopy(c2).reader(r1).rentalDate(LocalDateTime.now().minusDays(10))
+                .returned(false).build();
+        Rental rnt2 = Rental.builder().bookCopy(c4).reader(r2).rentalDate(LocalDateTime.now().minusDays(5))
+                .returned(false).build();
+        Rental rnt3 = Rental.builder().bookCopy(c1).reader(r3).rentalDate(LocalDateTime.now().minusDays(20))
+                .returnDate(LocalDateTime.now().minusDays(2)).returned(true).build();
+        Rental rnt4 = Rental.builder().bookCopy(c3).reader(r4).rentalDate(LocalDateTime.now().minusDays(15))
+                .returnDate(LocalDateTime.now().minusDays(1)).returned(true).build();
+        Rental rnt5 = Rental.builder().bookCopy(c5).reader(r5).rentalDate(LocalDateTime.now().minusDays(30))
+                .returnDate(LocalDateTime.now().minusDays(10)).returned(true).build();
         rentalRepository.saveAll(List.of(rnt1, rnt2, rnt3, rnt4, rnt5));
     }
 }
