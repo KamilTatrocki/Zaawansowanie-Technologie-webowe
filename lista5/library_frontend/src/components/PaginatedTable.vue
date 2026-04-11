@@ -11,6 +11,7 @@ const props = withDefaults(
 )
 
 defineEmits<{
+  (e: 'view', row: Record<string, any>): void
   (e: 'edit', row: Record<string, any>): void
   (e: 'delete', row: Record<string, any>): void
 }>()
@@ -49,6 +50,7 @@ function nextPage() {
         <tr v-for="row in paginatedRows" :key="row.id">
           <td v-for="col in columns" :key="col.key">{{ row[col.key] }}</td>
           <td class="actions">
+            <button class="btn btn-view" @click="$emit('view', row)">View</button>
             <button class="btn btn-edit" @click="$emit('edit', row)">Edit</button>
             <button class="btn btn-delete" @click="$emit('delete', row)">Delete</button>
           </td>
@@ -107,6 +109,15 @@ tr:hover {
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.85rem;
+}
+
+.btn-view {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.btn-view:hover {
+  background-color: #2980b9;
 }
 
 .btn-edit {

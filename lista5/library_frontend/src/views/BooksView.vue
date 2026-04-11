@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import type { Book, Author } from '@/types'
 import * as booksApi from '@/api/books'
@@ -7,6 +8,7 @@ import * as authorsApi from '@/api/authors'
 import SearchSelect from '@/components/SearchSelect.vue'
 
 const books = ref<Book[]>([])
+const router = useRouter()
 const authors = ref<Author[]>([])
 const showForm = ref(false)
 const editingId = ref<number | null>(null)
@@ -31,6 +33,10 @@ async function loadBooks() {
 
 async function loadAuthors() {
   authors.value = await authorsApi.getAll()
+}
+
+function goToDetail(row: Record<string, any>) {
+  router.push(`/books/${row.id}`)
 }
 
 const authorOptions = computed(() => 
@@ -119,6 +125,7 @@ async function handleDelete(row: Record<string, any>) {
     <PaginatedTable
       :columns="columns"
       :rows="books"
+      @view="goToDetail"
       @edit="openEdit"
       @delete="handleDelete"
     />

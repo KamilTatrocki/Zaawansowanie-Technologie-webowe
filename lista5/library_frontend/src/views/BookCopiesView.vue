@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import type { BookCopy } from '@/types'
 import * as bookCopiesApi from '@/api/bookCopies'
@@ -7,6 +8,7 @@ import * as booksApi from '@/api/books'
 import SearchSelect from '@/components/SearchSelect.vue'
 import type { Book } from '@/types'
 
+const router = useRouter()
 const copies = ref<BookCopy[]>([])
 const books = ref<Book[]>([])
 const showForm = ref(false)
@@ -30,6 +32,10 @@ async function loadCopies() {
 
 async function loadBooks() {
   books.value = await booksApi.getAll()
+}
+
+function goToDetail(row: Record<string, any>) {
+  router.push(`/book-copies/${row.id}`)
 }
 
 function openCreate() {
@@ -107,6 +113,7 @@ async function handleDelete(row: Record<string, any>) {
     <PaginatedTable
       :columns="columns"
       :rows="copies"
+      @view="goToDetail"
       @edit="openEdit"
       @delete="handleDelete"
     />

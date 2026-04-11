@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import type { Author } from '@/types'
 import * as authorsApi from '@/api/authors'
 
 const authors = ref<Author[]>([])
+const router = useRouter()
 const showForm = ref(false)
 const editingId = ref<number | null>(null)
 const form = ref({ firstName: '', lastName: '' })
@@ -19,6 +21,10 @@ onMounted(loadAuthors)
 
 async function loadAuthors() {
   authors.value = await authorsApi.getAll()
+}
+
+function goToDetail(row: Record<string, any>) {
+  router.push(`/authors/${row.id}`)
 }
 
 function openCreate() {
@@ -77,6 +83,7 @@ async function handleDelete(row: Record<string, any>) {
     <PaginatedTable
       :columns="columns"
       :rows="authors"
+      @view="goToDetail"
       @edit="openEdit"
       @delete="handleDelete"
     />

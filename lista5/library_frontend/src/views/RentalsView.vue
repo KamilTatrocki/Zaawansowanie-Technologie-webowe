@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import type { Rental } from '@/types'
 import * as rentalsApi from '@/api/rentals'
@@ -9,6 +10,7 @@ import SearchSelect from '@/components/SearchSelect.vue'
 import type { BookCopy, Reader } from '@/types'
 
 const rentals = ref<Rental[]>([])
+const router = useRouter()
 const bookCopies = ref<BookCopy[]>([])
 const readers = ref<Reader[]>([])
 const showForm = ref(false)
@@ -46,6 +48,10 @@ async function loadBookCopies() {
 
 async function loadReaders() {
   readers.value = await readersApi.getAll()
+}
+
+function goToDetail(row: Record<string, any>) {
+  router.push(`/rentals/${row.id}`)
 }
 
 // Compute display labels
@@ -158,44 +164,13 @@ async function handleReturn(row: Record<string, any>) {
       </form>
     </div>
 
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th v-for="col in columns" :key="col.key">{{ col.label }}</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-if="rentals.length === 0">
-            <td :colspan="columns.length + 1" class="empty">No data available</td>
-          </tr>
-          <tr v-for="rental in rentals" :key="rental.id">
-            <td>{{ rental.id }}</td>
-            <td>{{ rental.bookTitle }}</td>
-            <td>{{ rental.readerFirstName }}</td>
-            <td>{{ rental.readerLastName }}</td>
-            <td>{{ rental.rentalDate }}</td>
-            <td>
-              <span :class="rental.returned ? 'badge-yes' : 'badge-no'">
-                {{ rental.returned ? 'Yes' : 'No' }}
-              </span>
-            </td>
-            <td class="actions">
-              <button class="btn btn-edit" @click="openEdit(rental)">Edit</button>
-              <button class="btn btn-delete" @click="handleDelete(rental)">Delete</button>
-              <button
-                v-if="!rental.returned"
-                class="btn btn-return"
-                @click="handleReturn(rental)"
-              >
-                Return
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <PaginatedTable
+      :columns="columns"
+      :rows="rentals"
+      @view="goToDetail"
+      @edit="openEdit"
+      @delete="handleDelete"
+    />
   </div>
 </template>
 
