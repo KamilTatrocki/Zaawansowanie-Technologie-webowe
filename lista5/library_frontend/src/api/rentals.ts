@@ -1,4 +1,4 @@
-import type { Rental } from '@/types'
+import type { Rental, RentalCreatePayload } from '@/types'
 import { fetchGET, fetchPOST, fetchDELETE, fetchPUT } from './apiUtils'
 
 export async function getAll(): Promise<Rental[]> {
@@ -9,11 +9,11 @@ export async function getById(id: number): Promise<Rental | undefined> {
     return fetchGET<Rental | undefined>(`/api/rentals/${id}`)
 }
 
-export async function create(data: Omit<Rental, 'id'>): Promise<Rental> {
+export async function create(data: RentalCreatePayload): Promise<Rental> {
     return fetchPOST<Rental>(`/api/rentals`, data)
 }
 
-export async function update(id: number, data: Omit<Rental, 'id'>): Promise<Rental> {
+export async function update(id: number, data: RentalCreatePayload): Promise<Rental> {
     return fetchPUT<Rental>(`/api/rentals/${id}`, data)
 }
 

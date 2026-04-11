@@ -3,41 +3,64 @@ import { ref, onMounted } from 'vue'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import type { BookCopy } from '@/types'
 import * as bookCopiesApi from '@/api/bookCopies'
+import * as booksApi from '@/api/books'
+import SearchSelect from '@/components/SearchSelect.vue'
+import type { Book } from '@/types'
 
 const copies = ref<BookCopy[]>([])
+const books = ref<Book[]>([])
 const showForm = ref(false)
 const editingId = ref<number | null>(null)
-const form = ref({ bookTitle: '', available: true })
+const form = ref({ bookId: null as number | null, isAvailable: true })
 
 const columns = [
   { key: 'id', label: 'ID' },
   { key: 'bookTitle', label: 'Book Title' },
-  { key: 'available', label: 'Available' },
+  { key: 'isAvailable', label: 'Available' },
 ]
 
-onMounted(loadCopies)
+onMounted(() => {
+  loadCopies()
+  loadBooks()
+})
 
 async function loadCopies() {
   copies.value = await bookCopiesApi.getAll()
 }
 
+async function loadBooks() {
+  books.value = await booksApi.getAll()
+}
+
 function openCreate() {
   editingId.value = null
-  form.value = { bookTitle: '', available: true }
+  form.value = { bookId: null, isAvailable: true }
   showForm.value = true
 }
 
 function openEdit(row: Record<string, any>) {
   editingId.value = row.id
-  form.value = { bookTitle: row.bookTitle, available: row.available }
+  // Find the book by title (or we might need bookId in BookCopy DTO)
+  const book = books.value.find(b => b.title === row.bookTitle)
+  form.value = { 
+    bookId: book ? book.id : null, 
+    isAvailable: row.isAvailable 
+  }
   showForm.value = true
 }
 
 async function handleSubmit() {
+  if (form.value.bookId === null) return
+  
+  const payload = {
+    bookId: form.value.bookId,
+    isAvailable: form.value.isAvailable
+  }
+
   if (editingId.value !== null) {
-    await bookCopiesApi.update(editingId.value, form.value)
+    await bookCopiesApi.update(editingId.value, payload)
   } else {
-    await bookCopiesApi.create(form.value)
+    await bookCopiesApi.create(payload)
   }
   showForm.value = false
   await loadCopies()
@@ -61,15 +84,21 @@ async function handleDelete(row: Record<string, any>) {
     <div v-if="showForm" class="form-card">
       <h3>{{ editingId !== null ? 'Edit Copy' : 'New Copy' }}</h3>
       <form @submit.prevent="handleSubmit">
-        <label>Book Title
-          <input v-model="form.bookTitle" required />
+        <label>Book
+          <SearchSelect
+            v-model="form.bookId"
+            :options="books"
+            label="title"
+            placeholder="Select a book"
+            :reduce="(book: Book) => book.id"
+          />
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" v-model="form.available" />
+          <input type="checkbox" v-model="form.isAvailable" />
           Available
         </label>
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-primary" :disabled="form.bookId === null">Save</button>
           <button type="button" class="btn" @click="showForm = false">Cancel</button>
         </div>
       </form>

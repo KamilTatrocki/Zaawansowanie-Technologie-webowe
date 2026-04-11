@@ -1,4 +1,4 @@
-import type { Book } from '@/types'
+import type { Book, BookCreatePayload } from '@/types'
 import { fetchGET, fetchPOST, fetchDELETE, fetchPUT } from './apiUtils'
 
 export async function getAll(): Promise<Book[]> {
@@ -9,11 +9,11 @@ export async function getById(id: number): Promise<Book | undefined> {
     return fetchGET<Book | undefined>(`/api/books/${id}`)
 }
 
-export async function create(data: Omit<Book, 'id'>): Promise<Book> {
+export async function create(data: BookCreatePayload): Promise<Book> {
     return fetchPOST<Book>(`/api/books`, data)
 }
 
-export async function update(id: number, data: Omit<Book, 'id'>): Promise<Book> {
+export async function update(id: number, data: BookCreatePayload): Promise<Book> {
     return fetchPUT<Book>(`/api/books/${id}`, data)
 }
 

@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import PaginatedTable from '@/components/PaginatedTable.vue'
-import type { Book } from '@/types'
+import type { Book, Author } from '@/types'
 import * as booksApi from '@/api/books'
+import * as authorsApi from '@/api/authors'
+import SearchSelect from '@/components/SearchSelect.vue'
 
 const books = ref<Book[]>([])
+const authors = ref<Author[]>([])
 const showForm = ref(false)
 const editingId = ref<number | null>(null)
-const form = ref({ title: '', authorFirstName: '', authorLastName: '', pages: 0 })
+const form = ref({ title: '', authorId: null as number | null, pages: 0 })
 
 const columns = [
   { key: 'id', label: 'ID' },
@@ -17,34 +20,57 @@ const columns = [
   { key: 'pages', label: 'Pages' },
 ]
 
-onMounted(loadBooks)
+onMounted(() => {
+  loadBooks()
+  loadAuthors()
+})
 
 async function loadBooks() {
   books.value = await booksApi.getAll()
 }
 
+async function loadAuthors() {
+  authors.value = await authorsApi.getAll()
+}
+
+const authorOptions = computed(() => 
+  authors.value.map(a => ({
+    id: a.id,
+    display: `${a.firstName} ${a.lastName}`
+  }))
+)
+
 function openCreate() {
   editingId.value = null
-  form.value = { title: '', authorFirstName: '', authorLastName: '', pages: 0 }
+  form.value = { title: '', authorId: null, pages: 0 }
   showForm.value = true
 }
 
 function openEdit(row: Record<string, any>) {
   editingId.value = row.id
+  // Find author by first and last name if we don't have ID in row
+  const author = authors.value.find(a => a.firstName === row.authorFirstName && a.lastName === row.authorLastName)
   form.value = {
     title: row.title,
-    authorFirstName: row.authorFirstName,
-    authorLastName: row.authorLastName,
+    authorId: author ? author.id : null,
     pages: row.pages,
   }
   showForm.value = true
 }
 
 async function handleSubmit() {
+  if (form.value.authorId === null) return
+
+  const payload = {
+    title: form.value.title,
+    authorId: form.value.authorId,
+    pages: form.value.pages
+  }
+
   if (editingId.value !== null) {
-    await booksApi.update(editingId.value, form.value)
+    await booksApi.update(editingId.value, payload)
   } else {
-    await booksApi.create(form.value)
+    await booksApi.create(payload)
   }
   showForm.value = false
   await loadBooks()
@@ -71,17 +97,20 @@ async function handleDelete(row: Record<string, any>) {
         <label>Title
           <input v-model="form.title" required />
         </label>
-        <label>Author First Name
-          <input v-model="form.authorFirstName" required />
-        </label>
-        <label>Author Last Name
-          <input v-model="form.authorLastName" required />
+        <label>Author
+          <SearchSelect
+            v-model="form.authorId"
+            :options="authorOptions"
+            label="display"
+            placeholder="Select an author"
+            :reduce="(opt: any) => opt.id"
+          />
         </label>
         <label>Pages
           <input v-model.number="form.pages" type="number" min="1" required />
         </label>
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-primary" :disabled="form.authorId === null">Save</button>
           <button type="button" class="btn" @click="showForm = false">Cancel</button>
         </div>
       </form>

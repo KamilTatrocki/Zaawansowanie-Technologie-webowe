@@ -1,16 +1,24 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import type { Rental } from '@/types'
 import * as rentalsApi from '@/api/rentals'
+import * as bookCopiesApi from '@/api/bookCopies'
+import * as readersApi from '@/api/readers'
+import SearchSelect from '@/components/SearchSelect.vue'
+import type { BookCopy, Reader } from '@/types'
 
 const rentals = ref<Rental[]>([])
+const bookCopies = ref<BookCopy[]>([])
+const readers = ref<Reader[]>([])
 const showForm = ref(false)
 const editingId = ref<number | null>(null)
 const form = ref({
-  bookCopyId: 0, bookTitle: '', readerId: 0,
-  readerFirstName: '', readerLastName: '',
-  rentalDate: '', returnDate: '' as string | null, returned: false,
+  bookCopyId: null as number | null,
+  readerId: null as number | null,
+  rentalDate: '', 
+  returnDate: '' as string | null, 
+  returned: false,
 })
 
 const columns = [
@@ -22,19 +30,47 @@ const columns = [
   { key: 'returned', label: 'Returned' },
 ]
 
-onMounted(loadRentals)
+onMounted(() => {
+  loadRentals()
+  loadBookCopies()
+  loadReaders()
+})
 
 async function loadRentals() {
   rentals.value = await rentalsApi.getAll()
 }
 
+async function loadBookCopies() {
+  bookCopies.value = await bookCopiesApi.getAll()
+}
+
+async function loadReaders() {
+  readers.value = await readersApi.getAll()
+}
+
+// Compute display labels
+const bookCopyOptions = computed(() => 
+  bookCopies.value.map(c => ({
+    id: c.id,
+    display: `#${c.id} - ${c.bookTitle}`
+  }))
+)
+
+const readerOptions = computed(() => 
+  readers.value.map(r => ({
+    id: r.id,
+    display: `${r.firstName} ${r.lastName}`
+  }))
+)
+
 function openCreate() {
   editingId.value = null
   form.value = {
-    bookCopyId: 0, bookTitle: '', readerId: 0,
-    readerFirstName: '', readerLastName: '',
+    bookCopyId: null,
+    readerId: null,
     rentalDate: new Date().toISOString().slice(0, 16),
-    returnDate: null, returned: false,
+    returnDate: null, 
+    returned: false,
   }
   showForm.value = true
 }
@@ -43,10 +79,7 @@ function openEdit(row: Record<string, any>) {
   editingId.value = row.id
   form.value = {
     bookCopyId: row.bookCopyId,
-    bookTitle: row.bookTitle,
     readerId: row.readerId,
-    readerFirstName: row.readerFirstName,
-    readerLastName: row.readerLastName,
     rentalDate: row.rentalDate,
     returnDate: row.returnDate,
     returned: row.returned,
@@ -55,10 +88,20 @@ function openEdit(row: Record<string, any>) {
 }
 
 async function handleSubmit() {
+  if (form.value.bookCopyId === null || form.value.readerId === null) return
+
+  const payload = {
+    bookCopyId: form.value.bookCopyId,
+    readerId: form.value.readerId,
+    rentalDate: form.value.rentalDate,
+    returnDate: form.value.returnDate,
+    returned: form.value.returned,
+  }
+
   if (editingId.value !== null) {
-    await rentalsApi.update(editingId.value, form.value)
+    await rentalsApi.update(editingId.value, payload)
   } else {
-    await rentalsApi.create(form.value)
+    await rentalsApi.create(payload)
   }
   showForm.value = false
   await loadRentals()
@@ -87,26 +130,29 @@ async function handleReturn(row: Record<string, any>) {
     <div v-if="showForm" class="form-card">
       <h3>{{ editingId !== null ? 'Edit Rental' : 'New Rental' }}</h3>
       <form @submit.prevent="handleSubmit">
-        <label>Book Copy ID
-          <input v-model.number="form.bookCopyId" type="number" required />
+        <label>Book Copy
+          <SearchSelect
+            v-model="form.bookCopyId"
+            :options="bookCopyOptions"
+            label="display"
+            placeholder="Select a book copy"
+            :reduce="(opt: any) => opt.id"
+          />
         </label>
-        <label>Book Title
-          <input v-model="form.bookTitle" required />
-        </label>
-        <label>Reader ID
-          <input v-model.number="form.readerId" type="number" required />
-        </label>
-        <label>Reader First Name
-          <input v-model="form.readerFirstName" required />
-        </label>
-        <label>Reader Last Name
-          <input v-model="form.readerLastName" required />
+        <label>Reader
+          <SearchSelect
+            v-model="form.readerId"
+            :options="readerOptions"
+            label="display"
+            placeholder="Select a reader"
+            :reduce="(opt: any) => opt.id"
+          />
         </label>
         <label>Rental Date
           <input v-model="form.rentalDate" type="datetime-local" required />
         </label>
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-primary" :disabled="form.bookCopyId === null || form.readerId === null">Save</button>
           <button type="button" class="btn" @click="showForm = false">Cancel</button>
         </div>
       </form>

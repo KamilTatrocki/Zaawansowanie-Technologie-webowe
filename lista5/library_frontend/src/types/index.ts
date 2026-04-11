@@ -21,21 +21,12 @@ export interface Reader {
 export interface BookCopy {
     id: number
     bookTitle: string
-    available: boolean
+    isAvailable: boolean
 }
 
 export interface BookCopyCreatePayload {
-    book: {
-        id: number
-        title: string
-        author: {
-            id: number
-            firstName: string
-            lastName: string
-        }
-        pages: number
-    }
-    available: boolean
+    bookId: number
+    isAvailable: boolean
 }
 
 export interface Rental {
@@ -48,4 +39,18 @@ export interface Rental {
     rentalDate: string
     returnDate: string | null
     returned: boolean
+}
+
+export interface RentalCreatePayload {
+    bookCopyId: number
+    readerId: number
+    rentalDate: string
+    returnDate: string | null
+    returned: boolean
+}
+
+export interface BookCreatePayload {
+    title: string
+    authorId: number
+    pages: number
 }
