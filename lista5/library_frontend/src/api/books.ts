@@ -10,13 +10,13 @@ export async function getById(id: number): Promise<Book | undefined> {
 }
 
 export async function create(data: BookCreatePayload): Promise<Book> {
-    return fetchPOST<Book>(`/api/books`, data)
+    return fetchPOST<Book>(`/api/books`, data, 'Book created successfully')
 }
 
 export async function update(id: number, data: BookCreatePayload): Promise<Book> {
-    return fetchPUT<Book>(`/api/books/${id}`, data)
+    return fetchPUT<Book>(`/api/books/${id}`, data, 'Book updated successfully')
 }
 
 export async function remove(id: number): Promise<void> {
-    return fetchDELETE<void>(`/api/books/${id}`)
+    return fetchDELETE<void>(`/api/books/${id}`, 'Book deleted successfully')
 }

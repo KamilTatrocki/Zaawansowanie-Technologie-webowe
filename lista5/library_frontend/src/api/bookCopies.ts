@@ -11,14 +11,14 @@ export async function getById(id: number): Promise<BookCopy | undefined> {
 
 export async function create(data: BookCopyCreatePayload): Promise<BookCopy> {
     console.log(data)
-    return fetchPOST<BookCopy>(`/api/book-copies`, data)
+    return fetchPOST<BookCopy>(`/api/book-copies`, data, 'Book copy created successfully')
 }
 
 export async function update(id: number, data: BookCopyCreatePayload): Promise<BookCopy> {
     console.log(data)
-    return fetchPUT<BookCopy>(`/api/book-copies/${id}`, data)
+    return fetchPUT<BookCopy>(`/api/book-copies/${id}`, data, 'Book copy updated successfully')
 }
 
 export async function remove(id: number): Promise<void> {
-    return fetchDELETE<void>(`/api/book-copies/${id}`)
+    return fetchDELETE<void>(`/api/book-copies/${id}`, 'Book copy deleted successfully')
 }

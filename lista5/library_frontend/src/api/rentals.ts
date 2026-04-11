@@ -10,22 +10,22 @@ export async function getById(id: number): Promise<Rental | undefined> {
 }
 
 export async function create(data: RentalCreatePayload): Promise<Rental> {
-    return fetchPOST<Rental>(`/api/rentals`, data)
+    return fetchPOST<Rental>(`/api/rentals`, data, 'Rental created successfully')
 }
 
 export async function update(id: number, data: RentalCreatePayload): Promise<Rental> {
-    return fetchPUT<Rental>(`/api/rentals/${id}`, data)
+    return fetchPUT<Rental>(`/api/rentals/${id}`, data, 'Rental updated successfully')
 }
 
 export async function remove(id: number): Promise<void> {
-    return fetchDELETE<void>(`/api/rentals/${id}`)
+    return fetchDELETE<void>(`/api/rentals/${id}`, 'Rental deleted successfully')
 }
 
 // Extra rental-specific actions
 export async function rentBook(bookCopyId: number, readerId: number): Promise<Rental> {
-    return fetchPOST<Rental>(`/api/rentals/rent`, { bookCopyId, readerId })
+    return fetchPOST<Rental>(`/api/rentals/rent`, { bookCopyId, readerId }, 'Book rented successfully')
 }
 
 export async function returnBook(id: number): Promise<Rental> {
-    return fetchPOST<Rental>(`/api/rentals/return`, { id })
+    return fetchPOST<Rental>(`/api/rentals/return`, { id }, 'Book returned successfully')
 }
