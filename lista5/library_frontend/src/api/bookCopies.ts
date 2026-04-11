@@ -15,6 +15,7 @@ export async function create(data: BookCopyCreatePayload): Promise<BookCopy> {
 }
 
 export async function update(id: number, data: BookCopyCreatePayload): Promise<BookCopy> {
+    console.log(data)
     return fetchPUT<BookCopy>(`/api/book-copies/${id}`, data)
 }
 

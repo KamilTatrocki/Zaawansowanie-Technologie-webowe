@@ -21,9 +21,18 @@ const currentPage = ref(1)
 const totalPages = computed(() => Math.max(1, Math.ceil(props.rows.length / props.pageSize)))
 
 const paginatedRows = computed(() => {
+  const sorted = [...props.rows].sort((a, b) => {
+    if (a.id && b.id) return a.id - b.id
+    return 0
+  })
   const start = (currentPage.value - 1) * props.pageSize
-  return props.rows.slice(start, start + props.pageSize)
+  return sorted.slice(start, start + props.pageSize)
 })
+
+function formatValue(value: any) {
+  if (typeof value === 'boolean') return value ? 'Yes' : 'No'
+  return value
+}
 
 function prevPage() {
   if (currentPage.value > 1) currentPage.value--
@@ -48,7 +57,7 @@ function nextPage() {
           <td :colspan="columns.length + 1" class="empty">No data available</td>
         </tr>
         <tr v-for="row in paginatedRows" :key="row.id">
-          <td v-for="col in columns" :key="col.key">{{ row[col.key] }}</td>
+          <td v-for="col in columns" :key="col.key">{{ formatValue(row[col.key]) }}</td>
           <td class="actions">
             <button class="btn btn-view" @click="$emit('view', row)">View</button>
             <button class="btn btn-edit" @click="$emit('edit', row)">Edit</button>

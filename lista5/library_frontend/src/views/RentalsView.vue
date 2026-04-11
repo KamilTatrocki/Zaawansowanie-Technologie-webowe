@@ -154,11 +154,21 @@ async function handleReturn(row: Record<string, any>) {
             :reduce="(opt: any) => opt.id"
           />
         </label>
-        <label>Rental Date
-          <input v-model="form.rentalDate" type="datetime-local" required />
+        <div class="row">
+          <label>Rental Date
+            <input v-model="form.rentalDate" type="datetime-local" required />
+          </label>
+          <label>Return Date
+            <input v-model="form.returnDate" type="datetime-local" />
+          </label>
+        </div>
+        <label class="checkbox-label">
+          <input type="checkbox" v-model="form.returned" />
+          Returned
         </label>
         <div class="form-actions">
           <button type="submit" class="btn btn-primary" :disabled="form.bookCopyId === null || form.readerId === null">Save</button>
+          <button v-if="editingId !== null && !form.returned" type="button" class="btn btn-return" @click="handleReturn({ id: editingId })">Return Book</button>
           <button type="button" class="btn" @click="showForm = false">Cancel</button>
         </div>
       </form>
@@ -182,6 +192,8 @@ async function handleReturn(row: Record<string, any>) {
 form { display: flex; flex-direction: column; gap: 0.75rem; }
 label { display: flex; flex-direction: column; font-size: 0.9rem; color: #555; }
 input { margin-top: 0.25rem; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.checkbox-label { flex-direction: row !important; align-items: center; gap: 0.5rem; margin-top: 0.25rem; }
 .form-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
 
 table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
