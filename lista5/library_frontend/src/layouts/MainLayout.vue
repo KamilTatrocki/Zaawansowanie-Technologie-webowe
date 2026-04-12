@@ -1,5 +1,12 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
+
+const isNavOpen = ref(false)
+
+function toggleNav() {
+  isNavOpen.value = !isNavOpen.value
+}
 
 const navLinks = [
   { to: '/', label: 'Home' },
@@ -16,9 +23,16 @@ const navLinks = [
     <aside class="sidebar">
       <div class="sidebar-header">
         <h2>📚 Library</h2>
+        <button class="mobile-toggle" @click="toggleNav">☰</button>
       </div>
-      <nav>
-        <RouterLink v-for="link in navLinks" :key="link.to" :to="link.to" class="nav-link">
+      <nav :class="{ 'nav-open': isNavOpen }">
+        <RouterLink
+          v-for="link in navLinks"
+          :key="link.to"
+          :to="link.to"
+          class="nav-link"
+          @click="isNavOpen = false"
+        >
           {{ link.label }}
         </RouterLink>
       </nav>
@@ -52,6 +66,15 @@ const navLinks = [
 .sidebar-header h2 {
   margin: 0;
   font-size: 1.3rem;
+}
+
+.mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #ecf0f1;
+  font-size: 1.5rem;
+  cursor: pointer;
 }
 
 nav {
@@ -96,20 +119,29 @@ nav {
 
   .sidebar-header {
     padding: 1rem;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .mobile-toggle {
+    display: block;
   }
 
   nav {
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: none;
+    flex-direction: column;
     padding: 0;
   }
 
+  nav.nav-open {
+    display: flex;
+  }
+
   .nav-link {
-    flex: 1 1 50%;
+    width: 100%;
     text-align: center;
     border-bottom: 1px solid #34495e;
-    border-right: 1px solid #34495e;
   }
 
   .content {
@@ -119,8 +151,7 @@ nav {
 
 @media (max-width: 480px) {
   .nav-link {
-    flex: 1 1 100%;
-    border-right: none;
+    width: 100%;
   }
 }
 </style>
