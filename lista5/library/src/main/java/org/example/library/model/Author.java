@@ -25,7 +25,7 @@ public class Author {
     private String lastName;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Book> books = new ArrayList<>();
 
 

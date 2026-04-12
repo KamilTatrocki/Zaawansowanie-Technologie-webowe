@@ -6,16 +6,19 @@ import type { Rental } from '@/types'
 import * as rentalsApi from '@/api/rentals'
 import * as bookCopiesApi from '@/api/bookCopies'
 import * as readersApi from '@/api/readers'
+import * as booksApi from '@/api/books'
 import SearchSelect from '@/components/SearchSelect.vue'
-import type { BookCopy, Reader } from '@/types'
+import type { BookCopy, Reader, Book } from '@/types'
 
 const rentals = ref<Rental[]>([])
 const router = useRouter()
 const bookCopies = ref<BookCopy[]>([])
 const readers = ref<Reader[]>([])
+const books = ref<Book[]>([])
 const showForm = ref(false)
 const editingId = ref<number | null>(null)
 const form = ref({
+  bookId: null as number | null,
   bookCopyId: null as number | null,
   readerId: null as number | null,
   rentalDate: '',
@@ -36,6 +39,7 @@ onMounted(() => {
   loadRentals()
   loadBookCopies()
   loadReaders()
+  loadBooks()
 })
 
 async function loadRentals() {
@@ -50,6 +54,10 @@ async function loadReaders() {
   readers.value = await readersApi.getAll()
 }
 
+async function loadBooks() {
+  books.value = await booksApi.getAll()
+}
+
 function goToDetail(row: Record<string, any>) {
   router.push(`/rentals/${row.id}`)
 }
@@ -59,6 +67,13 @@ const bookCopyOptions = computed(() =>
   bookCopies.value.map((c) => ({
     id: c.id,
     display: `#${c.id} - ${c.bookTitle}`,
+  })),
+)
+
+const bookOptions = computed(() =>
+  books.value.map((b) => ({
+    id: b.id,
+    display: `#${b.id} - ${b.title}`,
   })),
 )
 
@@ -72,6 +87,7 @@ const readerOptions = computed(() =>
 function openCreate() {
   editingId.value = null
   form.value = {
+    bookId: null,
     bookCopyId: null,
     readerId: null,
     rentalDate: new Date().toISOString().slice(0, 16),
@@ -84,6 +100,7 @@ function openCreate() {
 function openEdit(row: Record<string, any>) {
   editingId.value = row.id
   form.value = {
+    bookId: null,
     bookCopyId: row.bookCopyId,
     readerId: row.readerId,
     rentalDate: row.rentalDate,
@@ -94,20 +111,19 @@ function openEdit(row: Record<string, any>) {
 }
 
 async function handleSubmit() {
-  if (form.value.bookCopyId === null || form.value.readerId === null) return
-
-  const payload = {
-    bookCopyId: form.value.bookCopyId,
-    readerId: form.value.readerId,
-    rentalDate: form.value.rentalDate,
-    returnDate: form.value.returnDate,
-    returned: form.value.returned,
-  }
-
   if (editingId.value !== null) {
+    if (form.value.bookCopyId === null || form.value.readerId === null) return
+    const payload = {
+      bookCopyId: form.value.bookCopyId,
+      readerId: form.value.readerId,
+      rentalDate: form.value.rentalDate,
+      returnDate: form.value.returnDate,
+      returned: form.value.returned,
+    }
     await rentalsApi.update(editingId.value, payload)
   } else {
-    await rentalsApi.create(payload)
+    if (form.value.bookId === null || form.value.readerId === null) return
+    await rentalsApi.rentBook(form.value.bookId, form.value.readerId)
   }
   showForm.value = false
   await loadRentals()
@@ -136,7 +152,17 @@ async function handleReturn(row: Record<string, any>) {
     <div v-if="showForm" class="form-card">
       <h3>{{ editingId !== null ? 'Edit Rental' : 'New Rental' }}</h3>
       <form @submit.prevent="handleSubmit">
-        <label
+        <label v-if="editingId === null"
+          >Book
+          <SearchSelect
+            v-model="form.bookId"
+            :options="bookOptions"
+            label="display"
+            placeholder="Select a book"
+            :reduce="(opt: any) => opt.id"
+          />
+        </label>
+        <label v-if="editingId !== null"
           >Book Copy
           <SearchSelect
             v-model="form.bookCopyId"
@@ -156,7 +182,7 @@ async function handleReturn(row: Record<string, any>) {
             :reduce="(opt: any) => opt.id"
           />
         </label>
-        <div class="row">
+        <div class="row" v-if="editingId !== null">
           <label
             >Rental Date
             <input v-model="form.rentalDate" type="datetime-local" required />
@@ -166,7 +192,7 @@ async function handleReturn(row: Record<string, any>) {
             <input v-model="form.returnDate" type="datetime-local" />
           </label>
         </div>
-        <label class="checkbox-label">
+        <label class="checkbox-label" v-if="editingId !== null">
           <input type="checkbox" v-model="form.returned" />
           Returned
         </label>
@@ -174,7 +200,7 @@ async function handleReturn(row: Record<string, any>) {
           <button
             type="submit"
             class="btn btn-primary"
-            :disabled="form.bookCopyId === null || form.readerId === null"
+            :disabled="(editingId === null && (form.bookId === null || form.readerId === null)) || (editingId !== null && (form.bookCopyId === null || form.readerId === null))"
           >
             Save
           </button>

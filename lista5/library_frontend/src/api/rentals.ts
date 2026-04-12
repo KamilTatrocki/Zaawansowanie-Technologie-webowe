@@ -22,10 +22,10 @@ export async function remove(id: number): Promise<void> {
 }
 
 // Extra rental-specific actions
-export async function rentBook(bookCopyId: number, readerId: number): Promise<Rental> {
+export async function rentBook(bookId: number, readerId: number): Promise<Rental> {
   return fetchPOST<Rental>(
-    `/api/rentals/rent`,
-    { bookCopyId, readerId },
+    `/api/rentals/rent?bookId=${bookId}&userId=${readerId}`,
+    {},
     'Book rented successfully',
   )
 }

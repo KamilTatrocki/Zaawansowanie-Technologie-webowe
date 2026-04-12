@@ -40,6 +40,7 @@ public class RentalService {
                 .bookCopy(availableCopy)
                 .reader(reader)
                 .rentalDate(LocalDateTime.now())
+                .returnDate(LocalDateTime.now().plusDays(30))
                 .returned(false)
                 .build();
 
