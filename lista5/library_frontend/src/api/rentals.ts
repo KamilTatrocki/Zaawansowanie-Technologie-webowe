@@ -31,5 +31,5 @@ export async function rentBook(bookCopyId: number, readerId: number): Promise<Re
 }
 
 export async function returnBook(id: number): Promise<Rental> {
-  return fetchPOST<Rental>(`/api/rentals/return`, { id }, 'Book returned successfully')
+  return fetchPOST<Rental>(`/api/rentals/${id}/return`, {}, 'Book returned successfully')
 }
