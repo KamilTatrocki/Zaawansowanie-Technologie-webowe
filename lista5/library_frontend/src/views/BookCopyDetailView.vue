@@ -15,10 +15,10 @@ const loading = ref(true)
 
 onMounted(async () => {
   try {
-    copy.value = await bookCopiesApi.getById(id) || null
+    copy.value = (await bookCopiesApi.getById(id)) || null
     if (copy.value) {
       const allRentals = await rentalsApi.getAll()
-      rentals.value = allRentals.filter(r => r.bookCopyId === copy.value?.id)
+      rentals.value = allRentals.filter((r) => r.bookCopyId === copy.value?.id)
     }
   } finally {
     loading.value = false
@@ -137,7 +137,8 @@ table {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-th, td {
+th,
+td {
   padding: 0.75rem 1rem;
   text-align: left;
   border-bottom: 1px solid #eee;
@@ -162,8 +163,14 @@ th {
   border: none;
 }
 
-.available { color: #27ae60; font-weight: 600; }
-.unavailable { color: #e74c3c; font-weight: 600; }
+.available {
+  color: #27ae60;
+  font-weight: 600;
+}
+.unavailable {
+  color: #e74c3c;
+  font-weight: 600;
+}
 
 .empty {
   color: #7f8c8d;

@@ -1,1 +1,1 @@
-declare module 'vue-select';
+declare module 'vue-select'

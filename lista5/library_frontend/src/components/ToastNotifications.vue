@@ -5,10 +5,10 @@ import { toasts, removeToast } from '@/utils/toast'
 <template>
   <div class="toast-container">
     <TransitionGroup name="toast-list">
-      <div 
-        v-for="toast in toasts" 
-        :key="toast.id" 
-        class="toast" 
+      <div
+        v-for="toast in toasts"
+        :key="toast.id"
+        class="toast"
         :class="`toast-${toast.type}`"
         @click="removeToast(toast.id)"
       >

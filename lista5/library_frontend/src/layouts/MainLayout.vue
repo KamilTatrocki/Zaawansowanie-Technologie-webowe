@@ -18,12 +18,7 @@ const navLinks = [
         <h2>📚 Library</h2>
       </div>
       <nav>
-        <RouterLink
-          v-for="link in navLinks"
-          :key="link.to"
-          :to="link.to"
-          class="nav-link"
-        >
+        <RouterLink v-for="link in navLinks" :key="link.to" :to="link.to" class="nav-link">
           {{ link.label }}
         </RouterLink>
       </nav>
@@ -87,5 +82,45 @@ nav {
   padding: 2rem;
   background-color: #f5f6fa;
   overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .sidebar-header {
+    padding: 1rem;
+    text-align: center;
+  }
+
+  nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0;
+  }
+
+  .nav-link {
+    flex: 1 1 50%;
+    text-align: center;
+    border-bottom: 1px solid #34495e;
+    border-right: 1px solid #34495e;
+  }
+
+  .content {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-link {
+    flex: 1 1 100%;
+    border-right: none;
+  }
 }
 </style>

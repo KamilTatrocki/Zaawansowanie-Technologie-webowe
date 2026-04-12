@@ -16,12 +16,12 @@ const emit = defineEmits(['update:modelValue'])
 
 const internalValue = computed({
   get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val)
+  set: (val) => emit('update:modelValue', val),
 })
 
 const filteredOptions = (options: any[], search: string) => {
   return options
-    .filter(option => {
+    .filter((option) => {
       const labelValue = option[props.label] || ''
       return String(labelValue).toLowerCase().includes(search.toLowerCase())
     })
@@ -40,14 +40,16 @@ const filteredOptions = (options: any[], search: string) => {
   >
     <template #no-options="{ search, searching }">
       <template v-if="searching">
-        No results found for <em>{{ search }}</em>.
+        No results found for <em>{{ search }}</em
+        >.
       </template>
-      <em v-else style="opacity: 0.5;">Start typing to search...</em>
+      <em v-else style="opacity: 0.5">Start typing to search...</em>
     </template>
-    
+
     <!-- Custom filtering logic to limit results -->
-    <template #list-header v-if="false"></template> <!-- placeholder if needed -->
-    
+    <template #list-header v-if="false"></template>
+    <!-- placeholder if needed -->
+
     <!-- We use the filter-options prop if vue-select supports it, 
          but since we want to limit results even when not searching, 
          we might need to handle it via a computed property for options -->
@@ -71,13 +73,14 @@ const filteredOptions = (options: any[], search: string) => {
   color: #999;
 }
 
-.vs__clear, .vs__open-indicator {
+.vs__clear,
+.vs__open-indicator {
   fill: #34495e;
 }
 
 .vs__dropdown-menu {
   border-radius: 4px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .vs__dropdown-option--highlight {

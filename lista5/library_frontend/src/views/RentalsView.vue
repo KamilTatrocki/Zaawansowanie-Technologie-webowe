@@ -18,8 +18,8 @@ const editingId = ref<number | null>(null)
 const form = ref({
   bookCopyId: null as number | null,
   readerId: null as number | null,
-  rentalDate: '', 
-  returnDate: '' as string | null, 
+  rentalDate: '',
+  returnDate: '' as string | null,
   returned: false,
 })
 
@@ -55,18 +55,18 @@ function goToDetail(row: Record<string, any>) {
 }
 
 // Compute display labels
-const bookCopyOptions = computed(() => 
-  bookCopies.value.map(c => ({
+const bookCopyOptions = computed(() =>
+  bookCopies.value.map((c) => ({
     id: c.id,
-    display: `#${c.id} - ${c.bookTitle}`
-  }))
+    display: `#${c.id} - ${c.bookTitle}`,
+  })),
 )
 
-const readerOptions = computed(() => 
-  readers.value.map(r => ({
+const readerOptions = computed(() =>
+  readers.value.map((r) => ({
     id: r.id,
-    display: `${r.firstName} ${r.lastName}`
-  }))
+    display: `${r.firstName} ${r.lastName}`,
+  })),
 )
 
 function openCreate() {
@@ -75,7 +75,7 @@ function openCreate() {
     bookCopyId: null,
     readerId: null,
     rentalDate: new Date().toISOString().slice(0, 16),
-    returnDate: null, 
+    returnDate: null,
     returned: false,
   }
   showForm.value = true
@@ -136,7 +136,8 @@ async function handleReturn(row: Record<string, any>) {
     <div v-if="showForm" class="form-card">
       <h3>{{ editingId !== null ? 'Edit Rental' : 'New Rental' }}</h3>
       <form @submit.prevent="handleSubmit">
-        <label>Book Copy
+        <label
+          >Book Copy
           <SearchSelect
             v-model="form.bookCopyId"
             :options="bookCopyOptions"
@@ -145,7 +146,8 @@ async function handleReturn(row: Record<string, any>) {
             :reduce="(opt: any) => opt.id"
           />
         </label>
-        <label>Reader
+        <label
+          >Reader
           <SearchSelect
             v-model="form.readerId"
             :options="readerOptions"
@@ -155,10 +157,12 @@ async function handleReturn(row: Record<string, any>) {
           />
         </label>
         <div class="row">
-          <label>Rental Date
+          <label
+            >Rental Date
             <input v-model="form.rentalDate" type="datetime-local" required />
           </label>
-          <label>Return Date
+          <label
+            >Return Date
             <input v-model="form.returnDate" type="datetime-local" />
           </label>
         </div>
@@ -167,8 +171,21 @@ async function handleReturn(row: Record<string, any>) {
           Returned
         </label>
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary" :disabled="form.bookCopyId === null || form.readerId === null">Save</button>
-          <button v-if="editingId !== null && !form.returned" type="button" class="btn btn-return" @click="handleReturn({ id: editingId })">Return Book</button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            :disabled="form.bookCopyId === null || form.readerId === null"
+          >
+            Save
+          </button>
+          <button
+            v-if="editingId !== null && !form.returned"
+            type="button"
+            class="btn btn-return"
+            @click="handleReturn({ id: editingId })"
+          >
+            Return Book
+          </button>
           <button type="button" class="btn" @click="showForm = false">Cancel</button>
         </div>
       </form>
@@ -185,34 +202,142 @@ async function handleReturn(row: Record<string, any>) {
 </template>
 
 <style scoped>
-.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-.page-header h1 { margin: 0; color: #2c3e50; }
-.form-card { background: #fff; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-.form-card h3 { margin: 0 0 1rem; }
-form { display: flex; flex-direction: column; gap: 0.75rem; }
-label { display: flex; flex-direction: column; font-size: 0.9rem; color: #555; }
-input { margin-top: 0.25rem; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; }
-.row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-.checkbox-label { flex-direction: row !important; align-items: center; gap: 0.5rem; margin-top: 0.25rem; }
-.form-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.page-header h1 {
+  margin: 0;
+  color: #2c3e50;
+}
+.form-card {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.form-card h3 {
+  margin: 0 0 1rem;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+  color: #555;
+}
+input {
+  margin-top: 0.25rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.checkbox-label {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
 
-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #eee; }
-th { background-color: #3498db; color: #fff; font-weight: 600; }
-tr:hover { background-color: #f0f4f8; }
-.empty { text-align: center; color: #999; padding: 2rem; }
-.actions { display: flex; gap: 0.5rem; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+th,
+td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+th {
+  background-color: #3498db;
+  color: #fff;
+  font-weight: 600;
+}
+tr:hover {
+  background-color: #f0f4f8;
+}
+.empty {
+  text-align: center;
+  color: #999;
+  padding: 2rem;
+}
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
 
-.badge-yes { color: #27ae60; font-weight: 600; }
-.badge-no { color: #e74c3c; font-weight: 600; }
+.badge-yes {
+  color: #27ae60;
+  font-weight: 600;
+}
+.badge-no {
+  color: #e74c3c;
+  font-weight: 600;
+}
 
-.btn { padding: 0.35rem 0.75rem; border: 1px solid #bdc3c7; border-radius: 4px; cursor: pointer; font-size: 0.85rem; background: #fff; }
-.btn-primary { background-color: #3498db; color: #fff; border-color: #3498db; padding: 0.5rem 1rem; font-size: 0.9rem; }
-.btn-primary:hover { background-color: #2980b9; }
-.btn-edit { background-color: #f39c12; color: #fff; border-color: #f39c12; }
-.btn-edit:hover { background-color: #e67e22; }
-.btn-delete { background-color: #e74c3c; color: #fff; border-color: #e74c3c; }
-.btn-delete:hover { background-color: #c0392b; }
-.btn-return { background-color: #27ae60; color: #fff; border-color: #27ae60; }
-.btn-return:hover { background-color: #219a52; }
+.btn {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  background: #fff;
+}
+.btn-primary {
+  background-color: #3498db;
+  color: #fff;
+  border-color: #3498db;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+.btn-primary:hover {
+  background-color: #2980b9;
+}
+.btn-edit {
+  background-color: #f39c12;
+  color: #fff;
+  border-color: #f39c12;
+}
+.btn-edit:hover {
+  background-color: #e67e22;
+}
+.btn-delete {
+  background-color: #e74c3c;
+  color: #fff;
+  border-color: #e74c3c;
+}
+.btn-delete:hover {
+  background-color: #c0392b;
+}
+.btn-return {
+  background-color: #27ae60;
+  color: #fff;
+  border-color: #27ae60;
+}
+.btn-return:hover {
+  background-color: #219a52;
+}
 </style>

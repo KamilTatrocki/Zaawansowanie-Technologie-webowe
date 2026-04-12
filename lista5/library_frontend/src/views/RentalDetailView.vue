@@ -13,7 +13,7 @@ const loading = ref(true)
 
 onMounted(async () => {
   try {
-    rental.value = await rentalsApi.getById(id) || null
+    rental.value = (await rentalsApi.getById(id)) || null
   } finally {
     loading.value = false
   }
@@ -49,11 +49,16 @@ function viewReader(id: number) {
         </div>
         <div class="info-group">
           <label>Book Copy ID:</label>
-          <span class="link" @click="viewBookCopy(rental.bookCopyId)">{{ rental.bookCopyId }} ({{ rental.bookTitle }})</span>
+          <span class="link" @click="viewBookCopy(rental.bookCopyId)"
+            >{{ rental.bookCopyId }} ({{ rental.bookTitle }})</span
+          >
         </div>
         <div class="info-group">
           <label>Reader:</label>
-          <span class="link" @click="viewReader(rental.readerId)">{{ rental.readerFirstName }} {{ rental.readerLastName }} (ID: {{ rental.readerId }})</span>
+          <span class="link" @click="viewReader(rental.readerId)"
+            >{{ rental.readerFirstName }} {{ rental.readerLastName }} (ID:
+            {{ rental.readerId }})</span
+          >
         </div>
         <div class="info-group">
           <label>Rental Date:</label>
@@ -124,6 +129,12 @@ function viewReader(id: number) {
   color: #2980b9;
 }
 
-.success { color: #27ae60; font-weight: 600; }
-.warning { color: #e67e22; font-weight: 600; }
+.success {
+  color: #27ae60;
+  font-weight: 600;
+}
+.warning {
+  color: #e67e22;
+  font-weight: 600;
+}
 </style>

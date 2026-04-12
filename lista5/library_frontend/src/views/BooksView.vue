@@ -39,11 +39,11 @@ function goToDetail(row: Record<string, any>) {
   router.push(`/books/${row.id}`)
 }
 
-const authorOptions = computed(() => 
-  authors.value.map(a => ({
+const authorOptions = computed(() =>
+  authors.value.map((a) => ({
     id: a.id,
-    display: `${a.firstName} ${a.lastName}`
-  }))
+    display: `${a.firstName} ${a.lastName}`,
+  })),
 )
 
 function openCreate() {
@@ -55,7 +55,9 @@ function openCreate() {
 function openEdit(row: Record<string, any>) {
   editingId.value = row.id
   // Find author by first and last name if we don't have ID in row
-  const author = authors.value.find(a => a.firstName === row.authorFirstName && a.lastName === row.authorLastName)
+  const author = authors.value.find(
+    (a) => a.firstName === row.authorFirstName && a.lastName === row.authorLastName,
+  )
   form.value = {
     title: row.title,
     authorId: author ? author.id : null,
@@ -70,7 +72,7 @@ async function handleSubmit() {
   const payload = {
     title: form.value.title,
     authorId: form.value.authorId,
-    pages: form.value.pages
+    pages: form.value.pages,
   }
 
   if (editingId.value !== null) {
@@ -100,10 +102,12 @@ async function handleDelete(row: Record<string, any>) {
     <div v-if="showForm" class="form-card">
       <h3>{{ editingId !== null ? 'Edit Book' : 'New Book' }}</h3>
       <form @submit.prevent="handleSubmit">
-        <label>Title
+        <label
+          >Title
           <input v-model="form.title" required />
         </label>
-        <label>Author
+        <label
+          >Author
           <SearchSelect
             v-model="form.authorId"
             :options="authorOptions"
@@ -112,11 +116,14 @@ async function handleDelete(row: Record<string, any>) {
             :reduce="(opt: any) => opt.id"
           />
         </label>
-        <label>Pages
+        <label
+          >Pages
           <input v-model.number="form.pages" type="number" min="1" required />
         </label>
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary" :disabled="form.authorId === null">Save</button>
+          <button type="submit" class="btn btn-primary" :disabled="form.authorId === null">
+            Save
+          </button>
           <button type="button" class="btn" @click="showForm = false">Cancel</button>
         </div>
       </form>

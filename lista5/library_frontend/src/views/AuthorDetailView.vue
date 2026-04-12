@@ -15,12 +15,13 @@ const loading = ref(true)
 
 onMounted(async () => {
   try {
-    author.value = await authorsApi.getById(id) || null
+    author.value = (await authorsApi.getById(id)) || null
     if (author.value) {
       const allBooks = await booksApi.getAll()
-      books.value = allBooks.filter(b => 
-        b.authorFirstName === author.value?.firstName && 
-        b.authorLastName === author.value?.lastName
+      books.value = allBooks.filter(
+        (b) =>
+          b.authorFirstName === author.value?.firstName &&
+          b.authorLastName === author.value?.lastName,
       )
     }
   } finally {
@@ -136,7 +137,8 @@ table {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-th, td {
+th,
+td {
   padding: 0.75rem 1rem;
   text-align: left;
   border-bottom: 1px solid #eee;

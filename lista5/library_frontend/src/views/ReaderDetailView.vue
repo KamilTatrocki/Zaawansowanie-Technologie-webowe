@@ -15,10 +15,10 @@ const loading = ref(true)
 
 onMounted(async () => {
   try {
-    reader.value = await readersApi.getById(id) || null
+    reader.value = (await readersApi.getById(id)) || null
     if (reader.value) {
       const allRentals = await rentalsApi.getAll()
-      rentals.value = allRentals.filter(r => r.readerId === reader.value?.id)
+      rentals.value = allRentals.filter((r) => r.readerId === reader.value?.id)
     }
   } finally {
     loading.value = false
@@ -135,7 +135,8 @@ table {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-th, td {
+th,
+td {
   padding: 0.75rem 1rem;
   text-align: left;
   border-bottom: 1px solid #eee;

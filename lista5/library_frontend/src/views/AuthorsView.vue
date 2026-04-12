@@ -67,10 +67,12 @@ async function handleDelete(row: Record<string, any>) {
     <div v-if="showForm" class="form-card">
       <h3>{{ editingId !== null ? 'Edit Author' : 'New Author' }}</h3>
       <form @submit.prevent="handleSubmit">
-        <label>First Name
+        <label
+          >First Name
           <input v-model="form.firstName" required />
         </label>
-        <label>Last Name
+        <label
+          >Last Name
           <input v-model="form.lastName" required />
         </label>
         <div class="form-actions">
@@ -97,17 +99,57 @@ async function handleDelete(row: Record<string, any>) {
   align-items: center;
   margin-bottom: 1.5rem;
 }
-.page-header h1 { margin: 0; color: #2c3e50; }
-.form-card {
-  background: #fff; padding: 1.5rem; border-radius: 8px;
-  margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+.page-header h1 {
+  margin: 0;
+  color: #2c3e50;
 }
-.form-card h3 { margin: 0 0 1rem; }
-form { display: flex; flex-direction: column; gap: 0.75rem; }
-label { display: flex; flex-direction: column; font-size: 0.9rem; color: #555; }
-input { margin-top: 0.25rem; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; }
-.form-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
-.btn { padding: 0.5rem 1rem; border: 1px solid #bdc3c7; border-radius: 4px; cursor: pointer; font-size: 0.9rem; background: #fff; }
-.btn-primary { background-color: #3498db; color: #fff; border-color: #3498db; }
-.btn-primary:hover { background-color: #2980b9; }
+.form-card {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.form-card h3 {
+  margin: 0 0 1rem;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+  color: #555;
+}
+input {
+  margin-top: 0.25rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  background: #fff;
+}
+.btn-primary {
+  background-color: #3498db;
+  color: #fff;
+  border-color: #3498db;
+}
+.btn-primary:hover {
+  background-color: #2980b9;
+}
 </style>
