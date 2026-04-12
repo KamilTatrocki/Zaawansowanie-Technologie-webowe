@@ -13,12 +13,12 @@ const copies = ref<BookCopy[]>([])
 const books = ref<Book[]>([])
 const showForm = ref(false)
 const editingId = ref<number | null>(null)
-const form = ref({ bookId: null as number | null, isAvailable: true })
+const form = ref({ bookId: null as number | null, available: true })
 
 const columns = [
   { key: 'id', label: 'ID' },
   { key: 'bookTitle', label: 'Book Title' },
-  { key: 'isAvailable', label: 'Available' },
+  { key: 'available', label: 'Available' },
 ]
 
 onMounted(() => {
@@ -40,7 +40,7 @@ function goToDetail(row: Record<string, any>) {
 
 function openCreate() {
   editingId.value = null
-  form.value = { bookId: null, isAvailable: true }
+  form.value = { bookId: null, available: true }
   showForm.value = true
 }
 
@@ -50,7 +50,7 @@ function openEdit(row: Record<string, any>) {
   const book = books.value.find((b) => b.title === row.bookTitle)
   form.value = {
     bookId: book ? book.id : null,
-    isAvailable: row.isAvailable,
+    available: row.available,
   }
   showForm.value = true
 }
@@ -60,7 +60,7 @@ async function handleSubmit() {
 
   const payload = {
     bookId: form.value.bookId,
-    isAvailable: form.value.isAvailable,
+    available: form.value.available,
   }
 
   if (editingId.value !== null) {
@@ -101,7 +101,7 @@ async function handleDelete(row: Record<string, any>) {
           />
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" v-model="form.isAvailable" />
+          <input type="checkbox" v-model="form.available" />
           Available
         </label>
         <div class="form-actions">

@@ -24,7 +24,7 @@ public class Reader {
     private String lastName;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "reader", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "reader")
     private List<Rental> rentals = new ArrayList<>();
 
 }
