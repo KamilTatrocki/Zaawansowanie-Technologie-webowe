@@ -30,7 +30,7 @@ public class Book {
     private int pages;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<BookCopy> copies;
 
 

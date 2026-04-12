@@ -17,7 +17,7 @@ public class Rental {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "copy_id",  nullable = false)
+    @JoinColumn(name = "copy_id",  nullable = true)
     private BookCopy bookCopy;
 
     @ManyToOne(fetch = FetchType.LAZY)

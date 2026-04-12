@@ -25,6 +25,6 @@ public class BookCopy {
     private boolean available = true;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "bookCopy")
+    @OneToMany(mappedBy = "bookCopy", cascade = CascadeType.ALL)
     private List<Rental> rentals;
 }
