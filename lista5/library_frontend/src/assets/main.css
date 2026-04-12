@@ -23,11 +23,10 @@ body {
 /* --- Global Responsive Rules --- */
 @media (max-width: 768px) {
   /* Tables */
-  table {
-    display: block !important;
-    width: 100% !important;
-    overflow-x: auto !important;
-    white-space: nowrap !important;
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Forms & Inputs */

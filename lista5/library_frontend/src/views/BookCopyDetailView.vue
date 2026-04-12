@@ -64,28 +64,30 @@ function viewRental(id: number) {
       <div class="related-section">
         <h3>Rental History</h3>
         <div v-if="rentals.length === 0" class="empty">No rentals found.</div>
-        <table v-else>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Reader</th>
-              <th>Rental Date</th>
-              <th>Returned</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="rental in rentals" :key="rental.id">
-              <td>{{ rental.id }}</td>
-              <td>{{ rental.readerFirstName }} {{ rental.readerLastName }}</td>
-              <td>{{ rental.rentalDate }}</td>
-              <td>{{ rental.returned ? 'Yes' : 'No' }}</td>
-              <td>
-                <button class="btn btn-view" @click="viewRental(rental.id)">View</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div v-else class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Reader</th>
+                <th>Rental Date</th>
+                <th>Returned</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="rental in rentals" :key="rental.id">
+                <td>{{ rental.id }}</td>
+                <td>{{ rental.readerFirstName }} {{ rental.readerLastName }}</td>
+                <td>{{ rental.rentalDate }}</td>
+                <td>{{ rental.returned ? 'Yes' : 'No' }}</td>
+                <td>
+                  <button class="btn btn-view" @click="viewRental(rental.id)">View</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

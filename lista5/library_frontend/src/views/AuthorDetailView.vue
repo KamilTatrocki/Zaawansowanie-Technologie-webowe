@@ -66,26 +66,28 @@ function viewBook(id: number) {
       <div class="related-section">
         <h3>Books by this Author</h3>
         <div v-if="books.length === 0" class="empty">No books found.</div>
-        <table v-else>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Title</th>
-              <th>Pages</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="book in books" :key="book.id">
-              <td>{{ book.id }}</td>
-              <td>{{ book.title }}</td>
-              <td>{{ book.pages }}</td>
-              <td>
-                <button class="btn btn-view" @click="viewBook(book.id)">View</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div v-else class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Pages</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="book in books" :key="book.id">
+                <td>{{ book.id }}</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.pages }}</td>
+                <td>
+                  <button class="btn btn-view" @click="viewBook(book.id)">View</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

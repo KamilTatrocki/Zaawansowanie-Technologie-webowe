@@ -38,7 +38,7 @@ const navLinks = [
       </nav>
     </aside>
     <main class="content">
-      <slot />
+      <RouterView />
     </main>
   </div>
 </template>

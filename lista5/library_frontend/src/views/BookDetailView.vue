@@ -66,28 +66,30 @@ function viewCopy(id: number) {
       <div class="related-section">
         <h3>Book Copies</h3>
         <div v-if="copies.length === 0" class="empty">No copies found.</div>
-        <table v-else>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="copy in copies" :key="copy.id">
-              <td>{{ copy.id }}</td>
-              <td>
-                <span :class="copy.isAvailable ? 'available' : 'unavailable'">
-                  {{ copy.isAvailable ? 'Available' : 'Unavailable' }}
-                </span>
-              </td>
-              <td>
-                <button class="btn btn-view" @click="viewCopy(copy.id)">View</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div v-else class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="copy in copies" :key="copy.id">
+                <td>{{ copy.id }}</td>
+                <td>
+                  <span :class="copy.isAvailable ? 'available' : 'unavailable'">
+                    {{ copy.isAvailable ? 'Available' : 'Unavailable' }}
+                  </span>
+                </td>
+                <td>
+                  <button class="btn btn-view" @click="viewCopy(copy.id)">View</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

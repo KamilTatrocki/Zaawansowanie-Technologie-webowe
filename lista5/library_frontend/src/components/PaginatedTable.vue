@@ -45,27 +45,29 @@ function nextPage() {
 
 <template>
   <div class="paginated-table">
-    <table>
-      <thead>
-        <tr>
-          <th v-for="col in columns" :key="col.key">{{ col.label }}</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-if="paginatedRows.length === 0">
-          <td :colspan="columns.length + 1" class="empty">No data available</td>
-        </tr>
-        <tr v-for="row in paginatedRows" :key="row.id">
-          <td v-for="col in columns" :key="col.key">{{ formatValue(row[col.key]) }}</td>
-          <td class="actions">
-            <button class="btn btn-view" @click="$emit('view', row)">View</button>
-            <button class="btn btn-edit" @click="$emit('edit', row)">Edit</button>
-            <button class="btn btn-delete" @click="$emit('delete', row)">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th v-for="col in columns" :key="col.key">{{ col.label }}</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="paginatedRows.length === 0">
+            <td :colspan="columns.length + 1" class="empty">No data available</td>
+          </tr>
+          <tr v-for="row in paginatedRows" :key="row.id">
+            <td v-for="col in columns" :key="col.key">{{ formatValue(row[col.key]) }}</td>
+            <td class="actions">
+              <button class="btn btn-view" @click="$emit('view', row)">View</button>
+              <button class="btn btn-edit" @click="$emit('edit', row)">Edit</button>
+              <button class="btn btn-delete" @click="$emit('delete', row)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <div class="pagination">
       <button :disabled="currentPage <= 1" @click="prevPage">← Prev</button>
