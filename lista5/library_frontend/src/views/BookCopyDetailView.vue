@@ -55,8 +55,8 @@ function viewRental(id: number) {
         </div>
         <div class="info-group">
           <label>Status:</label>
-          <span :class="copy.isAvailable ? 'available' : 'unavailable'">
-            {{ copy.isAvailable ? 'Available' : 'Unavailable' }}
+          <span :class="copy.available ? 'available' : 'unavailable'">
+            {{ copy.available ? 'Available' : 'Unavailable' }}
           </span>
         </div>
       </div>
