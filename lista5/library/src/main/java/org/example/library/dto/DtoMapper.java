@@ -29,7 +29,7 @@ public class DtoMapper {
         return BookCopyDto.builder()
                 .id(bookCopy.getId())
                 .bookTitle(bookCopy.getBook() != null ? bookCopy.getBook().getTitle() : null)
-                .isAvailable(bookCopy.isAvailable())
+                .available(bookCopy.isAvailable())
                 .build();
     }
 

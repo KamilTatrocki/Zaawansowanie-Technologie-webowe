@@ -9,5 +9,5 @@ import lombok.*;
 @Builder
 public class BookCopyCreateDto {
     private Long bookId;
-    private boolean isAvailable;
+    private boolean available;
 }

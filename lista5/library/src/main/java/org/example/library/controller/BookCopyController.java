@@ -39,7 +39,7 @@ public class BookCopyController {
         Book book = bookService.findById(bookCopyDto.getBookId());
         BookCopy bookCopy = BookCopy.builder()
                 .book(book)
-                .isAvailable(bookCopyDto.isAvailable())
+                .available(bookCopyDto.isAvailable())
                 .build();
         return DtoMapper.toDto(bookCopyService.save(bookCopy));
     }
@@ -49,7 +49,7 @@ public class BookCopyController {
         Book book = bookService.findById(bookCopyDto.getBookId());
         BookCopy bookCopyDetails = BookCopy.builder()
                 .book(book)
-                .isAvailable(bookCopyDto.isAvailable())
+                .available(bookCopyDto.isAvailable())
                 .build();
         return ResponseEntity.ok(DtoMapper.toDto(bookCopyService.update(id, bookCopyDetails)));
     }

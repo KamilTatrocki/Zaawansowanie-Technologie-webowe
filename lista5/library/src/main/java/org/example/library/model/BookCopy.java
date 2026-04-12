@@ -22,7 +22,7 @@ public class BookCopy {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    private boolean isAvailable = true;
+    private boolean available = true;
 
     @JsonIgnore
     @OneToMany(mappedBy = "bookCopy")

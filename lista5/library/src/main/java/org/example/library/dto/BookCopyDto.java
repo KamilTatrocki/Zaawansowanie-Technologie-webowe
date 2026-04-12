@@ -10,5 +10,5 @@ import lombok.*;
 public class BookCopyDto {
     private Long id;
     private String bookTitle;
-    private boolean isAvailable;
+    private boolean available;
 }
