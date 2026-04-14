@@ -37,14 +37,14 @@ public class BookCopyController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public BookCopyDto createBookCopy(@Valid @RequestBody BookCopyCreateDto bookCopyDto) {
+    public ResponseEntity<BookCopyDto> createBookCopy(@Valid @RequestBody BookCopyCreateDto bookCopyDto) {
         Book book = bookService.findById(bookCopyDto.getBookId());
         BookCopy bookCopy = BookCopy.builder()
                 .book(book)
                 .available(bookCopyDto.isAvailable())
                 .build();
-        return DtoMapper.toDto(bookCopyService.save(bookCopy));
+        return  ResponseEntity.status(HttpStatus.CREATED)
+                .body(DtoMapper.toDto(bookCopyService.save(bookCopy)));
     }
 
     @PutMapping("/{id}")

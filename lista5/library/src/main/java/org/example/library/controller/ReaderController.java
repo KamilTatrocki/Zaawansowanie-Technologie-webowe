@@ -34,13 +34,13 @@ public class ReaderController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ReaderDto createReader(@Valid @RequestBody ReaderCreateDto readerDto) {
+    public ResponseEntity<ReaderDto> createReader(@Valid @RequestBody ReaderCreateDto readerDto) {
         Reader reader = Reader.builder()
                 .firstName(readerDto.getFirstName())
                 .lastName(readerDto.getLastName())
                 .build();
-        return DtoMapper.toDto(readerService.save(reader));
+        return  ResponseEntity.status(HttpStatus.CREATED)
+                .body(DtoMapper.toDto(readerService.save(reader)));
     }
 
     @PutMapping("/{id}")

@@ -37,15 +37,15 @@ public class BookController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public BookDto createBook(@Valid @RequestBody BookCreateDto bookDto) {
+    public ResponseEntity<BookDto> createBook(@Valid @RequestBody BookCreateDto bookDto) {
         Author author = authorService.findById(bookDto.getAuthorId());
         Book book = Book.builder()
                 .title(bookDto.getTitle())
                 .author(author)
                 .pages(bookDto.getPages())
                 .build();
-        return DtoMapper.toDto(bookService.save(book));
+        return  ResponseEntity.status(HttpStatus.CREATED)
+                .body(DtoMapper.toDto(bookService.save(book)));
     }
 
     @PutMapping("/{id}")

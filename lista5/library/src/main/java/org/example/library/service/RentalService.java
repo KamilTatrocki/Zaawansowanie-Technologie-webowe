@@ -2,12 +2,10 @@ package org.example.library.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.example.library.model.Book;
+import org.example.library.dto.RentalCreateDto;
 import org.example.library.model.BookCopy;
 import org.example.library.model.Reader;
 import org.example.library.model.Rental;
-import org.example.library.repository.BookRepository;
-import org.example.library.repository.ReaderRepository;
 import org.example.library.repository.RentalRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,30 +15,27 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RentalService {
+
     private final RentalRepository rentalRepository;
-    private final ReaderRepository readerRepository;
-    private final BookRepository bookRepository;
+    private final ReaderService readerService;
+    private final BookCopyService bookCopyService;
 
     @Transactional
-    public Rental rentBook(Long bookId, Long userId){
-        Reader reader = readerRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Nie znaleziono czytelnika"));
+    public Rental rentBook(RentalCreateDto dto) {
+        Reader reader = readerService.findById(dto.getReaderId());
+        BookCopy bookCopy = bookCopyService.findById(dto.getBookCopyId());
 
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Nie znaleziono książki"));
+        if (!bookCopy.isAvailable()) {
+            throw new RuntimeException("Egzemplarz nie jest dostępny");
+        }
 
-        BookCopy availableCopy = book.getCopies().stream()
-                .filter(BookCopy::isAvailable)
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Brak dostępnych egzemplarzy tej książki"));
-
-        availableCopy.setAvailable(false);
+        bookCopy.setAvailable(false);
 
         Rental rental = Rental.builder()
-                .bookCopy(availableCopy)
+                .bookCopy(bookCopy)
                 .reader(reader)
-                .rentalDate(LocalDateTime.now())
-                .returnDate(LocalDateTime.now().plusDays(30))
+                .rentalDate(dto.getRentalDate() != null ? dto.getRentalDate() : LocalDateTime.now())
+                .returnDate(dto.getReturnDate() != null ? dto.getReturnDate() : LocalDateTime.now().plusDays(30))
                 .returned(false)
                 .build();
 
@@ -49,11 +44,10 @@ public class RentalService {
 
     @Transactional
     public Rental returnBook(Long rentalId) {
-        Rental rental = rentalRepository.findById(rentalId)
-                .orElseThrow(() -> new RuntimeException("Nie znaleziono wypożyczenia"));
+        Rental rental = findById(rentalId);
 
         if (rental.getReturned()) {
-            throw new RuntimeException("Książka została już zrócona");
+            throw new RuntimeException("Książka została już zwrócona");
         }
 
         rental.setReturned(true);
@@ -73,18 +67,17 @@ public class RentalService {
     }
 
     @Transactional
-    public Rental save(Rental rental) {
-        return rentalRepository.save(rental);
-    }
-
-    @Transactional
-    public Rental update(Long id, Rental rentalDetails) {
+    public Rental update(Long id, RentalCreateDto dto) {
         Rental rental = findById(id);
-        rental.setBookCopy(rentalDetails.getBookCopy());
-        rental.setReader(rentalDetails.getReader());
-        rental.setRentalDate(rentalDetails.getRentalDate());
-        rental.setReturnDate(rentalDetails.getReturnDate());
-        rental.setReturned(rentalDetails.getReturned());
+        Reader reader = readerService.findById(dto.getReaderId());
+        BookCopy bookCopy = bookCopyService.findById(dto.getBookCopyId());
+
+        rental.setBookCopy(bookCopy);
+        rental.setReader(reader);
+        rental.setRentalDate(dto.getRentalDate());
+        rental.setReturnDate(dto.getReturnDate());
+        rental.setReturned(dto.getReturned() != null ? dto.getReturned() : false);
+
         return rentalRepository.save(rental);
     }
 

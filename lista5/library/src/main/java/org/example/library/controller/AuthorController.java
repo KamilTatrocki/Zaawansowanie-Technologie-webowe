@@ -34,13 +34,13 @@ public class AuthorController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public AuthorDto createAuthor(@Valid @RequestBody AuthorCreateDto authorDto) {
+    public ResponseEntity<AuthorDto> createAuthor(@Valid @RequestBody AuthorCreateDto authorDto) {
         Author author = Author.builder()
                 .firstName(authorDto.getFirstName())
                 .lastName(authorDto.getLastName())
                 .build();
-        return DtoMapper.toDto(authorService.save(author));
+        return  ResponseEntity.status(HttpStatus.CREATED)
+                .body(DtoMapper.toDto(authorService.save(author)));
     }
 
     @PutMapping("/{id}")
