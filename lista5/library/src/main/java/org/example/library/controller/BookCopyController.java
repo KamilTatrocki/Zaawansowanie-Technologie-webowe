@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/book-copies")
+@RequestMapping("/api/bookCopies")
 @RequiredArgsConstructor
 public class BookCopyController {
 
