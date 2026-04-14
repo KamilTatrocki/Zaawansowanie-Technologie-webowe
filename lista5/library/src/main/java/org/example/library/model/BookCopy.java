@@ -25,6 +25,6 @@ public class BookCopy {
     private boolean available = true;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "bookCopy", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "bookCopy", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Rental> rentals;
 }
