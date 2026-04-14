@@ -7,13 +7,13 @@ import org.example.library.dto.ReaderCreateDto;
 import org.example.library.dto.DtoMapper;
 import org.example.library.model.Reader;
 import org.example.library.service.ReaderService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/readers")
@@ -23,10 +23,8 @@ public class ReaderController {
     private final ReaderService readerService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ReaderDto> getAllReaders() {
-        return readerService.findAll().stream()
-                .map(DtoMapper::toDto)
-                .collect(Collectors.toList());
+    public Page<ReaderDto> getAllReaders(@PageableDefault(size = 20) Pageable pageable) {
+        return readerService.findAll(pageable).map(DtoMapper::toDto);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

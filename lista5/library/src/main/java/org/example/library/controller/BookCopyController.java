@@ -9,13 +9,13 @@ import org.example.library.model.BookCopy;
 import org.example.library.model.Book;
 import org.example.library.service.BookCopyService;
 import org.example.library.service.BookService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/book-copies")
@@ -26,10 +26,8 @@ public class BookCopyController {
     private final BookService bookService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<BookCopyDto> getAllBookCopies() {
-        return bookCopyService.findAll().stream()
-                .map(DtoMapper::toDto)
-                .collect(Collectors.toList());
+    public Page<BookCopyDto> getAllBookCopies(@PageableDefault(size = 20) Pageable pageable) {
+        return bookCopyService.findAll(pageable).map(DtoMapper::toDto);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

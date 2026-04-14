@@ -7,10 +7,11 @@ import org.example.library.model.BookCopy;
 import org.example.library.model.Reader;
 import org.example.library.model.Rental;
 import org.example.library.repository.RentalRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -57,8 +58,8 @@ public class RentalService {
         return rentalRepository.save(rental);
     }
 
-    public List<Rental> findAll() {
-        return rentalRepository.findAll();
+    public Page<Rental> findAll(Pageable pageable) {
+        return rentalRepository.findAll(pageable);
     }
 
     public Rental findById(Long id) {

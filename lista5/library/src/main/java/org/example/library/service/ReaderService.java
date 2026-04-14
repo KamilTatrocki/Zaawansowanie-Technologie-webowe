@@ -3,18 +3,18 @@ package org.example.library.service;
 import lombok.RequiredArgsConstructor;
 import org.example.library.model.Reader;
 import org.example.library.repository.ReaderRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ReaderService {
     private final ReaderRepository readerRepository;
 
-    public List<Reader> findAll() {
-        return readerRepository.findAll();
+    public Page<Reader> findAll(Pageable pageable) {
+        return readerRepository.findAll(pageable);
     }
 
     public Reader findById(Long id) {
