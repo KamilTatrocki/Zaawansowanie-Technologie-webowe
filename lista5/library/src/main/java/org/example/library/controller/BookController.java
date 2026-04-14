@@ -1,5 +1,6 @@
 package org.example.library.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.library.dto.BookDto;
 import org.example.library.dto.BookCreateDto;
@@ -30,12 +31,12 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookDto> getBookById(@PathVariable Long id) {
+    public ResponseEntity<BookDto> getBookById(@Valid @PathVariable Long id) {
         return ResponseEntity.ok(DtoMapper.toDto(bookService.findById(id)));
     }
 
     @PostMapping
-    public BookDto createBook(@RequestBody BookCreateDto bookDto) {
+    public BookDto createBook(@Valid @RequestBody BookCreateDto bookDto) {
         Author author = authorService.findById(bookDto.getAuthorId());
         Book book = Book.builder()
                 .title(bookDto.getTitle())
@@ -46,7 +47,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookDto> updateBook(@PathVariable Long id, @RequestBody BookCreateDto bookDto) {
+    public ResponseEntity<BookDto> updateBook(@Valid @PathVariable Long id, @Valid @RequestBody BookCreateDto bookDto) {
         Author author = authorService.findById(bookDto.getAuthorId());
         Book bookDetails = Book.builder()
                 .title(bookDto.getTitle())
@@ -57,7 +58,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteBook(@Valid @PathVariable Long id) {
         bookService.delete(id);
         return ResponseEntity.noContent().build();
     }

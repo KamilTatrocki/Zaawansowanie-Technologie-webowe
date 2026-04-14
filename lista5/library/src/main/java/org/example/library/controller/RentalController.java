@@ -1,5 +1,6 @@
 package org.example.library.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.library.dto.RentalDto;
 import org.example.library.dto.RentalCreateDto;
@@ -33,12 +34,12 @@ public class RentalController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RentalDto> getRentalById(@PathVariable Long id) {
+    public ResponseEntity<RentalDto> getRentalById(@Valid @PathVariable Long id) {
         return ResponseEntity.ok(DtoMapper.toDto(rentalService.findById(id)));
     }
 
     @PostMapping
-    public RentalDto createRental(@RequestBody RentalCreateDto rentalDto) {
+    public RentalDto createRental(@Valid @RequestBody RentalCreateDto rentalDto) {
         BookCopy bookCopy = bookCopyService.findById(rentalDto.getBookCopyId());
         Reader reader = readerService.findById(rentalDto.getReaderId());
         Rental rental = Rental.builder()
@@ -52,7 +53,7 @@ public class RentalController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RentalDto> updateRental(@PathVariable Long id, @RequestBody RentalCreateDto rentalDto) {
+    public ResponseEntity<RentalDto> updateRental(@Valid @PathVariable Long id, @Valid @RequestBody RentalCreateDto rentalDto) {
         BookCopy bookCopy = bookCopyService.findById(rentalDto.getBookCopyId());
         Reader reader = readerService.findById(rentalDto.getReaderId());
         Rental rentalDetails = Rental.builder()
@@ -66,18 +67,19 @@ public class RentalController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRental(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRental(@Valid @PathVariable Long id) {
         rentalService.delete(id);
         return ResponseEntity.noContent().build();
     }
     
     @PostMapping("/rent")
-    public ResponseEntity<RentalDto> rentBook(@RequestParam Long bookId, @RequestParam Long userId) {
+    public ResponseEntity<RentalDto> rentBook(@Valid @RequestParam Long bookId, @Valid @RequestParam Long userId) {
         return ResponseEntity.ok(DtoMapper.toDto(rentalService.rentBook(bookId, userId)));
     }
-    
-    @PostMapping("/{id}/return")
-    public ResponseEntity<RentalDto> returnBook(@PathVariable Long id) {
+
+    // TODO - test
+    @PatchMapping("/{id}/return")
+    public ResponseEntity<RentalDto> returnBook(@Valid @PathVariable Long id) {
         return ResponseEntity.ok(DtoMapper.toDto(rentalService.returnBook(id)));
     }
 }

@@ -1,5 +1,6 @@
 package org.example.library.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.library.dto.ReaderDto;
 import org.example.library.dto.ReaderCreateDto;
@@ -27,12 +28,12 @@ public class ReaderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReaderDto> getReaderById(@PathVariable Long id) {
+    public ResponseEntity<ReaderDto> getReaderById(@Valid @PathVariable Long id) {
         return ResponseEntity.ok(DtoMapper.toDto(readerService.findById(id)));
     }
 
     @PostMapping
-    public ReaderDto createReader(@RequestBody ReaderCreateDto readerDto) {
+    public ReaderDto createReader(@Valid @RequestBody ReaderCreateDto readerDto) {
         Reader reader = Reader.builder()
                 .firstName(readerDto.getFirstName())
                 .lastName(readerDto.getLastName())
@@ -41,7 +42,7 @@ public class ReaderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReaderDto> updateReader(@PathVariable Long id, @RequestBody ReaderCreateDto readerDto) {
+    public ResponseEntity<ReaderDto> updateReader(@Valid @PathVariable Long id, @Valid @RequestBody ReaderCreateDto readerDto) {
         Reader readerDetails = Reader.builder()
                 .firstName(readerDto.getFirstName())
                 .lastName(readerDto.getLastName())
@@ -50,7 +51,7 @@ public class ReaderController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReader(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteReader(@Valid @PathVariable Long id) {
         readerService.delete(id);
         return ResponseEntity.noContent().build();
     }

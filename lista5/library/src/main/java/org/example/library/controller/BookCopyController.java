@@ -1,5 +1,6 @@
 package org.example.library.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.library.dto.BookCopyDto;
 import org.example.library.dto.BookCopyCreateDto;
@@ -30,12 +31,12 @@ public class BookCopyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookCopyDto> getBookCopyById(@PathVariable Long id) {
+    public ResponseEntity<BookCopyDto> getBookCopyById(@Valid @PathVariable Long id) {
         return ResponseEntity.ok(DtoMapper.toDto(bookCopyService.findById(id)));
     }
 
     @PostMapping
-    public BookCopyDto createBookCopy(@RequestBody BookCopyCreateDto bookCopyDto) {
+    public BookCopyDto createBookCopy(@Valid @RequestBody BookCopyCreateDto bookCopyDto) {
         Book book = bookService.findById(bookCopyDto.getBookId());
         BookCopy bookCopy = BookCopy.builder()
                 .book(book)
@@ -45,7 +46,7 @@ public class BookCopyController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookCopyDto> updateBookCopy(@PathVariable Long id, @RequestBody BookCopyCreateDto bookCopyDto) {
+    public ResponseEntity<BookCopyDto> updateBookCopy(@Valid @PathVariable Long id, @Valid @RequestBody BookCopyCreateDto bookCopyDto) {
         Book book = bookService.findById(bookCopyDto.getBookId());
         BookCopy bookCopyDetails = BookCopy.builder()
                 .book(book)
@@ -55,7 +56,7 @@ public class BookCopyController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBookCopy(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteBookCopy(@Valid @PathVariable Long id) {
         bookCopyService.delete(id);
         return ResponseEntity.noContent().build();
     }

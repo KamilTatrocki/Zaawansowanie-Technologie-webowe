@@ -1,5 +1,6 @@
 package org.example.library.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.library.dto.AuthorDto;
 import org.example.library.dto.AuthorCreateDto;
@@ -27,12 +28,12 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AuthorDto> getAuthorById(@PathVariable Long id) {
+    public ResponseEntity<AuthorDto> getAuthorById(@Valid @PathVariable Long id) {
         return ResponseEntity.ok(DtoMapper.toDto(authorService.findById(id)));
     }
 
     @PostMapping
-    public AuthorDto createAuthor(@RequestBody AuthorCreateDto authorDto) {
+    public AuthorDto createAuthor(@Valid @RequestBody AuthorCreateDto authorDto) {
         Author author = Author.builder()
                 .firstName(authorDto.getFirstName())
                 .lastName(authorDto.getLastName())
@@ -41,7 +42,7 @@ public class AuthorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AuthorDto> updateAuthor(@PathVariable Long id, @RequestBody AuthorCreateDto authorDto) {
+    public ResponseEntity<AuthorDto> updateAuthor(@Valid @PathVariable Long id, @Valid @RequestBody AuthorCreateDto authorDto) {
         Author authorDetails = Author.builder()
                 .firstName(authorDto.getFirstName())
                 .lastName(authorDto.getLastName())
@@ -50,7 +51,7 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAuthor(@Valid @PathVariable Long id) {
         authorService.delete(id);
         return ResponseEntity.noContent().build();
     }
