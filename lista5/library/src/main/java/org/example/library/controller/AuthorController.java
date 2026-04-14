@@ -7,6 +7,7 @@ import org.example.library.dto.AuthorCreateDto;
 import org.example.library.dto.DtoMapper;
 import org.example.library.model.Author;
 import org.example.library.service.AuthorService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,7 @@ public class AuthorController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public AuthorDto createAuthor(@Valid @RequestBody AuthorCreateDto authorDto) {
         Author author = Author.builder()
                 .firstName(authorDto.getFirstName())

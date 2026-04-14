@@ -7,6 +7,7 @@ import org.example.library.dto.ReaderCreateDto;
 import org.example.library.dto.DtoMapper;
 import org.example.library.model.Reader;
 import org.example.library.service.ReaderService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,7 @@ public class ReaderController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ReaderDto createReader(@Valid @RequestBody ReaderCreateDto readerDto) {
         Reader reader = Reader.builder()
                 .firstName(readerDto.getFirstName())

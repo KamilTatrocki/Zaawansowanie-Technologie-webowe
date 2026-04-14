@@ -11,6 +11,7 @@ import org.example.library.model.Reader;
 import org.example.library.service.RentalService;
 import org.example.library.service.BookCopyService;
 import org.example.library.service.ReaderService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,6 +74,7 @@ public class RentalController {
     }
     
     @PostMapping("/rent")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<RentalDto> rentBook(@Valid @RequestParam Long bookId, @Valid @RequestParam Long userId) {
         return ResponseEntity.ok(DtoMapper.toDto(rentalService.rentBook(bookId, userId)));
     }

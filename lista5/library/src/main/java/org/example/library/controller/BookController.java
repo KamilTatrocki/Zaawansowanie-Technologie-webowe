@@ -9,6 +9,7 @@ import org.example.library.model.Book;
 import org.example.library.model.Author;
 import org.example.library.service.BookService;
 import org.example.library.service.AuthorService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +37,7 @@ public class BookController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public BookDto createBook(@Valid @RequestBody BookCreateDto bookDto) {
         Author author = authorService.findById(bookDto.getAuthorId());
         Book book = Book.builder()

@@ -9,6 +9,7 @@ import org.example.library.model.BookCopy;
 import org.example.library.model.Book;
 import org.example.library.service.BookCopyService;
 import org.example.library.service.BookService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +37,7 @@ public class BookCopyController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public BookCopyDto createBookCopy(@Valid @RequestBody BookCopyCreateDto bookCopyDto) {
         Book book = bookService.findById(bookCopyDto.getBookId());
         BookCopy bookCopy = BookCopy.builder()
