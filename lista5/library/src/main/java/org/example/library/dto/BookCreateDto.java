@@ -1,5 +1,6 @@
 package org.example.library.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -15,5 +16,6 @@ public class BookCreateDto {
     @NotNull(message = "Book must have an author")
     private Long authorId;
     @NotNull(message = "Book must have pages")
+    @Min(value = 1, message = "Liczba stron musi być większa od 0")
     private int pages;
 }
