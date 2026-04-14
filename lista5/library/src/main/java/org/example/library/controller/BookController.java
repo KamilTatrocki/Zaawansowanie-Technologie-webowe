@@ -10,6 +10,7 @@ import org.example.library.model.Author;
 import org.example.library.service.BookService;
 import org.example.library.service.AuthorService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,19 +25,22 @@ public class BookController {
     private final BookService bookService;
     private final AuthorService authorService;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<BookDto> getAllBooks() {
         return bookService.findAll().stream()
                 .map(DtoMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BookDto> getBookById(@Valid @PathVariable Long id) {
         return ResponseEntity.ok(DtoMapper.toDto(bookService.findById(id)));
     }
 
-    @PostMapping
+    @PostMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<BookDto> createBook(@Valid @RequestBody BookCreateDto bookDto) {
         Author author = authorService.findById(bookDto.getAuthorId());
         Book book = Book.builder()
@@ -48,7 +52,11 @@ public class BookController {
                 .body(DtoMapper.toDto(bookService.save(book)));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(
+            value = "/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<BookDto> updateBook(@Valid @PathVariable Long id, @Valid @RequestBody BookCreateDto bookDto) {
         Author author = authorService.findById(bookDto.getAuthorId());
         Book bookDetails = Book.builder()
@@ -59,7 +67,7 @@ public class BookController {
         return ResponseEntity.ok(DtoMapper.toDto(bookService.update(id, bookDetails)));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteBook(@Valid @PathVariable Long id) {
         bookService.delete(id);
         return ResponseEntity.noContent().build();

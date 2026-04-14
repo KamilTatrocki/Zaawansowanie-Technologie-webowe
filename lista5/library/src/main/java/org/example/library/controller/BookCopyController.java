@@ -10,6 +10,7 @@ import org.example.library.model.Book;
 import org.example.library.service.BookCopyService;
 import org.example.library.service.BookService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,19 +25,22 @@ public class BookCopyController {
     private final BookCopyService bookCopyService;
     private final BookService bookService;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<BookCopyDto> getAllBookCopies() {
         return bookCopyService.findAll().stream()
                 .map(DtoMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BookCopyDto> getBookCopyById(@Valid @PathVariable Long id) {
         return ResponseEntity.ok(DtoMapper.toDto(bookCopyService.findById(id)));
     }
 
-    @PostMapping
+    @PostMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<BookCopyDto> createBookCopy(@Valid @RequestBody BookCopyCreateDto bookCopyDto) {
         Book book = bookService.findById(bookCopyDto.getBookId());
         BookCopy bookCopy = BookCopy.builder()
@@ -47,7 +51,11 @@ public class BookCopyController {
                 .body(DtoMapper.toDto(bookCopyService.save(bookCopy)));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(
+            value = "/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<BookCopyDto> updateBookCopy(@Valid @PathVariable Long id, @Valid @RequestBody BookCopyCreateDto bookCopyDto) {
         Book book = bookService.findById(bookCopyDto.getBookId());
         BookCopy bookCopyDetails = BookCopy.builder()
@@ -57,7 +65,7 @@ public class BookCopyController {
         return ResponseEntity.ok(DtoMapper.toDto(bookCopyService.update(id, bookCopyDetails)));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteBookCopy(@Valid @PathVariable Long id) {
         bookCopyService.delete(id);
         return ResponseEntity.noContent().build();

@@ -8,6 +8,7 @@ import org.example.library.dto.DtoMapper;
 import org.example.library.model.Author;
 import org.example.library.service.AuthorService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,19 +22,22 @@ public class AuthorController {
 
     private final AuthorService authorService;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<AuthorDto> getAllAuthors() {
         return authorService.findAll().stream()
                 .map(DtoMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AuthorDto> getAuthorById(@Valid @PathVariable Long id) {
         return ResponseEntity.ok(DtoMapper.toDto(authorService.findById(id)));
     }
 
-    @PostMapping
+    @PostMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<AuthorDto> createAuthor(@Valid @RequestBody AuthorCreateDto authorDto) {
         Author author = Author.builder()
                 .firstName(authorDto.getFirstName())
@@ -43,7 +47,11 @@ public class AuthorController {
                 .body(DtoMapper.toDto(authorService.save(author)));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(
+            value = "/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<AuthorDto> updateAuthor(@Valid @PathVariable Long id, @Valid @RequestBody AuthorCreateDto authorDto) {
         Author authorDetails = Author.builder()
                 .firstName(authorDto.getFirstName())
@@ -52,7 +60,7 @@ public class AuthorController {
         return ResponseEntity.ok(DtoMapper.toDto(authorService.update(id, authorDetails)));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteAuthor(@Valid @PathVariable Long id) {
         authorService.delete(id);
         return ResponseEntity.noContent().build();

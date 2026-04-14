@@ -6,6 +6,7 @@ import org.example.library.dto.RentalCreateDto;
 import org.example.library.dto.DtoMapper;
 import org.example.library.service.RentalService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class RentalController {
 
     private final RentalService rentalService;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<RentalDto>> getAllRentals() {
         List<RentalDto> rentals = rentalService.findAll().stream()
                 .map(DtoMapper::toDto)
@@ -27,28 +28,38 @@ public class RentalController {
         return ResponseEntity.ok(rentals);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RentalDto> getRentalById(@PathVariable Long id) {
         return ResponseEntity.ok(DtoMapper.toDto(rentalService.findById(id)));
     }
 
-    @PostMapping
+    @PostMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<RentalDto> rentBook(@RequestBody RentalCreateDto rentalDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(DtoMapper.toDto(rentalService.rentBook(rentalDto)));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(
+            value = "/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<RentalDto> updateRental(@PathVariable Long id, @RequestBody RentalCreateDto rentalDto) {
         return ResponseEntity.ok(DtoMapper.toDto(rentalService.update(id, rentalDto)));
     }
 
-    @PatchMapping("/{id}/return")
+    @PatchMapping(
+            value = "/{id}/return",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<RentalDto> returnBook(@PathVariable Long id) {
         return ResponseEntity.ok(DtoMapper.toDto(rentalService.returnBook(id)));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteRental(@PathVariable Long id) {
         rentalService.delete(id);
         return ResponseEntity.noContent().build();
