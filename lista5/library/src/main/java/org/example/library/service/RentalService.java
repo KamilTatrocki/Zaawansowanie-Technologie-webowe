@@ -74,6 +74,10 @@ public class RentalService {
 
     @Transactional
     public Rental update(Long id, RentalCreateDto dto) {
+        if (dto.getReturnDate() != null && (dto.getReturnDate().isBefore(dto.getRentalDate()))) {
+            throw new BadRequestException("Return date should be after rental date");
+        }
+
         Rental rental = findById(id);
         Reader reader = readerService.findById(dto.getReaderId());
         BookCopy bookCopy = bookCopyService.findById(dto.getBookCopyId());
