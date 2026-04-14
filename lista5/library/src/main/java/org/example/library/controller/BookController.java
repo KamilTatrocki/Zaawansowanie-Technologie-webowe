@@ -80,8 +80,7 @@ public class BookController {
     }
 
     @DeleteMapping(
-            value = "/{id}",
-            consumes = MediaType.APPLICATION_JSON_VALUE
+            value = "/{id}"
     )
     public ResponseEntity<Void> deleteBook(@Valid @PathVariable Long id) {
         bookService.delete(id);

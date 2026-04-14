@@ -59,8 +59,7 @@ public class AuthorController {
     }
 
     @DeleteMapping(
-            value = "/{id}",
-            consumes = MediaType.APPLICATION_JSON_VALUE
+            value = "/{id}"
     )
     public ResponseEntity<Void> deleteAuthor(@Valid @PathVariable Long id) {
         authorService.delete(id);

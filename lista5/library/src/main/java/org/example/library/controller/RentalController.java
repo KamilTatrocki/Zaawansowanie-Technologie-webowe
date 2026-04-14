@@ -57,8 +57,7 @@ public class RentalController {
     }
 
     @DeleteMapping(
-            value = "/{id}",
-            consumes = MediaType.APPLICATION_JSON_VALUE
+            value = "/{id}"
     )
     public ResponseEntity<Void> deleteRental(@PathVariable Long id) {
         rentalService.delete(id);

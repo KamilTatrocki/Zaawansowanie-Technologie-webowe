@@ -59,8 +59,7 @@ public class ReaderController {
     }
 
     @DeleteMapping(
-            value = "/{id}",
-            consumes = MediaType.APPLICATION_JSON_VALUE
+            value = "/{id}"
     )
     public ResponseEntity<Void> deleteReader(@Valid @PathVariable Long id) {
         readerService.delete(id);
