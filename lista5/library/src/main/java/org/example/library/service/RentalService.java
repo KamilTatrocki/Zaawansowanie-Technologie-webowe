@@ -2,6 +2,7 @@ package org.example.library.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.example.library.config.BadRequestException;
 import org.example.library.dto.RentalCreateDto;
 import org.example.library.model.BookCopy;
 import org.example.library.model.Reader;
@@ -23,6 +24,10 @@ public class RentalService {
 
     @Transactional
     public Rental rentBook(RentalCreateDto dto) {
+        if (dto.getReturnDate() != null && (dto.getReturnDate().isBefore(dto.getRentalDate()))) {
+            throw new BadRequestException("Return date should be after rental date");
+        }
+
         Reader reader = readerService.findById(dto.getReaderId());
         BookCopy bookCopy = bookCopyService.findById(dto.getBookCopyId());
 
