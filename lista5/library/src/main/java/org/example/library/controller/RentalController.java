@@ -56,7 +56,10 @@ public class RentalController {
         return ResponseEntity.ok(DtoMapper.toDto(rentalService.returnBook(id)));
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(
+            value = "/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<Void> deleteRental(@PathVariable Long id) {
         rentalService.delete(id);
         return ResponseEntity.noContent().build();

@@ -58,7 +58,10 @@ public class AuthorController {
         return ResponseEntity.ok(DtoMapper.toDto(authorService.update(id, authorDetails)));
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(
+            value = "/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<Void> deleteAuthor(@Valid @PathVariable Long id) {
         authorService.delete(id);
         return ResponseEntity.noContent().build();

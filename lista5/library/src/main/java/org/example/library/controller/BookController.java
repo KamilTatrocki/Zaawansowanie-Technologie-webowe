@@ -79,7 +79,10 @@ public class BookController {
         return ResponseEntity.ok(DtoMapper.toDto(bookService.update(id, bookDetails)));
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(
+            value = "/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<Void> deleteBook(@Valid @PathVariable Long id) {
         bookService.delete(id);
         return ResponseEntity.noContent().build();
