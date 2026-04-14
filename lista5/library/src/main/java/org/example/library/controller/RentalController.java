@@ -43,7 +43,7 @@ public class RentalController {
         return ResponseEntity.ok(DtoMapper.toDto(rentalService.update(id, rentalDto)));
     }
 
-    @PostMapping("/{id}/return")
+    @PatchMapping("/{id}/return")
     public ResponseEntity<RentalDto> returnBook(@PathVariable Long id) {
         return ResponseEntity.ok(DtoMapper.toDto(rentalService.returnBook(id)));
     }
