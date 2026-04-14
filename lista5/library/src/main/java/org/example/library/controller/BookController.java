@@ -1,5 +1,8 @@
 package org.example.library.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.library.dto.BookDto;
@@ -35,6 +38,11 @@ public class BookController {
         return ResponseEntity.ok(DtoMapper.toDto(bookService.findById(id)));
     }
 
+    @Operation(summary = "Dodaj nową książkę")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Książka utworzona"),
+            @ApiResponse(responseCode = "400", description = "Nieprawidłowe dane wejściowe")
+    })
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -50,6 +58,12 @@ public class BookController {
                 .body(DtoMapper.toDto(bookService.save(book)));
     }
 
+
+    @Operation(summary = "Edytuj książkę")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Książka edytowana"),
+            @ApiResponse(responseCode = "400", description = "Nieprawidłowe dane wejściowe")
+    })
     @PutMapping(
             value = "/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
