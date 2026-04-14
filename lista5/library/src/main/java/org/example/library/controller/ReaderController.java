@@ -58,7 +58,9 @@ public class ReaderController {
         return ResponseEntity.ok(DtoMapper.toDto(readerService.update(id, readerDetails)));
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(
+            value = "/{id}"
+    )
     public ResponseEntity<Void> deleteReader(@Valid @PathVariable Long id) {
         readerService.delete(id);
         return ResponseEntity.noContent().build();

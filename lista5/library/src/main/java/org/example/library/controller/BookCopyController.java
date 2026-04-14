@@ -63,7 +63,9 @@ public class BookCopyController {
         return ResponseEntity.ok(DtoMapper.toDto(bookCopyService.update(id, bookCopyDetails)));
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(
+            value = "/{id}"
+    )
     public ResponseEntity<Void> deleteBookCopy(@Valid @PathVariable Long id) {
         bookCopyService.delete(id);
         return ResponseEntity.noContent().build();
