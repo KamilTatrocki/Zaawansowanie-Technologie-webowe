@@ -6,6 +6,8 @@ import type { Reader } from '@/types'
 import * as readersApi from '@/api/readers'
 
 const readers = ref<Reader[]>([])
+const currentPage = ref(0)
+const totalPages = ref(1)
 const router = useRouter()
 const showForm = ref(false)
 const editingId = ref<number | null>(null)
@@ -17,13 +19,16 @@ const columns = [
   { key: 'lastName', label: 'Last Name' },
 ]
 
-onMounted(loadReaders)
+onMounted(() => loadPage(0))
 
-async function loadReaders() {
-  readers.value = await readersApi.getAll()
+async function loadPage(page: number) {
+  const result = await readersApi.getPage(page)
+  readers.value = result.content
+  currentPage.value = result.number
+  totalPages.value = result.totalPages
 }
 
-function goToDetail(row: Record<string, any>) {
+function goToDetail(row: Record<string, unknown>) {
   router.push(`/readers/${row.id}`)
 }
 
@@ -33,9 +38,9 @@ function openCreate() {
   showForm.value = true
 }
 
-function openEdit(row: Record<string, any>) {
-  editingId.value = row.id
-  form.value = { firstName: row.firstName, lastName: row.lastName }
+function openEdit(row: Record<string, unknown>) {
+  editingId.value = row.id as number
+  form.value = { firstName: row.firstName as string, lastName: row.lastName as string }
   showForm.value = true
 }
 
@@ -46,13 +51,13 @@ async function handleSubmit() {
     await readersApi.create(form.value)
   }
   showForm.value = false
-  await loadReaders()
+  await loadPage(currentPage.value)
 }
 
-async function handleDelete(row: Record<string, any>) {
+async function handleDelete(row: Record<string, unknown>) {
   if (confirm(`Delete "${row.firstName} ${row.lastName}"?`)) {
-    await readersApi.remove(row.id)
-    await loadReaders()
+    await readersApi.remove(row.id as number)
+    await loadPage(currentPage.value)
   }
 }
 </script>
@@ -85,9 +90,12 @@ async function handleDelete(row: Record<string, any>) {
     <PaginatedTable
       :columns="columns"
       :rows="readers"
+      :current-page="currentPage"
+      :total-pages="totalPages"
       @view="goToDetail"
       @edit="openEdit"
       @delete="handleDelete"
+      @page-change="loadPage"
     />
   </div>
 </template>

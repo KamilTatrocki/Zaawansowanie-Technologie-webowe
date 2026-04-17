@@ -6,19 +6,18 @@ import type { Rental } from '@/types'
 import * as rentalsApi from '@/api/rentals'
 import * as bookCopiesApi from '@/api/bookCopies'
 import * as readersApi from '@/api/readers'
-import * as booksApi from '@/api/books'
 import SearchSelect from '@/components/SearchSelect.vue'
-import type { BookCopy, Reader, Book } from '@/types'
+import type { BookCopy, Reader } from '@/types'
 
 const rentals = ref<Rental[]>([])
+const currentPage = ref(0)
+const totalPages = ref(1)
 const router = useRouter()
 const bookCopies = ref<BookCopy[]>([])
 const readers = ref<Reader[]>([])
-const books = ref<Book[]>([])
 const showForm = ref(false)
 const editingId = ref<number | null>(null)
 const form = ref({
-  bookId: null as number | null,
   bookCopyId: null as number | null,
   readerId: null as number | null,
   rentalDate: '',
@@ -36,14 +35,16 @@ const columns = [
 ]
 
 onMounted(() => {
-  loadRentals()
+  loadPage(0)
   loadBookCopies()
   loadReaders()
-  loadBooks()
 })
 
-async function loadRentals() {
-  rentals.value = await rentalsApi.getAll()
+async function loadPage(page: number) {
+  const result = await rentalsApi.getPage(page)
+  rentals.value = result.content
+  currentPage.value = result.number
+  totalPages.value = result.totalPages
 }
 
 async function loadBookCopies() {
@@ -54,26 +55,14 @@ async function loadReaders() {
   readers.value = await readersApi.getAll()
 }
 
-async function loadBooks() {
-  books.value = await booksApi.getAll()
-}
-
-function goToDetail(row: Record<string, any>) {
+function goToDetail(row: Record<string, unknown>) {
   router.push(`/rentals/${row.id}`)
 }
 
-// Compute display labels
 const bookCopyOptions = computed(() =>
   bookCopies.value.map((c) => ({
     id: c.id,
     display: `#${c.id} - ${c.bookTitle}`,
-  })),
-)
-
-const bookOptions = computed(() =>
-  books.value.map((b) => ({
-    id: b.id,
-    display: `#${b.id} - ${b.title}`,
   })),
 )
 
@@ -87,7 +76,6 @@ const readerOptions = computed(() =>
 function openCreate() {
   editingId.value = null
   form.value = {
-    bookId: null,
     bookCopyId: null,
     readerId: null,
     rentalDate: new Date().toISOString().slice(0, 16),
@@ -97,48 +85,48 @@ function openCreate() {
   showForm.value = true
 }
 
-function openEdit(row: Record<string, any>) {
-  editingId.value = row.id
+function openEdit(row: Record<string, unknown>) {
+  editingId.value = row.id as number
   form.value = {
-    bookId: null,
-    bookCopyId: row.bookCopyId,
-    readerId: row.readerId,
-    rentalDate: row.rentalDate,
-    returnDate: row.returnDate,
-    returned: row.returned,
+    bookCopyId: row.bookCopyId as number,
+    readerId: row.readerId as number,
+    rentalDate: row.rentalDate as string,
+    returnDate: row.returnDate as string | null,
+    returned: row.returned as boolean,
   }
   showForm.value = true
 }
 
 async function handleSubmit() {
+  if (form.value.bookCopyId === null || form.value.readerId === null) return
+
+  const payload = {
+    bookCopyId: form.value.bookCopyId,
+    readerId: form.value.readerId,
+    rentalDate: form.value.rentalDate,
+    returnDate: form.value.returnDate || null,
+    returned: form.value.returned,
+  }
+
   if (editingId.value !== null) {
-    if (form.value.bookCopyId === null || form.value.readerId === null) return
-    const payload = {
-      bookCopyId: form.value.bookCopyId,
-      readerId: form.value.readerId,
-      rentalDate: form.value.rentalDate,
-      returnDate: form.value.returnDate,
-      returned: form.value.returned,
-    }
     await rentalsApi.update(editingId.value, payload)
   } else {
-    if (form.value.bookId === null || form.value.readerId === null) return
-    await rentalsApi.rentBook(form.value.bookId, form.value.readerId)
+    await rentalsApi.create(payload)
   }
   showForm.value = false
-  await loadRentals()
+  await loadPage(currentPage.value)
 }
 
-async function handleDelete(row: Record<string, any>) {
+async function handleDelete(row: Record<string, unknown>) {
   if (confirm(`Delete rental #${row.id}?`)) {
-    await rentalsApi.remove(row.id)
-    await loadRentals()
+    await rentalsApi.remove(row.id as number)
+    await loadPage(currentPage.value)
   }
 }
 
-async function handleReturn(row: Record<string, any>) {
-  await rentalsApi.returnBook(row.id)
-  await loadRentals()
+async function handleReturn(row: Record<string, unknown>) {
+  await rentalsApi.returnBook(row.id as number)
+  await loadPage(currentPage.value)
 }
 </script>
 
@@ -152,24 +140,14 @@ async function handleReturn(row: Record<string, any>) {
     <div v-if="showForm" class="form-card">
       <h3>{{ editingId !== null ? 'Edit Rental' : 'New Rental' }}</h3>
       <form @submit.prevent="handleSubmit">
-        <label v-if="editingId === null"
-          >Book
-          <SearchSelect
-            v-model="form.bookId"
-            :options="bookOptions"
-            label="display"
-            placeholder="Select a book"
-            :reduce="(opt: any) => opt.id"
-          />
-        </label>
-        <label v-if="editingId !== null"
+        <label
           >Book Copy
           <SearchSelect
             v-model="form.bookCopyId"
             :options="bookCopyOptions"
             label="display"
             placeholder="Select a book copy"
-            :reduce="(opt: any) => opt.id"
+            :reduce="(opt: { id: number; display: string }) => opt.id"
           />
         </label>
         <label
@@ -179,10 +157,10 @@ async function handleReturn(row: Record<string, any>) {
             :options="readerOptions"
             label="display"
             placeholder="Select a reader"
-            :reduce="(opt: any) => opt.id"
+            :reduce="(opt: { id: number; display: string }) => opt.id"
           />
         </label>
-        <div class="row" v-if="editingId !== null">
+        <div class="row">
           <label
             >Rental Date
             <input v-model="form.rentalDate" type="datetime-local" required />
@@ -192,7 +170,7 @@ async function handleReturn(row: Record<string, any>) {
             <input v-model="form.returnDate" type="datetime-local" />
           </label>
         </div>
-        <label class="checkbox-label" v-if="editingId !== null">
+        <label class="checkbox-label">
           <input type="checkbox" v-model="form.returned" />
           Returned
         </label>
@@ -200,7 +178,7 @@ async function handleReturn(row: Record<string, any>) {
           <button
             type="submit"
             class="btn btn-primary"
-            :disabled="(editingId === null && (form.bookId === null || form.readerId === null)) || (editingId !== null && (form.bookCopyId === null || form.readerId === null))"
+            :disabled="form.bookCopyId === null || form.readerId === null"
           >
             Save
           </button>
@@ -220,9 +198,12 @@ async function handleReturn(row: Record<string, any>) {
     <PaginatedTable
       :columns="columns"
       :rows="rentals"
+      :current-page="currentPage"
+      :total-pages="totalPages"
       @view="goToDetail"
       @edit="openEdit"
       @delete="handleDelete"
+      @page-change="loadPage"
     />
   </div>
 </template>
@@ -283,47 +264,6 @@ input {
   margin-top: 0.5rem;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #fff;
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-th,
-td {
-  padding: 0.75rem 1rem;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-}
-th {
-  background-color: #3498db;
-  color: #fff;
-  font-weight: 600;
-}
-tr:hover {
-  background-color: #f0f4f8;
-}
-.empty {
-  text-align: center;
-  color: #999;
-  padding: 2rem;
-}
-.actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.badge-yes {
-  color: #27ae60;
-  font-weight: 600;
-}
-.badge-no {
-  color: #e74c3c;
-  font-weight: 600;
-}
-
 .btn {
   padding: 0.35rem 0.75rem;
   border: 1px solid #bdc3c7;
@@ -341,22 +281,6 @@ tr:hover {
 }
 .btn-primary:hover {
   background-color: #2980b9;
-}
-.btn-edit {
-  background-color: #f39c12;
-  color: #fff;
-  border-color: #f39c12;
-}
-.btn-edit:hover {
-  background-color: #e67e22;
-}
-.btn-delete {
-  background-color: #e74c3c;
-  color: #fff;
-  border-color: #e74c3c;
-}
-.btn-delete:hover {
-  background-color: #c0392b;
 }
 .btn-return {
   background-color: #27ae60;

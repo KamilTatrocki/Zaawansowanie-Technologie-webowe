@@ -1,8 +1,13 @@
-import type { Author } from '@/types'
+import type { Author, Page } from '@/types'
 import { fetchGET, fetchPOST, fetchDELETE, fetchPUT } from './apiUtils'
 
+export async function getPage(page = 0, size = 5): Promise<Page<Author>> {
+  return fetchGET<Page<Author>>(`/api/authors?page=${page}&size=${size}`)
+}
+
 export async function getAll(): Promise<Author[]> {
-  return fetchGET<Author[]>('/api/authors')
+  const p = await getPage(0, 1000)
+  return p.content
 }
 
 export async function getById(id: number): Promise<Author | undefined> {

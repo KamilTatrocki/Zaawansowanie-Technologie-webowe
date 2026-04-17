@@ -1,45 +1,22 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-
-const props = withDefaults(
-  defineProps<{
-    columns: { key: string; label: string }[]
-    rows: Record<string, any>[]
-    pageSize?: number
-  }>(),
-  { pageSize: 5 },
-)
-
-defineEmits<{
-  (e: 'view', row: Record<string, any>): void
-  (e: 'edit', row: Record<string, any>): void
-  (e: 'delete', row: Record<string, any>): void
+defineProps<{
+  columns: { key: string; label: string }[]
+  rows: Record<string, unknown>[]
+  currentPage: number
+  totalPages: number
 }>()
 
-const currentPage = ref(1)
+const emit = defineEmits<{
+  (e: 'view', row: Record<string, unknown>): void
+  (e: 'edit', row: Record<string, unknown>): void
+  (e: 'delete', row: Record<string, unknown>): void
+  (e: 'page-change', page: number): void
+}>()
 
-const totalPages = computed(() => Math.max(1, Math.ceil(props.rows.length / props.pageSize)))
-
-const paginatedRows = computed(() => {
-  const sorted = [...props.rows].sort((a, b) => {
-    if (a.id && b.id) return a.id - b.id
-    return 0
-  })
-  const start = (currentPage.value - 1) * props.pageSize
-  return sorted.slice(start, start + props.pageSize)
-})
-
-function formatValue(value: any) {
+function formatValue(value: unknown): string | number | boolean {
   if (typeof value === 'boolean') return value ? 'Yes' : 'No'
-  return value
-}
-
-function prevPage() {
-  if (currentPage.value > 1) currentPage.value--
-}
-
-function nextPage() {
-  if (currentPage.value < totalPages.value) currentPage.value++
+  if (value === null || value === undefined) return ''
+  return value as string | number
 }
 </script>
 
@@ -54,15 +31,15 @@ function nextPage() {
           </tr>
         </thead>
         <tbody>
-          <tr v-if="paginatedRows.length === 0">
+          <tr v-if="rows.length === 0">
             <td :colspan="columns.length + 1" class="empty">No data available</td>
           </tr>
-          <tr v-for="row in paginatedRows" :key="row.id">
+          <tr v-for="row in rows" :key="row.id as number">
             <td v-for="col in columns" :key="col.key">{{ formatValue(row[col.key]) }}</td>
             <td class="actions">
-              <button class="btn btn-view" @click="$emit('view', row)">View</button>
-              <button class="btn btn-edit" @click="$emit('edit', row)">Edit</button>
-              <button class="btn btn-delete" @click="$emit('delete', row)">Delete</button>
+              <button class="btn btn-view" @click="emit('view', row)">View</button>
+              <button class="btn btn-edit" @click="emit('edit', row)">Edit</button>
+              <button class="btn btn-delete" @click="emit('delete', row)">Delete</button>
             </td>
           </tr>
         </tbody>
@@ -70,9 +47,9 @@ function nextPage() {
     </div>
 
     <div class="pagination">
-      <button :disabled="currentPage <= 1" @click="prevPage">← Prev</button>
-      <span>Page {{ currentPage }} of {{ totalPages }}</span>
-      <button :disabled="currentPage >= totalPages" @click="nextPage">Next →</button>
+      <button :disabled="currentPage <= 0" @click="emit('page-change', currentPage - 1)">← Prev</button>
+      <span>Page {{ currentPage + 1 }} of {{ Math.max(1, totalPages) }}</span>
+      <button :disabled="currentPage >= totalPages - 1" @click="emit('page-change', currentPage + 1)">Next →</button>
     </div>
   </div>
 </template>

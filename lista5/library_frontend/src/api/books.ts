@@ -1,8 +1,13 @@
-import type { Book, BookCreatePayload } from '@/types'
+import type { Book, BookCreatePayload, Page } from '@/types'
 import { fetchGET, fetchPOST, fetchDELETE, fetchPUT } from './apiUtils'
 
+export async function getPage(page = 0, size = 5): Promise<Page<Book>> {
+  return fetchGET<Page<Book>>(`/api/books?page=${page}&size=${size}`)
+}
+
 export async function getAll(): Promise<Book[]> {
-  return fetchGET<Book[]>('/api/books')
+  const p = await getPage(0, 1000)
+  return p.content
 }
 
 export async function getById(id: number): Promise<Book | undefined> {

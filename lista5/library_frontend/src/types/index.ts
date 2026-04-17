@@ -1,3 +1,13 @@
+export interface Page<T> {
+  content: T[]
+  totalPages: number
+  totalElements: number
+  number: number
+  size: number
+  last: boolean
+  first: boolean
+}
+
 export interface Book {
   id: number
   title: string
@@ -21,12 +31,12 @@ export interface Reader {
 export interface BookCopy {
   id: number
   bookTitle: string
-  isAvailable: boolean
+  available: boolean
 }
 
 export interface BookCopyCreatePayload {
   bookId: number
-  isAvailable: boolean
+  available: boolean
 }
 
 export interface Rental {

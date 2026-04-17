@@ -10,6 +10,8 @@ import type { Book } from '@/types'
 
 const router = useRouter()
 const copies = ref<BookCopy[]>([])
+const currentPage = ref(0)
+const totalPages = ref(1)
 const books = ref<Book[]>([])
 const showForm = ref(false)
 const editingId = ref<number | null>(null)
@@ -22,19 +24,22 @@ const columns = [
 ]
 
 onMounted(() => {
-  loadCopies()
+  loadPage(0)
   loadBooks()
 })
 
-async function loadCopies() {
-  copies.value = await bookCopiesApi.getAll()
+async function loadPage(page: number) {
+  const result = await bookCopiesApi.getPage(page)
+  copies.value = result.content
+  currentPage.value = result.number
+  totalPages.value = result.totalPages
 }
 
 async function loadBooks() {
   books.value = await booksApi.getAll()
 }
 
-function goToDetail(row: Record<string, any>) {
+function goToDetail(row: Record<string, unknown>) {
   router.push(`/book-copies/${row.id}`)
 }
 
@@ -44,13 +49,12 @@ function openCreate() {
   showForm.value = true
 }
 
-function openEdit(row: Record<string, any>) {
-  editingId.value = row.id
-  // Find the book by title (or we might need bookId in BookCopy DTO)
+function openEdit(row: Record<string, unknown>) {
+  editingId.value = row.id as number
   const book = books.value.find((b) => b.title === row.bookTitle)
   form.value = {
     bookId: book ? book.id : null,
-    available: row.available,
+    available: row.available as boolean,
   }
   showForm.value = true
 }
@@ -69,13 +73,13 @@ async function handleSubmit() {
     await bookCopiesApi.create(payload)
   }
   showForm.value = false
-  await loadCopies()
+  await loadPage(currentPage.value)
 }
 
-async function handleDelete(row: Record<string, any>) {
+async function handleDelete(row: Record<string, unknown>) {
   if (confirm(`Delete copy #${row.id}?`)) {
-    await bookCopiesApi.remove(row.id)
-    await loadCopies()
+    await bookCopiesApi.remove(row.id as number)
+    await loadPage(currentPage.value)
   }
 }
 </script>
@@ -116,9 +120,12 @@ async function handleDelete(row: Record<string, any>) {
     <PaginatedTable
       :columns="columns"
       :rows="copies"
+      :current-page="currentPage"
+      :total-pages="totalPages"
       @view="goToDetail"
       @edit="openEdit"
       @delete="handleDelete"
+      @page-change="loadPage"
     />
   </div>
 </template>

@@ -1,8 +1,13 @@
-import type { Rental, RentalCreatePayload } from '@/types'
-import { fetchGET, fetchPOST, fetchDELETE, fetchPUT } from './apiUtils'
+import type { Rental, RentalCreatePayload, Page } from '@/types'
+import { fetchGET, fetchPOST, fetchDELETE, fetchPUT, fetchPATCH } from './apiUtils'
+
+export async function getPage(page = 0, size = 5): Promise<Page<Rental>> {
+  return fetchGET<Page<Rental>>(`/api/rentals?page=${page}&size=${size}`)
+}
 
 export async function getAll(): Promise<Rental[]> {
-  return fetchGET<Rental[]>('/api/rentals')
+  const p = await getPage(0, 1000)
+  return p.content
 }
 
 export async function getById(id: number): Promise<Rental | undefined> {
@@ -21,15 +26,6 @@ export async function remove(id: number): Promise<void> {
   return fetchDELETE<void>(`/api/rentals/${id}`, 'Rental deleted successfully')
 }
 
-// Extra rental-specific actions
-export async function rentBook(bookId: number, readerId: number): Promise<Rental> {
-  return fetchPOST<Rental>(
-    `/api/rentals/rent?bookId=${bookId}&userId=${readerId}`,
-    {},
-    'Book rented successfully',
-  )
-}
-
 export async function returnBook(id: number): Promise<Rental> {
-  return fetchPOST<Rental>(`/api/rentals/${id}/return`, {}, 'Book returned successfully')
+  return fetchPATCH<Rental>(`/api/rentals/${id}/return`, 'Book returned successfully')
 }

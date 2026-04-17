@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import * as booksApi from '@/api/books'
 import * as authorsApi from '@/api/authors'
@@ -13,23 +13,22 @@ const recentRentals = ref<Rental[]>([])
 const router = useRouter()
 
 onMounted(async () => {
-  const [books, authors, readers, copies, rentals] = await Promise.all([
-    booksApi.getAll(),
-    authorsApi.getAll(),
-    readersApi.getAll(),
-    bookCopiesApi.getAll(),
-    rentalsApi.getAll(),
+  const [booksPage, authorsPage, readersPage, copiesPage, rentalsPage] = await Promise.all([
+    booksApi.getPage(0, 1),
+    authorsApi.getPage(0, 1),
+    readersApi.getPage(0, 1),
+    bookCopiesApi.getPage(0, 1),
+    rentalsApi.getPage(0, 4),
   ])
   stats.value = {
-    books: books.length,
-    authors: authors.length,
-    readers: readers.length,
-    bookCopies: copies.length,
-    rentals: rentals.length,
+    books: booksPage.totalElements,
+    authors: authorsPage.totalElements,
+    readers: readersPage.totalElements,
+    bookCopies: copiesPage.totalElements,
+    rentals: rentalsPage.totalElements,
   }
 
-  // Get 4 most recent rentals (simulate by slicing since no specific sorting API is clear)
-  recentRentals.value = [...rentals].reverse().slice(0, 4)
+  recentRentals.value = rentalsPage.content
 })
 
 function navigateTo(route: string) {

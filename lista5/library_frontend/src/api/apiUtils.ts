@@ -2,50 +2,72 @@ import router from '@/router'
 import { addToast } from '@/utils/toast'
 
 class ApiError extends Error {
-  constructor(message: string) {
+  constructor(
+    message: string,
+    public status: number,
+  ) {
     super(message)
     this.name = 'ApiError'
   }
 }
 
+function statusMessage(status: number): string {
+  switch (status) {
+    case 400:
+      return 'Bad Request (400): Invalid input data.'
+    case 401:
+      return 'Unauthorized (401): Authentication required.'
+    case 403:
+      return 'Forbidden (403): You do not have permission.'
+    case 404:
+      return 'Not Found (404): The requested resource does not exist.'
+    case 409:
+      return 'Conflict (409): The action conflicts with the current state.'
+    case 422:
+      return 'Unprocessable Entity (422): Validation failed.'
+    case 500:
+      return 'Server Error (500): An internal error occurred.'
+    case 503:
+      return 'Service Unavailable (503): The server is temporarily unavailable.'
+    default:
+      return `Request Failed (${status}).`
+  }
+}
+
 async function handleResponse<T>(response: Response, successMessage?: string): Promise<T> {
   if (!response.ok) {
-    let errorMessage = `Action Failed. Status: ${response.status}`
+    let errorMessage = statusMessage(response.status)
+
     try {
       const errorText = await response.text()
-
-      // Check for known SQL constraints that typically occur during deletions (DataIntegrityViolationException)
       if (
         errorText.includes('ConstraintViolationException') ||
         errorText.includes('could not execute statement') ||
         errorText.includes('DataIntegrityViolationException')
       ) {
         errorMessage =
-          'Action failed: Cannot delete this resource because it is referenced by other items.'
-      }
-      // If the message contains standard "Nie znaleziono", cleanly pass it along
-      else if (errorText.trim().length > 0) {
-        // Sometimes spring boot wraps things in JSON arbitrarily. Attempt to parse out 'message' if possible, otherwise use raw text.
+          'Action failed (409): Cannot delete this resource because it is referenced by other items.'
+      } else if (errorText.trim().length > 0) {
         try {
           const errorJson = JSON.parse(errorText)
-          errorMessage = errorJson.message || errorJson.error || errorText
+          const detail = errorJson.message || errorJson.error
+          if (detail) errorMessage = `${statusMessage(response.status)} ${detail}`
         } catch {
-          errorMessage = errorText // Use the raw plain text from the backend
+          // use default status message
         }
       }
-    } catch (e) {
-      // failed to read text body
+    } catch {
+      // failed to read body
     }
 
-    // If it's a 404 and it explicitly mentions an entity was not found in polish, do the redirect trap.
-    if (response.status === 404 && errorMessage.includes('Nie znaleziono')) {
+    if (response.status === 404) {
       addToast(errorMessage, 'error')
       router.push('/')
     } else {
       addToast(errorMessage, 'error')
     }
 
-    throw new ApiError(errorMessage)
+    throw new ApiError(errorMessage, response.status)
   }
 
   if (successMessage) {
@@ -53,30 +75,28 @@ async function handleResponse<T>(response: Response, successMessage?: string): P
   }
 
   if (response.status === 204) {
-    return {} as Promise<T>
+    return {} as T
   }
 
-  // In some cases response might be empty entirely, but standard operations expect JSON.
   const text = await response.text()
   if (!text) {
-    return {} as Promise<T>
+    return {} as T
   }
-  return JSON.parse(text) as Promise<T>
+  return JSON.parse(text) as T
 }
 
 export async function fetchGET<T>(url: string, successMessage?: string): Promise<T> {
   try {
     const response = await fetch(url)
     return await handleResponse<T>(response, successMessage)
-  } catch (e: any) {
-    if (e.name !== 'ApiError') {
-      addToast('Network error: Cannot reach the server', 'error')
-    }
+  } catch (e: unknown) {
+    if (e instanceof ApiError) throw e
+    addToast('Network error: Cannot reach the server', 'error')
     throw e
   }
 }
 
-export async function fetchPOST<T>(url: string, data: any, successMessage?: string): Promise<T> {
+export async function fetchPOST<T>(url: string, data: unknown, successMessage?: string): Promise<T> {
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -84,15 +104,14 @@ export async function fetchPOST<T>(url: string, data: any, successMessage?: stri
       body: JSON.stringify(data),
     })
     return await handleResponse<T>(response, successMessage)
-  } catch (e: any) {
-    if (e.name !== 'ApiError') {
-      addToast('Network error: Cannot reach the server', 'error')
-    }
+  } catch (e: unknown) {
+    if (e instanceof ApiError) throw e
+    addToast('Network error: Cannot reach the server', 'error')
     throw e
   }
 }
 
-export async function fetchPUT<T>(url: string, data: any, successMessage?: string): Promise<T> {
+export async function fetchPUT<T>(url: string, data: unknown, successMessage?: string): Promise<T> {
   try {
     const response = await fetch(url, {
       method: 'PUT',
@@ -100,10 +119,23 @@ export async function fetchPUT<T>(url: string, data: any, successMessage?: strin
       body: JSON.stringify(data),
     })
     return await handleResponse<T>(response, successMessage)
-  } catch (e: any) {
-    if (e.name !== 'ApiError') {
-      addToast('Network error: Cannot reach the server', 'error')
-    }
+  } catch (e: unknown) {
+    if (e instanceof ApiError) throw e
+    addToast('Network error: Cannot reach the server', 'error')
+    throw e
+  }
+}
+
+export async function fetchPATCH<T>(url: string, successMessage?: string): Promise<T> {
+  try {
+    const response = await fetch(url, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    return await handleResponse<T>(response, successMessage)
+  } catch (e: unknown) {
+    if (e instanceof ApiError) throw e
+    addToast('Network error: Cannot reach the server', 'error')
     throw e
   }
 }
@@ -114,10 +146,9 @@ export async function fetchDELETE<T>(url: string, successMessage?: string): Prom
       method: 'DELETE',
     })
     return await handleResponse<T>(response, successMessage)
-  } catch (e: any) {
-    if (e.name !== 'ApiError') {
-      addToast('Network error: Cannot reach the server', 'error')
-    }
+  } catch (e: unknown) {
+    if (e instanceof ApiError) throw e
+    addToast('Network error: Cannot reach the server', 'error')
     throw e
   }
 }

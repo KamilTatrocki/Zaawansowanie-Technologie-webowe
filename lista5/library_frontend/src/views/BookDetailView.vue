@@ -79,8 +79,8 @@ function viewCopy(id: number) {
               <tr v-for="copy in copies" :key="copy.id">
                 <td>{{ copy.id }}</td>
                 <td>
-                  <span :class="copy.isAvailable ? 'available' : 'unavailable'">
-                    {{ copy.isAvailable ? 'Available' : 'Unavailable' }}
+                  <span :class="copy.available ? 'available' : 'unavailable'">
+                    {{ copy.available ? 'Available' : 'Unavailable' }}
                   </span>
                 </td>
                 <td>

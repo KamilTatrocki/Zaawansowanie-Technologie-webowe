@@ -8,6 +8,8 @@ import * as authorsApi from '@/api/authors'
 import SearchSelect from '@/components/SearchSelect.vue'
 
 const books = ref<Book[]>([])
+const currentPage = ref(0)
+const totalPages = ref(1)
 const router = useRouter()
 const authors = ref<Author[]>([])
 const showForm = ref(false)
@@ -23,19 +25,22 @@ const columns = [
 ]
 
 onMounted(() => {
-  loadBooks()
+  loadPage(0)
   loadAuthors()
 })
 
-async function loadBooks() {
-  books.value = await booksApi.getAll()
+async function loadPage(page: number) {
+  const result = await booksApi.getPage(page)
+  books.value = result.content
+  currentPage.value = result.number
+  totalPages.value = result.totalPages
 }
 
 async function loadAuthors() {
   authors.value = await authorsApi.getAll()
 }
 
-function goToDetail(row: Record<string, any>) {
+function goToDetail(row: Record<string, unknown>) {
   router.push(`/books/${row.id}`)
 }
 
@@ -52,16 +57,15 @@ function openCreate() {
   showForm.value = true
 }
 
-function openEdit(row: Record<string, any>) {
-  editingId.value = row.id
-  // Find author by first and last name if we don't have ID in row
+function openEdit(row: Record<string, unknown>) {
+  editingId.value = row.id as number
   const author = authors.value.find(
     (a) => a.firstName === row.authorFirstName && a.lastName === row.authorLastName,
   )
   form.value = {
-    title: row.title,
+    title: row.title as string,
     authorId: author ? author.id : null,
-    pages: row.pages,
+    pages: row.pages as number,
   }
   showForm.value = true
 }
@@ -81,13 +85,13 @@ async function handleSubmit() {
     await booksApi.create(payload)
   }
   showForm.value = false
-  await loadBooks()
+  await loadPage(currentPage.value)
 }
 
-async function handleDelete(row: Record<string, any>) {
+async function handleDelete(row: Record<string, unknown>) {
   if (confirm(`Delete "${row.title}"?`)) {
-    await booksApi.remove(row.id)
-    await loadBooks()
+    await booksApi.remove(row.id as number)
+    await loadPage(currentPage.value)
   }
 }
 </script>
@@ -113,7 +117,7 @@ async function handleDelete(row: Record<string, any>) {
             :options="authorOptions"
             label="display"
             placeholder="Select an author"
-            :reduce="(opt: any) => opt.id"
+            :reduce="(opt: { id: number; display: string }) => opt.id"
           />
         </label>
         <label
@@ -132,9 +136,12 @@ async function handleDelete(row: Record<string, any>) {
     <PaginatedTable
       :columns="columns"
       :rows="books"
+      :current-page="currentPage"
+      :total-pages="totalPages"
       @view="goToDetail"
       @edit="openEdit"
       @delete="handleDelete"
+      @page-change="loadPage"
     />
   </div>
 </template>

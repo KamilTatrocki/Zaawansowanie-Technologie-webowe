@@ -1,8 +1,13 @@
-import type { Reader } from '@/types'
+import type { Reader, Page } from '@/types'
 import { fetchGET, fetchPOST, fetchDELETE, fetchPUT } from './apiUtils'
 
+export async function getPage(page = 0, size = 5): Promise<Page<Reader>> {
+  return fetchGET<Page<Reader>>(`/api/readers?page=${page}&size=${size}`)
+}
+
 export async function getAll(): Promise<Reader[]> {
-  return fetchGET<Reader[]>('/api/readers')
+  const p = await getPage(0, 1000)
+  return p.content
 }
 
 export async function getById(id: number): Promise<Reader | undefined> {
