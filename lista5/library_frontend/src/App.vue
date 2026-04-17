@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterView } from 'vue-router'
 import AppLayout from './layouts/AppLayout.vue'
 import ToastNotifications from './components/ToastNotifications.vue'
@@ -9,30 +9,64 @@ const appState = ref<AppState>('loading')
 const errorMessage = ref('')
 
 const TIMEOUT_MS = 8000
+const MIN_LOADING_MS = 1000
+const HEALTH_POLL_MS = 10000
 
-onMounted(async () => {
+let healthTimer: ReturnType<typeof setInterval> | null = null
+
+async function checkConnection(): Promise<boolean> {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
-
   try {
     const res = await fetch('/api/authors?page=0&size=1', { signal: controller.signal })
     clearTimeout(timer)
-    if (res.ok || res.status < 500) {
-      appState.value = 'ready'
-    } else {
-      errorMessage.value = `Server responded with status ${res.status}. The database may be unavailable.`
-      appState.value = 'error'
-    }
-  } catch (e: unknown) {
+    return res.ok || res.status < 500
+  } catch {
     clearTimeout(timer)
-    if (e instanceof Error && e.name === 'AbortError') {
-      errorMessage.value = 'Connection timed out. The server did not respond within 8 seconds.'
-    } else {
-      errorMessage.value = 'Cannot reach the server. Please check that the backend is running.'
-    }
-    appState.value = 'error'
+    return false
   }
-})
+}
+
+async function tryConnect() {
+  appState.value = 'loading'
+  errorMessage.value = ''
+
+  const [ok] = await Promise.all([
+    checkConnection(),
+    new Promise<void>((r) => setTimeout(r, MIN_LOADING_MS)),
+  ])
+
+  if (ok) {
+    appState.value = 'ready'
+    startHealthPolling()
+  } else {
+    errorMessage.value = 'Cannot reach the server or database. Please check that the backend is running.'
+    appState.value = 'error'
+    stopHealthPolling()
+  }
+}
+
+function startHealthPolling() {
+  stopHealthPolling()
+  healthTimer = setInterval(async () => {
+    const ok = await checkConnection()
+    if (!ok && appState.value === 'ready') {
+      errorMessage.value = 'Connection to the server was lost. Please retry when the server is back online.'
+      appState.value = 'error'
+      stopHealthPolling()
+    }
+  }, HEALTH_POLL_MS)
+}
+
+function stopHealthPolling() {
+  if (healthTimer !== null) {
+    clearInterval(healthTimer)
+    healthTimer = null
+  }
+}
+
+onMounted(() => tryConnect())
+onUnmounted(() => stopHealthPolling())
 </script>
 
 <template>
@@ -51,7 +85,7 @@ onMounted(async () => {
       <div class="error-icon">⚠️</div>
       <h2>Unable to Connect</h2>
       <p>{{ errorMessage }}</p>
-      <button class="retry-btn" @click="location.reload()">Retry</button>
+      <button class="retry-btn" @click="tryConnect()">Retry</button>
     </div>
   </div>
 

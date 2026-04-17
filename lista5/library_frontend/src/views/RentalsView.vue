@@ -40,9 +40,19 @@ onMounted(() => {
   loadReaders()
 })
 
+/** Converts any ISO-8601 datetime string to the "yyyy-MM-ddTHH:mm" format
+ *  required by <input type="datetime-local">. Handles fractional seconds of
+ *  any precision returned by the backend (e.g. "2026-04-07T11:54:50.068037"). */
+function toDatetimeLocal(iso: string | null | undefined): string {
+  if (!iso) return ''
+  // Slice to 16 characters: "yyyy-MM-ddTHH:mm"
+  return iso.slice(0, 16)
+}
+
 async function loadPage(page: number) {
   const result = await rentalsApi.getPage(page)
-  rentals.value = result.content
+  // Sort by ID ascending so the order stays stable after creates/edits
+  rentals.value = [...result.content].sort((a, b) => a.id - b.id)
   currentPage.value = result.number
   totalPages.value = result.totalPages
 }
@@ -90,8 +100,8 @@ function openEdit(row: Record<string, unknown>) {
   form.value = {
     bookCopyId: row.bookCopyId as number,
     readerId: row.readerId as number,
-    rentalDate: row.rentalDate as string,
-    returnDate: row.returnDate as string | null,
+    rentalDate: toDatetimeLocal(row.rentalDate as string),
+    returnDate: toDatetimeLocal(row.returnDate as string | null) || null,
     returned: row.returned as boolean,
   }
   showForm.value = true

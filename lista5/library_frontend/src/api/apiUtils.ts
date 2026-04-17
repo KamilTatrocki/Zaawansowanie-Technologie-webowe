@@ -1,7 +1,8 @@
 import router from '@/router'
 import { addToast } from '@/utils/toast'
 
-class ApiError extends Error {
+export class ApiError extends Error {
+  isHandled = true
   constructor(
     message: string,
     public status: number,
@@ -91,8 +92,9 @@ export async function fetchGET<T>(url: string, successMessage?: string): Promise
     return await handleResponse<T>(response, successMessage)
   } catch (e: unknown) {
     if (e instanceof ApiError) throw e
+    const err = new ApiError('Network error: Cannot reach the server', 0)
     addToast('Network error: Cannot reach the server', 'error')
-    throw e
+    throw err
   }
 }
 
@@ -106,8 +108,9 @@ export async function fetchPOST<T>(url: string, data: unknown, successMessage?: 
     return await handleResponse<T>(response, successMessage)
   } catch (e: unknown) {
     if (e instanceof ApiError) throw e
+    const err = new ApiError('Network error: Cannot reach the server', 0)
     addToast('Network error: Cannot reach the server', 'error')
-    throw e
+    throw err
   }
 }
 
@@ -121,8 +124,9 @@ export async function fetchPUT<T>(url: string, data: unknown, successMessage?: s
     return await handleResponse<T>(response, successMessage)
   } catch (e: unknown) {
     if (e instanceof ApiError) throw e
+    const err = new ApiError('Network error: Cannot reach the server', 0)
     addToast('Network error: Cannot reach the server', 'error')
-    throw e
+    throw err
   }
 }
 
@@ -135,8 +139,9 @@ export async function fetchPATCH<T>(url: string, successMessage?: string): Promi
     return await handleResponse<T>(response, successMessage)
   } catch (e: unknown) {
     if (e instanceof ApiError) throw e
+    const err = new ApiError('Network error: Cannot reach the server', 0)
     addToast('Network error: Cannot reach the server', 'error')
-    throw e
+    throw err
   }
 }
 
@@ -148,7 +153,8 @@ export async function fetchDELETE<T>(url: string, successMessage?: string): Prom
     return await handleResponse<T>(response, successMessage)
   } catch (e: unknown) {
     if (e instanceof ApiError) throw e
+    const err = new ApiError('Network error: Cannot reach the server', 0)
     addToast('Network error: Cannot reach the server', 'error')
-    throw e
+    throw err
   }
 }
