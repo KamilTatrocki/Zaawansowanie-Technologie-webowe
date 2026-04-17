@@ -17,6 +17,7 @@ const bookCopies = ref<BookCopy[]>([])
 const readers = ref<Reader[]>([])
 const showForm = ref(false)
 const editingId = ref<number | null>(null)
+const originalReturned = ref(false)
 const form = ref({
   bookCopyId: null as number | null,
   readerId: null as number | null,
@@ -85,6 +86,7 @@ const readerOptions = computed(() =>
 
 function openCreate() {
   editingId.value = null
+  originalReturned.value = false
   form.value = {
     bookCopyId: null,
     readerId: null,
@@ -97,6 +99,7 @@ function openCreate() {
 
 function openEdit(row: Record<string, unknown>) {
   editingId.value = row.id as number
+  originalReturned.value = row.returned as boolean
   form.value = {
     bookCopyId: row.bookCopyId as number,
     readerId: row.readerId as number,
@@ -136,6 +139,7 @@ async function handleDelete(row: Record<string, unknown>) {
 
 async function handleReturn(row: Record<string, unknown>) {
   await rentalsApi.returnBook(row.id as number)
+  showForm.value = false
   await loadPage(currentPage.value)
 }
 </script>
@@ -193,7 +197,7 @@ async function handleReturn(row: Record<string, unknown>) {
             Save
           </button>
           <button
-            v-if="editingId !== null && !form.returned"
+            v-if="editingId !== null && !originalReturned"
             type="button"
             class="btn btn-return"
             @click="handleReturn({ id: editingId })"

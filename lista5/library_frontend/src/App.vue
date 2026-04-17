@@ -21,7 +21,7 @@ async function checkConnection(): Promise<boolean> {
     const res = await fetch('/api/authors?page=0&size=1', { signal: controller.signal })
     clearTimeout(timer)
     return res.ok || res.status < 500
-  } catch {
+  } catch (e) {
     clearTimeout(timer)
     return false
   }

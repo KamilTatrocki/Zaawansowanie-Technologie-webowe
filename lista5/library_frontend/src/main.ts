@@ -21,4 +21,12 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 
+// Vue wraps async event handlers and lifecycle hooks with its own error handling,
+// which would log ApiErrors to the console even though they're already shown as toasts.
+// Suppress those here; re-log anything unexpected.
+app.config.errorHandler = (err) => {
+  if (err && (err as { isHandled?: boolean }).isHandled) return
+  console.error(err)
+}
+
 app.mount('#app')
