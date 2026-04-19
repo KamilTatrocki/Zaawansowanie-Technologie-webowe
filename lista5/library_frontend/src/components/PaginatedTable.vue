@@ -22,7 +22,7 @@ function formatValue(value: unknown): string | number | boolean {
 
 <template>
   <div class="paginated-table">
-    <!-- Desktop View (Table) -->
+
     <div class="table-responsive desktop-only">
       <table>
         <thead>
@@ -47,7 +47,7 @@ function formatValue(value: unknown): string | number | boolean {
       </table>
     </div>
 
-    <!-- Mobile View (Cards) -->
+
     <div class="mobile-only">
       <div v-if="rows.length === 0" class="empty-card">
         No data available
@@ -173,7 +173,7 @@ tr:hover {
   background-color: #ecf0f1;
 }
 
-/* Responsive Layout Styles */
+
 .desktop-only {
   display: block;
 }

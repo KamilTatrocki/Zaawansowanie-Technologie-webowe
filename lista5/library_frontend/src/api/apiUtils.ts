@@ -54,11 +54,11 @@ async function handleResponse<T>(response: Response, successMessage?: string): P
           const detail = errorJson.message || errorJson.error
           if (detail) errorMessage = `${statusMessage(response.status)} ${detail}`
         } catch {
-          // use default status message
+
         }
       }
     } catch {
-      // failed to read body
+
     }
 
     if (response.status === 404) {

@@ -70,7 +70,7 @@ onUnmounted(() => stopHealthPolling())
 </script>
 
 <template>
-  <!-- Loading screen -->
+
   <div v-if="appState === 'loading'" class="splash">
     <div class="splash-inner">
       <div class="spinner"></div>
@@ -79,7 +79,7 @@ onUnmounted(() => stopHealthPolling())
     </div>
   </div>
 
-  <!-- Error screen -->
+
   <div v-else-if="appState === 'error'" class="splash splash-error">
     <div class="splash-inner">
       <div class="error-icon">⚠️</div>
@@ -89,7 +89,7 @@ onUnmounted(() => stopHealthPolling())
     </div>
   </div>
 
-  <!-- Normal app -->
+
   <template v-else>
     <AppLayout>
       <RouterView />

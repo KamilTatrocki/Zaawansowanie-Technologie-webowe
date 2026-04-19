@@ -14,7 +14,7 @@ export function addToast(message: string, type: ToastType = 'info') {
   const id = Math.random().toString(36).substring(2, 9)
   toasts.value.push({ id, message, type })
 
-  // Auto-dismiss after 3.5 seconds
+
   setTimeout(() => {
     removeToast(id)
   }, 3500)

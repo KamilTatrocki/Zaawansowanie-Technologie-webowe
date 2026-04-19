@@ -1,5 +1,5 @@
 <template>
-  <div class="layout home">
+  <div class="layout default">
     <aside class="sidebar">
       <div class="sidebar-header">
         <h2>📚 Library</h2>

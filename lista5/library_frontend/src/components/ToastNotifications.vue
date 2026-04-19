@@ -33,11 +33,11 @@ import { toasts, removeToast } from '@/utils/toast'
   flex-direction: column;
   gap: 0.75rem;
   z-index: 9999;
-  pointer-events: none; /* Let clicks pass through empty space */
+  pointer-events: none;
 }
 
 .toast {
-  pointer-events: auto; /* Re-enable clicks on the toast itself */
+  pointer-events: auto;
   min-width: 280px;
   max-width: 400px;
   padding: 1rem;
@@ -97,7 +97,7 @@ import { toasts, removeToast } from '@/utils/toast'
   border-left-color: #3498db;
 }
 
-/* Animations */
+
 .toast-list-enter-active,
 .toast-list-leave-active {
   transition: all 0.3s ease;

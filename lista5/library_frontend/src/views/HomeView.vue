@@ -149,7 +149,7 @@ function navigateTo(route: string) {
   font-size: 1.1rem;
 }
 
-/* KPI Cards */
+
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -221,7 +221,7 @@ function navigateTo(route: string) {
   font-weight: 500;
 }
 
-/* Dashboard Layout */
+
 .dashboard-layout {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -243,7 +243,7 @@ h2 {
   padding-bottom: 0.5rem;
 }
 
-/* Table */
+
 .dashboard-table {
   width: 100%;
   border-collapse: collapse;
@@ -295,7 +295,7 @@ h2 {
   padding: 2rem;
 }
 
-/* Quick Actions */
+
 .action-buttons {
   display: flex;
   flex-direction: column;

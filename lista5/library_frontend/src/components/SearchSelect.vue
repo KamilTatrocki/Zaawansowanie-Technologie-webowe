@@ -46,18 +46,16 @@ const filteredOptions = (options: any[], search: string) => {
       <em v-else style="opacity: 0.5">Start typing to search...</em>
     </template>
 
-    <!-- Custom filtering logic to limit results -->
-    <template #list-header v-if="false"></template>
-    <!-- placeholder if needed -->
 
-    <!-- We use the filter-options prop if vue-select supports it, 
-         but since we want to limit results even when not searching, 
-         we might need to handle it via a computed property for options -->
+    <template #list-header v-if="false"></template>
+
+
+
   </v-select>
 </template>
 
 <style>
-/* Custom styles to match the app aesthetic */
+
 .v-select {
   margin-top: 0.25rem;
   background: white;
