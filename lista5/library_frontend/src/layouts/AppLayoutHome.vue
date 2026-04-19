@@ -6,7 +6,7 @@
         <button class="mobile-toggle" @click="toggleNav">☰</button>
       </div>
       <nav :class="{ 'nav-open': isNavOpen }">
-        <AppLayoutLinks @click="isNavOpen = false" />
+        <LinksComponent @click="isNavOpen = false" />
       </nav>
     </aside>
     <main class="content">
@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import AppLayoutLinks from './AppLayoutLinks.vue'
+import LinksComponent from '../components/LinksComponent.vue'
 
 const isNavOpen = ref(false)
 
