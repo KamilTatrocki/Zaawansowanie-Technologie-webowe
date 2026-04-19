@@ -10,7 +10,6 @@ const navLinks = [
   { to: '/readers', label: 'Readers' },
   { to: '/book-copies', label: 'Book Copies' },
   { to: '/rentals', label: 'Rentals' },
-  { to: '/test', label: 'Test Default Layout' }
 ]
 </script>
 
