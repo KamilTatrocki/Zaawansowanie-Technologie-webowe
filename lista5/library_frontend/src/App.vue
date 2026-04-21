@@ -18,7 +18,7 @@ async function checkConnection(): Promise<boolean> {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
   try {
-    const res = await fetch('/api/authors?page=0&size=1', { signal: controller.signal })
+    const res = await fetch('/api/health', { signal: controller.signal })
     clearTimeout(timer)
     return res.ok || res.status < 500
   } catch (e) {
