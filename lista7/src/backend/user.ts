@@ -88,7 +88,7 @@ async function deleteUser(parent, { id }, context, info) {
       })
     } catch(e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
-          if (e.code === "P2002") {
+          if (e.code === "P2003") {
             throw new GraphQLError(`Could not delete user. Check if the user has any todos`, {
                extensions: {
                   // http: { status: 409 },
