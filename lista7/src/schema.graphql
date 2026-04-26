@@ -20,7 +20,7 @@ input TodoItemInput {
 
 type TodoItem {
    id: ID!
-   title: Strig!
+   title: String!
    completed: Boolean!
    user: User!
 }
