@@ -1,7 +1,7 @@
 
 import { PrismaClient } from '../../generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { getUserById, createUser } from './user'
+import { getUserById, createUser, deleteUser, updateUser } from './user'
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -19,7 +19,9 @@ const Query = {
 }
 
 const Mutation = {
-    createUser: createUser
+    createUser: createUser,
+    updateUser: updateUser,
+    deleteUser: deleteUser
 }
 
 

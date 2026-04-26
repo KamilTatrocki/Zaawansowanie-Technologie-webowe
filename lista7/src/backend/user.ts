@@ -1,21 +1,13 @@
 import { PrismaClient, Prisma } from '../../generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { GraphQLError } from 'graphql';
+import { toEmail, toInt } from './validation'
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
-async function getUserById(parent, args, context, info) {
-    const numericId = parseInt(args.id, 10)
-
-    if (isNaN(numericId)) {
-        throw new GraphQLError(`Invalid ID provided. Expected a number, got '${args.id}'.`, {
-            extensions: {
-                // http: { status: 400 },
-                code: 'BAD_USER_INPUT'
-            }
-        });
-    }
+async function getUserById(parent, { id }, context, info) {
+    const numericId = toInt(id)
 
     const user = await prisma.user.findUnique({
         where: { id: numericId }
@@ -34,6 +26,7 @@ async function getUserById(parent, args, context, info) {
 }
 
 async function createUser(parent, { user }, context, info) {
+    toEmail(user.email)
 
     try {
       return await prisma.user.create({
@@ -41,7 +34,7 @@ async function createUser(parent, { user }, context, info) {
       })
     } catch(e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
-         throw new GraphQLError(`The login is already taken. Please choose another.`, {
+         throw new GraphQLError(`The login is taken. Please choose another.`, {
             extensions: {
                // http: { status: 409 },
                code: 'UNIQUE_CONSTRAINT_VIOLATION'
@@ -51,5 +44,71 @@ async function createUser(parent, { user }, context, info) {
     }
 }
 
+
+async function updateUser(parent, { id, user }, context, info) {
+
+    const numericId = toInt(id)
+    toEmail(user.email)
+
+    try {
+      return await prisma.user.update({
+         where: { id: numericId },
+         data: user
+      })
+    } catch(e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+          if (e.code === "P2002") {
+            throw new GraphQLError(`Could not update user. Login is taken.`, {
+               extensions: {
+                  // http: { status: 409 },
+                  code: 'UNIQUE_CONSTRAINT_VIOLATION'
+               }
+            });
+          }
+          else if (e.code == "P2025") {
+            throw new GraphQLError(`Could not update user`, {
+               extensions: {
+                  // http: { status: 404 },
+                  code: 'NOT_FOUND'
+               }
+            });
+          }
+      }
+    }
+}
+
+
+async function deleteUser(parent, { id }, context, info) {
+
+    const numericId = toInt(id)
+
+    try {
+      return await prisma.user.delete({
+         where: { id: numericId }
+      })
+    } catch(e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+          if (e.code === "P2002") {
+            throw new GraphQLError(`Could not delete user. Check if the user has any todos`, {
+               extensions: {
+                  // http: { status: 409 },
+                  code: 'FOREIGN_KEY_CONSTRAINT_VIOLATION'
+               }
+            });
+          }
+          else if (e.code == "P2025") {
+            throw new GraphQLError(`Could not delete user`, {
+               extensions: {
+                  // http: { status: 404 },
+                  code: 'NOT_FOUND'
+               }
+            });
+          }
+      }
+    }
+}
+
 export { getUserById }
 export { createUser }
+export { updateUser }
+export { deleteUser }
