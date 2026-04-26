@@ -1,0 +1,46 @@
+
+import { PrismaClient } from '../../generated/prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { getUserById, createUser } from './user'
+
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+const prisma = new PrismaClient({ adapter });
+
+// w sumie to są nasze serwisy
+const Query = {
+   users: async () => {
+       //a to nasze repo
+      return await prisma.user.findMany()
+   },
+   user: getUserById,
+   todos: async () => {
+      return await prisma.todo.findMany()
+   }
+}
+
+const Mutation = {
+    createUser: createUser
+}
+
+
+// entity specific
+//
+const User = {
+   todos: async (parent, args, context, info) => {
+      return await prisma.todo.findMany({where: { user: parent.id }})
+   }
+}
+
+const TodoItem = {
+    user: async (parent, args, context, info) => {
+        return await prisma.user.findFirstOrThrow({where: { id: parent.user }})
+    }
+}
+
+
+
+export { Query }
+export { Mutation }
+
+export { User }
+export { TodoItem }
