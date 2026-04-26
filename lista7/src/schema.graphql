@@ -15,11 +15,12 @@ type User {
 input TodoItemInput {
    title: String!
    completed: Boolean!
+   user_id: ID!
 }
 
 type TodoItem {
    id: ID!
-   title: String!
+   title: Strig!
    completed: Boolean!
    user: User!
 }
@@ -33,5 +34,10 @@ type Query {
 
 type Mutation {
    createUser(user: UserInput!): User
+   updateUser(id: ID!, user: UserInput!): User
+   deleteUser(id: ID!): User
+
    createTodo(todo: TodoItemInput!): TodoItem
+   updateTodo(id: ID!, todo: TodoItemInput!): TodoItem
+   deleteTodo(id: ID!): TodoItem
 }

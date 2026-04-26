@@ -12,3 +12,7 @@ lista4/*.tsbuildinfo
 lista4/.npm
 lista4/.eslintcache
 lista4/node_modules
+
+
+lista7/venv
+lista7/.envrc

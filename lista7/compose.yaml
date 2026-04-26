@@ -1,0 +1,22 @@
+
+
+# Use postgres/example user/password credentials
+
+services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: ztw_l7
+      POSTGRES_PASSWORD: ztw_l7
+      POSTGRES_DB: app_db
+    volumes:
+          - ./dbs/postgres-data:/var/lib/postgresql
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8079:8080
