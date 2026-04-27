@@ -10,6 +10,7 @@ type User {
    email: String!
    login: String!
    todos: [TodoItem!]!
+   testTodos: [TodoItem!]! @deprecated(reason: "use todos instead")
 }
 
 input TodoItemInput {
@@ -20,9 +21,10 @@ input TodoItemInput {
 
 type TodoItem {
    id: ID!
-   title: Strig!
+   title: String!
    completed: Boolean!
    user: User!
+   testUser: User! @deprecated(reason: "user user instead")
 }
 
 type Query {

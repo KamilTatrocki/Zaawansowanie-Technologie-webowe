@@ -4,9 +4,13 @@ from pathlib import Path
 import psycopg2
 #SQLITE
 
-data_path = Path("sqlite-data/database.db")
-if data_path.exists():
+data_path = Path("sqlite-data/")
+file_path = data_path / "database.db"
+if file_path.exists():
     data_path.unlink()
+
+if not data_path.exists():
+    data_path.mkdir()
 
 con = sqlite3.connect(data_path)
 

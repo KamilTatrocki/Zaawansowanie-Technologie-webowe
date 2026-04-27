@@ -3,6 +3,7 @@ import { PrismaClient } from '../../generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { getUserById, createUser, deleteUser, updateUser } from './user'
 import { getTodoById, createTodo, updateTodo, deleteTodo } from './todo'
+import { getTestTodosForUser,getTestUserForTodo } from './API';
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -36,12 +37,18 @@ const Mutation = {
 const User = {
    todos: async (parent, args, context, info) => {
       return await prisma.todo.findMany({where: { user: parent.id }})
+   },
+   testTodos: async (parent, args, context, info) => {
+      return await getTestTodosForUser(parent.id)
    }
 }
 
 const TodoItem = {
     user: async (parent, args, context, info) => {
         return await prisma.user.findFirstOrThrow({where: { id: parent.user }})
+    },
+    testUser: async (parent, args, context, info) => {
+        return await getTestUserForTodo(parent.user)
     }
 }
 

@@ -1,0 +1,9 @@
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+cd dbs
+python db_seeding.py
+cd ..
+npm install
+npx prisma generate
+docker compose up

@@ -1,0 +1,5 @@
+jedi==0.19.2
+parso==0.8.6
+psycopg2-binary==2.9.12
+ruff==0.15.12
+ty==0.0.32
