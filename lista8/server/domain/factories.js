@@ -3,8 +3,8 @@ const { v4: uuidv4 } = require("uuid");
 function createUser(socketId, nickname, avatar) {
   return { id: socketId, nickname, avatar, currentRoom: null };
 }
-
 function createRoom(id, name, description, createdBy) {
+
   return {
     id,
     name: `# ${name}`,

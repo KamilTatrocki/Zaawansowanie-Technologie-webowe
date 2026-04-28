@@ -8,15 +8,12 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: corsOptions,
-  maxHttpBufferSize: 10e6, // 10MB for image uploads
+  maxHttpBufferSize: 10e6, // 10MB (image )
 });
 
-// Initialize Socket.IO logic
 initSockets(io);
 
-// ─── Start server ─────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
-  console.log(`\n🚀 Chat server running at http://localhost:${PORT}`);
-  console.log(`   Accepting WebSocket connections from any localhost port\n`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
