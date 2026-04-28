@@ -1,5 +1,5 @@
 const store = require("../domain/store");
-const { createRoom, createSystemMessage } = require("../domain/factories");
+const { Room, SystemMessage } = require("../domain/classes");
 
 function getRoomList(io) {
   return Array.from(store.rooms.values()).map((r) => ({
@@ -28,14 +28,14 @@ function getUsersInRoom(io, roomId) {
 }
 
 function createNewRoom(id, name, description, createdBy) {
-  const room = createRoom(id, name, description, createdBy);
+  const room = new Room(id, name, description, createdBy);
   store.rooms.set(id, room);
   store.typingUsers.set(id, new Set());
   return room;
 }
 
 function addSystemMessage(roomId, text) {
-  const msg = createSystemMessage(roomId, text);
+  const msg = new SystemMessage(roomId, text);
   const room = store.rooms.get(roomId);
   if (room) room.messages.push(msg);
   return msg;

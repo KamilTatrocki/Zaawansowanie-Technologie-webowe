@@ -1,5 +1,5 @@
 const store = require("../domain/store");
-const { createUser } = require("../domain/factories");
+const { User } = require("../domain/classes");
 
 const AVATAR_COLORS = [
   "#6366f1", "#8b5cf6", "#ec4899", "#f43f5e",
@@ -19,7 +19,7 @@ function isNicknameTaken(nickname) {
 }
 
 function registerUser(socketId, nickname, avatar) {
-  const user = createUser(
+  const user = new User(
     socketId,
     nickname.trim(),
     avatar || generateAvatarColor(nickname.trim())

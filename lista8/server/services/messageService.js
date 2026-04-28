@@ -1,7 +1,7 @@
-const { createMessage } = require("../domain/factories");
+const { Message } = require("../domain/classes");
 
 function buildMessage({ text, imageUrl, roomId, sender }) {
-  return createMessage({
+  return new Message({
     type: imageUrl ? "image" : "text",
     text,
     imageUrl,
