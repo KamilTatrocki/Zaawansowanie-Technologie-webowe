@@ -1,4 +1,4 @@
-const { Message } = require("../domain/classes");
+import { Message } from "../domain/classes";
 
 function buildMessage({ text, imageUrl, roomId, sender }) {
   return new Message({

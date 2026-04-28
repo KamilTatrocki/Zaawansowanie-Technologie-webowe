@@ -1,14 +1,8 @@
-/**
- * @typedef {import('./classes').Room} Room
- * @typedef {import('./classes').User} User
- */
+import { Room, User } from './classes';
 
-/** @type {Map<string, Room>} */
-const rooms = new Map();
-/** @type {Map<string, User>} */
-const users = new Map();
-/** @type {Map<string, Set<string>>} */
-const typingUsers = new Map();
+const rooms = new Map<string, Room>();
+const users = new Map<string, User>();
+const typingUsers = new Map<string, Set<string>>();
 
 const defaultRooms = [
   { id: "general", name: "# general", description: "General discussion for everyone" },
@@ -17,10 +11,8 @@ const defaultRooms = [
   { id: "gaming", name: "# gaming", description: "Video games & esports" },
 ];
 
-const { Room } = require("./classes");
-
 defaultRooms.forEach((r) => {
-  const room = new Room(r.id, r.name, r.description, null);
+  const room = new Room(r.id, r.name, r.description, "");
   rooms.set(r.id, room);
   typingUsers.set(r.id, new Set());
 });

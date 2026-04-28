@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "Node16",
+    "rootDir": "./",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "Node16",
+    "types": [
+      "node",
+      "express",
+      "cors",
+      "multer"
+    ]
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}

@@ -285,8 +285,9 @@ export default function ChatRoom({
               overflowY: "auto",
             }}
             onInput={(e) => {
-              e.target.style.height = "auto";
-              e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px";
+              const target = e.target as HTMLTextAreaElement;
+              target.style.height = "auto";
+              target.style.height = Math.min(target.scrollHeight, 120) + "px";
             }}
           />
 

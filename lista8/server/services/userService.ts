@@ -1,5 +1,5 @@
 const store = require("../domain/store");
-const { User } = require("../domain/classes");
+import { User } from "../domain/classes";
 
 const AVATAR_COLORS = [
   "#6366f1", "#8b5cf6", "#ec4899", "#f43f5e",
@@ -12,9 +12,9 @@ function generateAvatarColor(nickname) {
   return AVATAR_COLORS[idx % AVATAR_COLORS.length];
 }
 
-function isNicknameTaken(nickname) {
+function isNicknameTaken(nickname: string) {
   return Array.from(store.users.values()).some(
-    (u) => u.nickname.toLowerCase() === nickname.trim().toLowerCase()
+    (u: any) => u.nickname.toLowerCase() === nickname.trim().toLowerCase()
   );
 }
 

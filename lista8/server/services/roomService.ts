@@ -1,8 +1,8 @@
 const store = require("../domain/store");
-const { Room, SystemMessage } = require("../domain/classes");
+import { Room, SystemMessage } from "../domain/classes";
 
-function getRoomList(io) {
-  return Array.from(store.rooms.values()).map((r) => ({
+function getRoomList(io: any) {
+  return Array.from(store.rooms.values()).map((r: any) => ({
     id: r.id,
     name: r.name,
     description: r.description,
@@ -19,12 +19,12 @@ function roomExists(roomId) {
   return store.rooms.has(roomId);
 }
 
-function getUsersInRoom(io, roomId) {
+function getUsersInRoom(io: any, roomId: string) {
   const socketIds = io.sockets.adapter.rooms.get(roomId) || new Set();
   return Array.from(socketIds)
     .map((id) => store.users.get(id))
     .filter(Boolean)
-    .map((u) => ({ id: u.id, nickname: u.nickname, avatar: u.avatar }));
+    .map((u: any) => ({ id: u.id, nickname: u.nickname, avatar: u.avatar }));
 }
 
 function createNewRoom(id, name, description, createdBy) {
