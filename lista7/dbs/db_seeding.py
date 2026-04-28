@@ -1,4 +1,5 @@
 
+
 import sqlite3
 from pathlib import Path
 import psycopg2
@@ -7,12 +8,15 @@ import psycopg2
 data_path = Path("sqlite-data/")
 file_path = data_path / "database.db"
 if file_path.exists():
-    data_path.unlink()
+    file_path.unlink()
 
 if not data_path.exists():
     data_path.mkdir()
 
-con = sqlite3.connect(data_path)
+if not file_path.exists():
+    file_path.touch()
+
+con = sqlite3.connect(file_path)
 
 cur = con.cursor()
 
