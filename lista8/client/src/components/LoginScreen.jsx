@@ -45,9 +45,9 @@ export default function LoginScreen({ onJoin, error, loading }) {
         <div className="h-1 w-full"
           style={{ background: "linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899)" }} />
 
-        <div className="p-8">
+        <div className="p-8 sm:p-12 flex gap-6 flex-col">
           {/* Logo & title */}
-          <div className="text-center mb-8">
+          <div className="text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 glow-ring"
               style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}>
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -55,7 +55,7 @@ export default function LoginScreen({ onJoin, error, loading }) {
               </svg>
             </div>
             <h1 className="text-2xl font-bold mb-1" style={{ color: "var(--text-primary)" }}>
-              Welcome to <span style={{ color: "#818cf8" }}>NexusChat</span>
+              Welcome to <span style={{ color: "#818cf8" }}>Chat Jacek & Kamil</span>
             </h1>
             <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem" }}>
               Choose a nickname to start chatting
@@ -63,7 +63,7 @@ export default function LoginScreen({ onJoin, error, loading }) {
           </div>
 
           {/* Avatar preview */}
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-10">
             <div className="relative">
               <div className="w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold text-white transition-all duration-300 glow-ring"
                 style={{ background: selectedColor, boxShadow: `0 0 20px ${selectedColor}66` }}>
@@ -77,12 +77,12 @@ export default function LoginScreen({ onJoin, error, loading }) {
           </div>
 
           {/* Color picker */}
-          <div className="mb-6">
-            <label className="block text-xs font-medium mb-2 uppercase tracking-wider"
+          <div className="mb-10">
+            <label className="block text-xs font-medium  uppercase tracking-wider "
               style={{ color: "var(--text-muted)" }}>
               Avatar Color
             </label>
-            <div className="flex gap-2 justify-center flex-wrap">
+            <div className="flex gap-2 justify-center flex-wrap pt-6">
               {AVATAR_COLORS.map((color) => (
                 <button
                   key={color}
@@ -101,7 +101,7 @@ export default function LoginScreen({ onJoin, error, loading }) {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-8">
             <div>
               <label className="block text-xs font-medium mb-2 uppercase tracking-wider"
                 style={{ color: "var(--text-muted)" }}>
@@ -114,7 +114,7 @@ export default function LoginScreen({ onJoin, error, loading }) {
                 onChange={(e) => setNickname(e.target.value)}
                 placeholder="e.g. CoolUser42"
                 maxLength={20}
-                className="w-full px-6 py-4 rounded-xl outline-none transition-all duration-200 text-sm"
+                className="w-full px-4 py-3 rounded-xl outline-none transition-all duration-200 text-sm"
                 style={{
                   background: "rgba(255,255,255,0.05)",
                   border: "1px solid rgba(99,102,241,0.3)",
@@ -130,7 +130,7 @@ export default function LoginScreen({ onJoin, error, loading }) {
                   e.target.style.boxShadow = "none";
                 }}
               />
-              <div className="flex justify-between mt-2">
+              <div className="flex justify-between mt-3">
                 {error ? (
                   <span className="text-xs" style={{ color: "var(--danger)" }}>⚠ {error}</span>
                 ) : (
@@ -146,7 +146,7 @@ export default function LoginScreen({ onJoin, error, loading }) {
               id="join-chat-btn"
               type="submit"
               disabled={nickname.trim().length < 2 || loading}
-              className="w-full py-4 rounded-xl font-semibold text-sm transition-all duration-200 relative overflow-hidden mt-4"
+              className="w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 relative overflow-hidden"
               style={{
                 background: nickname.trim().length >= 2
                   ? "linear-gradient(135deg, #6366f1, #8b5cf6)"
@@ -163,7 +163,7 @@ export default function LoginScreen({ onJoin, error, loading }) {
                   <span className="typing-dot" />
                 </span>
               ) : (
-                "Join NexusChat →"
+                "Join Chat →"
               )}
             </button>
           </form>

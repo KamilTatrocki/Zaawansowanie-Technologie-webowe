@@ -29,31 +29,12 @@ export default function Sidebar({
   };
 
   return (
-    <aside className="flex flex-col h-full select-none"
+    <aside className="flex flex-col h-full select-none w-full"
       style={{
-        width: "300px",
-        minWidth: "300px",
         background: "var(--bg-secondary)",
         borderRight: "1px solid var(--border-subtle)",
       }}>
 
-      {/* App header */}
-      <div className="flex items-center gap-3 px-6 py-6"
-        style={{ borderBottom: "1px solid var(--border-subtle)" }}>
-        <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-          </svg>
-        </div>
-        <div>
-          <div className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>NexusChat</div>
-          <div className="flex items-center gap-1">
-            <div className="w-1.5 h-1.5 rounded-full" style={{ background: "var(--success)" }} />
-            <span className="text-xs" style={{ color: "var(--text-muted)" }}>Online</span>
-          </div>
-        </div>
-      </div>
 
       {/* Rooms section */}
       <div className="flex-1 overflow-y-auto py-2">

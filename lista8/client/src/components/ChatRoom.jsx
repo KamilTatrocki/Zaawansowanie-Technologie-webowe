@@ -12,6 +12,7 @@ export default function ChatRoom({
   onSendMessage,
   onTypingStart,
   onTypingStop,
+  onLeaveRoom,
 }) {
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
@@ -169,7 +170,17 @@ export default function ChatRoom({
           borderBottom: "1px solid var(--border-subtle)",
           boxShadow: "0 1px 0 rgba(0,0,0,0.2)",
         }}>
-        <div className="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm flex-shrink-0"
+        <button
+          onClick={() => onLeaveRoom(room.id)}
+          className="md:hidden w-9 h-9 rounded-xl flex items-center justify-center transition-colors flex-shrink-0"
+          style={{ background: "rgba(255,255,255,0.05)", color: "var(--text-muted)" }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
+          </svg>
+        </button>
+        <div className="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm flex-shrink-0 hidden sm:flex"
           style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)", color: "white" }}>
           #
         </div>
@@ -228,9 +239,9 @@ export default function ChatRoom({
       )}
 
       {/* Input area */}
-      <div className="flex-shrink-0 px-8 py-6"
+      <div className="flex-shrink-0 px-4 py-3"
         style={{ borderTop: "1px solid var(--border-subtle)", background: "var(--bg-secondary)" }}>
-        <div className="flex items-end gap-3 rounded-2xl px-6 py-4"
+        <div className="flex items-end gap-3 rounded-2xl px-1 py-1"
           style={{
             background: "rgba(255,255,255,0.04)",
             border: "1px solid rgba(99,102,241,0.25)",

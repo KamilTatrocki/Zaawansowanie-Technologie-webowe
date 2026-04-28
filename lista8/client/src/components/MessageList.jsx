@@ -59,7 +59,7 @@ function TextBubble({ msg, isSelf }) {
           </span>
         )}
         <div
-          className="relative px-6 py-4 text-sm leading-relaxed break-words"
+          className="relative px-3 py-2 text-sm leading-relaxed break-words"
           style={{
             background: isSelf
               ? "linear-gradient(135deg, #6366f1, #8b5cf6)"

@@ -142,25 +142,30 @@ export default function App() {
   }
 
   return (
-    <div className="flex h-full w-full overflow-hidden">
-      <Sidebar
-        currentUser={currentUser}
-        rooms={rooms}
-        currentRoom={currentRoom}
-        members={members}
-        onJoinRoom={handleJoinRoom}
-        onLeaveRoom={handleLeaveRoom}
-        onCreateRoom={handleCreateRoom}
-      />
-      <ChatRoom
-        room={currentRoom}
-        messages={messages}
-        typingUsers={typingUsers}
-        currentUser={currentUser}
-        onSendMessage={handleSendMessage}
-        onTypingStart={handleTypingStart}
-        onTypingStop={handleTypingStop}
-      />
+    <div className="flex h-full w-full overflow-hidden relative">
+      <div className={`h-full flex-shrink-0 transition-all duration-300 ${currentRoom ? "hidden md:flex md:w-[300px]" : "flex w-full md:w-[300px]"}`}>
+        <Sidebar
+          currentUser={currentUser}
+          rooms={rooms}
+          currentRoom={currentRoom}
+          members={members}
+          onJoinRoom={handleJoinRoom}
+          onLeaveRoom={handleLeaveRoom}
+          onCreateRoom={handleCreateRoom}
+        />
+      </div>
+      <div className={`h-full flex-1 transition-all duration-300 ${!currentRoom ? "hidden md:flex" : "flex w-full"}`}>
+        <ChatRoom
+          room={currentRoom}
+          messages={messages}
+          typingUsers={typingUsers}
+          currentUser={currentUser}
+          onSendMessage={handleSendMessage}
+          onTypingStart={handleTypingStart}
+          onTypingStop={handleTypingStop}
+          onLeaveRoom={handleLeaveRoom}
+        />
+      </div>
     </div>
   );
 }
