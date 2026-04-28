@@ -31,14 +31,14 @@ export default function Sidebar({
   return (
     <aside className="flex flex-col h-full select-none"
       style={{
-        width: "260px",
-        minWidth: "260px",
+        width: "300px",
+        minWidth: "300px",
         background: "var(--bg-secondary)",
         borderRight: "1px solid var(--border-subtle)",
       }}>
 
       {/* App header */}
-      <div className="flex items-center gap-3 px-4 py-4"
+      <div className="flex items-center gap-3 px-6 py-6"
         style={{ borderBottom: "1px solid var(--border-subtle)" }}>
         <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
           style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}>
@@ -57,7 +57,7 @@ export default function Sidebar({
 
       {/* Rooms section */}
       <div className="flex-1 overflow-y-auto py-2">
-        <div className="flex items-center justify-between px-4 py-2 mb-1">
+        <div className="flex items-center justify-between px-6 py-4 mb-2">
           <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>
             Rooms
           </span>
@@ -123,11 +123,11 @@ export default function Sidebar({
               key={room.id}
               id={`room-btn-${room.id}`}
               onClick={() => onJoinRoom(room.id)}
-              className="w-full flex items-center gap-3 px-3 py-2.5 mx-1 rounded-xl transition-all duration-150 text-left group"
+              className="w-full flex items-center gap-3 px-4 py-3 mx-2 rounded-xl transition-all duration-150 text-left group mb-1"
               style={{
                 background: isActive ? "rgba(99,102,241,0.2)" : "transparent",
                 border: isActive ? "1px solid rgba(99,102,241,0.3)" : "1px solid transparent",
-                width: "calc(100% - 8px)",
+                width: "calc(100% - 16px)",
               }}
             >
               <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0 transition-all duration-150"
@@ -161,7 +161,7 @@ export default function Sidebar({
       {/* Members panel */}
       {currentRoom && members.length > 0 && (
         <div style={{ borderTop: "1px solid var(--border-subtle)" }}>
-          <div className="px-4 pt-3 pb-1">
+          <div className="px-6 pt-4 pb-2">
             <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>
               Members — {members.length}
             </span>
@@ -186,7 +186,7 @@ export default function Sidebar({
       )}
 
       {/* Current user bar */}
-      <div className="flex items-center gap-3 px-4 py-3"
+      <div className="flex items-center gap-3 px-6 py-4"
         style={{ borderTop: "1px solid var(--border-subtle)", background: "rgba(0,0,0,0.2)" }}>
         <div className="relative flex-shrink-0">
           <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white"

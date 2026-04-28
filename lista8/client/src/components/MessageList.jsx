@@ -29,8 +29,8 @@ function AvatarCircle({ nickname, color, size = 32 }) {
 
 function SystemMessage({ msg }) {
   return (
-    <div className="flex justify-center my-2 msg-system">
-      <span className="text-xs px-3 py-1 rounded-full"
+    <div className="flex justify-center my-4 msg-system">
+      <span className="text-xs px-4 py-2 rounded-full"
         style={{
           background: "rgba(255,255,255,0.05)",
           color: "var(--text-muted)",
@@ -59,7 +59,7 @@ function TextBubble({ msg, isSelf }) {
           </span>
         )}
         <div
-          className="relative px-4 py-2.5 text-sm leading-relaxed break-words"
+          className="relative px-6 py-4 text-sm leading-relaxed break-words"
           style={{
             background: isSelf
               ? "linear-gradient(135deg, #6366f1, #8b5cf6)"
@@ -158,7 +158,7 @@ export default function MessageList({ messages, currentUser }) {
   let lastDate = null;
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-4">
       {messages.map((msg) => {
         const dateLabel = msg.timestamp ? formatDate(msg.timestamp) : null;
         const showDate = dateLabel && dateLabel !== lastDate;
@@ -168,8 +168,8 @@ export default function MessageList({ messages, currentUser }) {
           return (
             <div key={msg.id}>
               {showDate && (
-                <div className="flex justify-center my-3">
-                  <span className="text-xs px-3 py-1 rounded-full font-medium"
+                <div className="flex justify-center my-5">
+                  <span className="text-xs px-4 py-2 rounded-full font-medium"
                     style={{ background: "rgba(255,255,255,0.05)", color: "var(--text-muted)" }}>
                     {dateLabel}
                   </span>
@@ -185,8 +185,8 @@ export default function MessageList({ messages, currentUser }) {
         return (
           <div key={msg.id}>
             {showDate && (
-              <div className="flex justify-center my-3">
-                <span className="text-xs px-3 py-1 rounded-full font-medium"
+              <div className="flex justify-center my-5">
+                <span className="text-xs px-4 py-2 rounded-full font-medium"
                   style={{ background: "rgba(255,255,255,0.05)", color: "var(--text-muted)" }}>
                   {dateLabel}
                 </span>

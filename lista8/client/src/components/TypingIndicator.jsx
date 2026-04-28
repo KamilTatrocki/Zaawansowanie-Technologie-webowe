@@ -9,8 +9,8 @@ export default function TypingIndicator({ typingUsers }) {
       : `${typingUsers.length} people are typing`;
 
   return (
-    <div className="flex items-center gap-2 px-4 py-2 msg-system">
-      <div className="flex items-center gap-1.5 px-3 py-2 rounded-2xl"
+    <div className="flex items-center gap-2 px-6 py-4 msg-system">
+      <div className="flex items-center gap-1.5 px-4 py-3 rounded-2xl"
         style={{
           background: "rgba(255,255,255,0.05)",
           border: "1px solid rgba(255,255,255,0.08)",

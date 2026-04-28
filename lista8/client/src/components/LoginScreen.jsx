@@ -114,7 +114,7 @@ export default function LoginScreen({ onJoin, error, loading }) {
                 onChange={(e) => setNickname(e.target.value)}
                 placeholder="e.g. CoolUser42"
                 maxLength={20}
-                className="w-full px-4 py-3 rounded-xl outline-none transition-all duration-200 text-sm"
+                className="w-full px-6 py-4 rounded-xl outline-none transition-all duration-200 text-sm"
                 style={{
                   background: "rgba(255,255,255,0.05)",
                   border: "1px solid rgba(99,102,241,0.3)",
@@ -130,7 +130,7 @@ export default function LoginScreen({ onJoin, error, loading }) {
                   e.target.style.boxShadow = "none";
                 }}
               />
-              <div className="flex justify-between mt-1">
+              <div className="flex justify-between mt-2">
                 {error ? (
                   <span className="text-xs" style={{ color: "var(--danger)" }}>⚠ {error}</span>
                 ) : (
@@ -146,7 +146,7 @@ export default function LoginScreen({ onJoin, error, loading }) {
               id="join-chat-btn"
               type="submit"
               disabled={nickname.trim().length < 2 || loading}
-              className="w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 relative overflow-hidden"
+              className="w-full py-4 rounded-xl font-semibold text-sm transition-all duration-200 relative overflow-hidden mt-4"
               style={{
                 background: nickname.trim().length >= 2
                   ? "linear-gradient(135deg, #6366f1, #8b5cf6)"

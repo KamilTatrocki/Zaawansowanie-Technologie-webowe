@@ -163,7 +163,7 @@ export default function ChatRoom({
   return (
     <div className="flex flex-col h-full flex-1" style={{ background: "var(--bg-primary)", minWidth: 0 }}>
       {/* Room header */}
-      <div className="flex items-center gap-3 px-6 py-4 flex-shrink-0"
+      <div className="flex items-center gap-3 px-8 py-6 flex-shrink-0"
         style={{
           background: "var(--bg-secondary)",
           borderBottom: "1px solid var(--border-subtle)",
@@ -188,7 +188,7 @@ export default function ChatRoom({
       </div>
 
       {/* Messages area */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1" id="messages-container">
+      <div className="flex-1 overflow-y-auto px-8 py-6 space-y-2" id="messages-container">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center py-16">
             <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4"
@@ -211,7 +211,7 @@ export default function ChatRoom({
 
       {/* Image preview */}
       {imagePreview && (
-        <div className="px-4 py-2 flex-shrink-0"
+        <div className="px-8 py-4 flex-shrink-0"
           style={{ borderTop: "1px solid var(--border-subtle)", background: "var(--bg-secondary)" }}>
           <div className="relative inline-block">
             <img src={imagePreview} alt="preview" className="h-24 rounded-xl object-cover"
@@ -228,9 +228,9 @@ export default function ChatRoom({
       )}
 
       {/* Input area */}
-      <div className="flex-shrink-0 px-4 py-4"
+      <div className="flex-shrink-0 px-8 py-6"
         style={{ borderTop: "1px solid var(--border-subtle)", background: "var(--bg-secondary)" }}>
-        <div className="flex items-end gap-3 rounded-2xl px-4 py-3"
+        <div className="flex items-end gap-3 rounded-2xl px-6 py-4"
           style={{
             background: "rgba(255,255,255,0.04)",
             border: "1px solid rgba(99,102,241,0.25)",
