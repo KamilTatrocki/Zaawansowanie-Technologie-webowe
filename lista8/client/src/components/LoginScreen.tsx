@@ -19,11 +19,11 @@ export default function LoginScreen({ onJoin, error, loading }) {
   const initials = nickname.trim() ? nickname.trim()[0].toUpperCase() : "?";
 
   return (
-    <div className="flex items-center justify-center h-full w-full relative overflow-hidden"
+    <div className="h-full w-full relative overflow-y-auto overflow-x-hidden"
       style={{ background: "var(--bg-primary)" }}>
 
       {/* Animated background blobs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full opacity-20 blur-3xl"
           style={{ background: "radial-gradient(circle, #6366f1, transparent)" }} />
         <div className="absolute -bottom-40 -right-40 w-96 h-96 rounded-full opacity-20 blur-3xl"
@@ -32,8 +32,9 @@ export default function LoginScreen({ onJoin, error, loading }) {
           style={{ background: "radial-gradient(circle, #ec4899, transparent)" }} />
       </div>
 
-      {/* Login card */}
-      <div className="relative z-10 w-full max-w-md mx-4 rounded-2xl overflow-hidden"
+      <div className="min-h-full w-full flex items-center justify-center py-8 px-4">
+        {/* Login card */}
+        <div className="relative z-10 w-full max-w-md rounded-2xl overflow-hidden"
         style={{
           background: "linear-gradient(135deg, rgba(26,26,48,0.95), rgba(30,30,53,0.95))",
           border: "1px solid rgba(99,102,241,0.3)",
@@ -168,6 +169,7 @@ export default function LoginScreen({ onJoin, error, loading }) {
             </button>
           </form>
         </div>
+      </div>
       </div>
     </div>
   );
