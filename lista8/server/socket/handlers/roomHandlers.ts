@@ -7,7 +7,6 @@ export default function (io: any, socket: any) {
     socket.leave(roomId);
     if (user.currentRoom === roomId) user.currentRoom = null;
 
-    // Remove from typing
     const typingUsers = typingService.stopTyping(roomId, user.nickname);
     socket.to(roomId).emit("typing:update", typingUsers);
 
@@ -23,7 +22,7 @@ export default function (io: any, socket: any) {
 
     if (!roomService.roomExists(roomId)) return callback?.({ error: "Room not found" });
 
-    // Leave previous room
+
     if (user.currentRoom && user.currentRoom !== roomId) {
       leaveRoom(user, user.currentRoom);
     }
@@ -41,9 +40,9 @@ export default function (io: any, socket: any) {
     });
 
     const msg = roomService.addSystemMessage(roomId, `${user.nickname} joined the room`);
-    socket.to(roomId).emit("message:new", msg);
-    io.to(roomId).emit("room:members", roomService.getUsersInRoom(io, roomId));
-    io.emit("rooms:update", roomService.getRoomList(io));
+    socket.to(roomId).emit("message:new", msg); //do wszystkich w pokoju oprocz nadawca /kamil
+    io.to(roomId).emit("room:members", roomService.getUsersInRoom(io, roomId));  //caly pokoj /kamil
+    io.emit("rooms:update", roomService.getRoomList(io));  //caly serwer /kamil
 
     console.log(`${user.nickname} joined room: ${room.name}`);
   });
