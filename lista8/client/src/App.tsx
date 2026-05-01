@@ -16,11 +16,10 @@ export default function App() {
   const [members, setMembers] = useState([]);
   const [typingUsers, setTypingUsers] = useState([]);
 
-  // Refs for stable callbacks
   const currentRoomRef = useRef(null);
   currentRoomRef.current = currentRoom;
 
-  // ── Socket lifecycle ──────────────────────────────────────────────────────
+
   useEffect(() => {
     socket.connect();
 
@@ -37,26 +36,26 @@ export default function App() {
     };
   }, []);
 
-  // ── Global socket listeners ───────────────────────────────────────────────
+
   useEffect(() => {
-    // Rooms list updated
+
     socket.on("rooms:update", (updatedRooms) => {
       setRooms(updatedRooms);
     });
 
-    // New message in current room
+
     socket.on("message:new", (msg) => {
       if (msg.roomId === currentRoomRef.current?.id) {
         setMessages((prev) => [...prev, msg]);
       }
     });
 
-    // Members of current room updated
+
     socket.on("room:members", (updatedMembers) => {
       setMembers(updatedMembers);
     });
 
-    // Typing users updated
+
     socket.on("typing:update", (users) => {
       setTypingUsers(users);
     });
@@ -67,9 +66,9 @@ export default function App() {
       socket.off("room:members");
       socket.off("typing:update");
     };
-  }, []); // intentionally empty – uses ref for currentRoom
+  }, []);
 
-  // ── Actions ───────────────────────────────────────────────────────────────
+
   const handleLogin = useCallback((nickname, avatar) => {
     setLoginLoading(true);
     setLoginError("");
@@ -130,7 +129,7 @@ export default function App() {
     });
   }, [handleJoinRoom]);
 
-  // ── Render ─────────────────────────────────────────────────────────────────
+
   if (phase === "login") {
     return (
       <LoginScreen
