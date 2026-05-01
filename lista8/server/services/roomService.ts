@@ -23,7 +23,7 @@ function getUsersInRoom(io: any, roomId: string) {
   const socketIds = io.sockets.adapter.rooms.get(roomId) || new Set<string>();
   return Array.from(socketIds)
     .map((id: any) => store.users.get(id as string))
-    .filter(Boolean)
+    .filter(Boolean) //wyrzuca tych co maja NULLA / Kamil
     .map((u: any) => ({ id: u.id, nickname: u.nickname, avatar: u.avatar }));
 }
 
