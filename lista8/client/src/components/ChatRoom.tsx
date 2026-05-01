@@ -25,12 +25,12 @@ export default function ChatRoom({
   const typingTimeoutRef = useRef(null);
   const isTypingRef = useRef(false);
 
-  // Auto scroll to bottom
+  // scroll na sam dol /kamil
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, typingUsers]);
 
-  // Focus input when room changes
+  // Focusowanie inputu jak zmieniamy pokój /kamil
   useEffect(() => {
     inputRef.current?.focus();
     setText("");

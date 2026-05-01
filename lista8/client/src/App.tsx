@@ -5,14 +5,14 @@ import Sidebar from "./components/Sidebar";
 import ChatRoom from "./components/ChatRoom";
 
 export default function App() {
-  const [phase, setPhase] = useState("login"); // "login" | "chat"
+  const [phase, setPhase] = useState("login"); // "login" | "chat" /kamil
   const [loginError, setLoginError] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
 
   const [currentUser, setCurrentUser] = useState(null);
   const [rooms, setRooms] = useState([]);
   const [currentRoom, setCurrentRoom] = useState(null);
-  const [messages, setMessages] = useState([]); // for current room
+  const [messages, setMessages] = useState([]);
   const [members, setMembers] = useState([]);
   const [typingUsers, setTypingUsers] = useState([]);
 

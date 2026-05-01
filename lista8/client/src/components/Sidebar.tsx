@@ -49,7 +49,7 @@ export default function Sidebar({
             style={{ color: "var(--text-muted)", background: "transparent" }}
             title="Create room"
           >
-            {showCreate ? "×" : "+"}
+            {showCreate ? "X" : "+"}
           </button>
         </div>
 
