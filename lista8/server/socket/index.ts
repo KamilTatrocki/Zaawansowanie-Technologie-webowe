@@ -1,12 +1,12 @@
 const userService = require("../services/userService");
 const roomService = require("../services/roomService");
 
-const registerUserHandlers = require("./handlers/userHandlers");
-const registerRoomHandlers = require("./handlers/roomHandlers");
-const registerMessageHandlers = require("./handlers/messageHandlers");
-const registerTypingHandlers = require("./handlers/typingHandlers");
+import registerUserHandlers from "./handlers/userHandlers";
+import registerRoomHandlers from "./handlers/roomHandlers";
+import registerMessageHandlers from "./handlers/messageHandlers";
+import registerTypingHandlers from "./handlers/typingHandlers";
 
-module.exports = function (io) {
+export default function (io: any) {
   io.on("connection", (socket) => {
     console.log(`Socket connected: ${socket.id}`);
 

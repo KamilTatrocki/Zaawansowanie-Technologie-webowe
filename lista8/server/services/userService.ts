@@ -36,4 +36,4 @@ function removeUser(socketId) {
   store.users.delete(socketId);
 }
 
-module.exports = { isNicknameTaken, registerUser, getUser, removeUser };
+export { isNicknameTaken, registerUser, getUser, removeUser };

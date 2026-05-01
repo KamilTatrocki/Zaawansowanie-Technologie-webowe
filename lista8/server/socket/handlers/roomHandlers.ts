@@ -2,7 +2,7 @@ const userService = require("../../services/userService");
 const roomService = require("../../services/roomService");
 const typingService = require("../../services/typingService");
 
-module.exports = function (io, socket) {
+export default function (io: any, socket: any) {
   function leaveRoom(user, roomId) {
     socket.leave(roomId);
     if (user.currentRoom === roomId) user.currentRoom = null;

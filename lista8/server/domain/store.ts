@@ -17,4 +17,4 @@ defaultRooms.forEach((r) => {
   typingUsers.set(r.id, new Set());
 });
 
-module.exports = { rooms, users, typingUsers };
+export { rooms, users, typingUsers };

@@ -3,7 +3,7 @@ const roomService = require("../../services/roomService");
 const messageService = require("../../services/messageService");
 const typingService = require("../../services/typingService");
 
-module.exports = function (io, socket) {
+export default function (io: any, socket: any) {
   socket.on("message:send", ({ roomId, text, imageUrl }, callback) => {
     const user = userService.getUser(socket.id);
     if (!user) return callback?.({ error: "Not authenticated" });

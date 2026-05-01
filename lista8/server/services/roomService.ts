@@ -50,7 +50,7 @@ function getRecentMessages(roomId, limit = 100) {
   return store.rooms.get(roomId)?.messages.slice(-limit) || [];
 }
 
-module.exports = {
+export {
   getRoomList,
   getRoom,
   roomExists,

@@ -4,4 +4,4 @@ const corsOptions = {
   origin: localhostOrigin,
 };
 
-module.exports = { localhostOrigin, corsOptions };
+export { localhostOrigin, corsOptions };

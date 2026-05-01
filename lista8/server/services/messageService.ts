@@ -10,4 +10,4 @@ function buildMessage({ text, imageUrl, roomId, sender }) {
   });
 }
 
-module.exports = { buildMessage };
+export { buildMessage };

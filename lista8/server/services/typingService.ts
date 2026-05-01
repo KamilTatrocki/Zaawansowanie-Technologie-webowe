@@ -16,4 +16,4 @@ function stopTyping(roomId, nickname) {
   return [];
 }
 
-module.exports = { startTyping, stopTyping };
+export { startTyping, stopTyping };

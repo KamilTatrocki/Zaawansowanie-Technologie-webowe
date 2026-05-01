@@ -2,7 +2,7 @@ const userService = require("../../services/userService");
 const roomService = require("../../services/roomService");
 const typingService = require("../../services/typingService");
 
-module.exports = function (io, socket) {
+export default function (io: any, socket: any) {
   socket.on("typing:start", (roomId) => {
     const user = userService.getUser(socket.id);
     if (!user || !roomService.roomExists(roomId)) return;
