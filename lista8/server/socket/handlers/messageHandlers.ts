@@ -40,7 +40,6 @@ export default function (io: any, socket: any) {
 
     roomService.addMessage(roomId, msg);
 
-    // Stop typing for this user
     const typingUsers = typingService.stopTyping(roomId, user.nickname);
     socket.to(roomId).emit("typing:update", typingUsers);
 

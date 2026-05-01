@@ -68,5 +68,5 @@ export default function (io: any, socket: any) {
     console.log(`Room created: ${room.name} by ${user.nickname}`);
   });
 
-  return { leaveRoom }; // Export for disconnect handler
+  return { leaveRoom };
 };
