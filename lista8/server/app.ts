@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import { corsOptions } from "./config/cors";
 import { uploadsDir } from "./config/multer";
-import uploadRoutes from "./routes/uploadRoutes";
 
 const app = express();
 
@@ -13,6 +12,6 @@ app.use(express.json());
 app.use("/uploads", express.static(uploadsDir));
 
 // Routes
-app.use("/upload", uploadRoutes);
+// (Other routes would go here if they existed)
 
 export default app;

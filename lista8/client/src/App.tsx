@@ -103,12 +103,12 @@ export default function App() {
     });
   }, []);
 
-  const handleSendMessage = useCallback((text, imageUrl) => {
+  const handleSendMessage = useCallback((text, image) => {
     if (!currentRoomRef.current) return;
     socket.emit("message:send", {
       roomId: currentRoomRef.current.id,
       text,
-      imageUrl,
+      image,
     });
   }, []);
 

@@ -99,17 +99,14 @@ export default function ChatRoom({
     if (imageFile) {
       setUploading(true);
       try {
-        const formData = new FormData();
-        formData.append("image", imageFile);
-        const res = await fetch("http://localhost:3001/upload", {
-          method: "POST",
-          body: formData,
+        const buffer = await imageFile.arrayBuffer();
+        onSendMessage(trimmed, {
+          buffer,
+          name: imageFile.name,
+          type: imageFile.type
         });
-        const data = await res.json();
-        if (data.error) throw new Error(data.error);
-        onSendMessage(trimmed, data.imageUrl);
-      } catch (err) {
-        setImageError("Upload failed: " + err.message);
+      } catch (err: any) {
+        setImageError("Upload failed: " + (err.message || "Unknown error"));
         setUploading(false);
         return;
       }
