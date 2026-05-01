@@ -1,4 +1,4 @@
-const store = require("../domain/store");
+import * as store from "../domain/store";
 
 function startTyping(roomId, nickname) {
   const typingSet = store.typingUsers.get(roomId) || new Set();

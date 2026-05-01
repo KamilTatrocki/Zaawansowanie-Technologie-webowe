@@ -1,4 +1,4 @@
-const store = require("../domain/store");
+import * as store from "../domain/store";
 import { Room, SystemMessage } from "../domain/classes";
 
 function getRoomList(io: any) {
@@ -20,9 +20,9 @@ function roomExists(roomId) {
 }
 
 function getUsersInRoom(io: any, roomId: string) {
-  const socketIds = io.sockets.adapter.rooms.get(roomId) || new Set();
+  const socketIds = io.sockets.adapter.rooms.get(roomId) || new Set<string>();
   return Array.from(socketIds)
-    .map((id) => store.users.get(id))
+    .map((id: any) => store.users.get(id as string))
     .filter(Boolean)
     .map((u: any) => ({ id: u.id, nickname: u.nickname, avatar: u.avatar }));
 }

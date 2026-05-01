@@ -1,11 +1,11 @@
-const userService = require("../../services/userService");
-const roomService = require("../../services/roomService");
-const messageService = require("../../services/messageService");
-const typingService = require("../../services/typingService");
-const fs = require("fs");
-const path = require("path");
-const { v4: uuidv4 } = require("uuid");
-const { uploadsDir } = require("../../config/uploads");
+import * as userService from "../../services/userService";
+import * as roomService from "../../services/roomService";
+import * as messageService from "../../services/messageService";
+import * as typingService from "../../services/typingService";
+import fs from "fs";
+import path from "path";
+import { v4 as uuidv4 } from "uuid";
+import { uploadsDir } from "../../config/uploads";
 
 export default function (io: any, socket: any) {
   socket.on("message:send", ({ roomId, text, image }, callback) => {

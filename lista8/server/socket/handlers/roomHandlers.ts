@@ -1,6 +1,6 @@
-const userService = require("../../services/userService");
-const roomService = require("../../services/roomService");
-const typingService = require("../../services/typingService");
+import * as userService from "../../services/userService";
+import * as roomService from "../../services/roomService";
+import * as typingService from "../../services/typingService";
 
 export default function (io: any, socket: any) {
   function leaveRoom(user, roomId) {

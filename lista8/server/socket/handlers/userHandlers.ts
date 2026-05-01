@@ -1,5 +1,5 @@
-const userService = require("../../services/userService");
-const roomService = require("../../services/roomService");
+import * as userService from "../../services/userService";
+import * as roomService from "../../services/roomService";
 
 export default function (io: any, socket: any) {
   socket.on("user:join", ({ nickname, avatar }, callback) => {

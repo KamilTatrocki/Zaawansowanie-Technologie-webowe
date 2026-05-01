@@ -1,4 +1,4 @@
-const store = require("../domain/store");
+import * as store from "../domain/store";
 import { User } from "../domain/classes";
 
 const AVATAR_COLORS = [
