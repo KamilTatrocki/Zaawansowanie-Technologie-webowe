@@ -8,10 +8,8 @@ const app = express();
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Serve uploaded images statically
 app.use("/uploads", express.static(uploadsDir));
 
-// Routes
-// (Other routes would go here if they existed)
+
 
 export default app;
