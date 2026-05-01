@@ -5,7 +5,7 @@ const typingService = require("../../services/typingService");
 const fs = require("fs");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
-const { uploadsDir } = require("../../config/multer");
+const { uploadsDir } = require("../../config/uploads");
 
 export default function (io: any, socket: any) {
   socket.on("message:send", ({ roomId, text, image }, callback) => {

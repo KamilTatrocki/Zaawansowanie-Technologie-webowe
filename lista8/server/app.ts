@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { corsOptions } from "./config/cors";
-import { uploadsDir } from "./config/multer";
+import { uploadsDir } from "./config/uploads";
 
 const app = express();
 
