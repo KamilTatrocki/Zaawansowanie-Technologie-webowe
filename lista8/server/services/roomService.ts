@@ -1,0 +1,62 @@
+import * as store from "../domain/store";
+import { Room, SystemMessage } from "../domain/classes";
+
+function getRoomList(io: any) {
+  return Array.from(store.rooms.values()).map((r: any) => ({
+    id: r.id,
+    name: r.name,
+    description: r.description,
+    createdAt: r.createdAt,
+    memberCount: io.sockets.adapter.rooms.get(r.id)?.size || 0,
+  }));
+}
+
+function getRoom(roomId) {
+  return store.rooms.get(roomId);
+}
+
+function roomExists(roomId) {
+  return store.rooms.has(roomId);
+}
+
+function getUsersInRoom(io: any, roomId: string) {
+  const socketIds = io.sockets.adapter.rooms.get(roomId) || new Set<string>();
+  return Array.from(socketIds)
+    .map((id: any) => store.users.get(id as string))
+    .filter(Boolean) //wyrzuca tych co maja NULLA / Kamil
+    .map((u: any) => ({ id: u.id, nickname: u.nickname, avatar: u.avatar }));
+}
+
+function createNewRoom(id, name, description, createdBy) {
+  const room = new Room(id, name, description, createdBy);
+  store.rooms.set(id, room);
+  store.typingUsers.set(id, new Set());
+  return room;
+}
+
+function addSystemMessage(roomId, text) {
+  const msg = new SystemMessage(roomId, text);
+  const room = store.rooms.get(roomId);
+  if (room) room.messages.push(msg);
+  return msg;
+}
+
+function addMessage(roomId, msg) {
+  const room = store.rooms.get(roomId);
+  if (room) room.messages.push(msg);
+}
+
+function getRecentMessages(roomId, limit = 100) {
+  return store.rooms.get(roomId)?.messages.slice(-limit) || [];
+}
+
+export {
+  getRoomList,
+  getRoom,
+  roomExists,
+  getUsersInRoom,
+  createNewRoom,
+  addSystemMessage,
+  addMessage,
+  getRecentMessages,
+};

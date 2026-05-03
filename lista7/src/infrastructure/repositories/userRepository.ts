@@ -1,10 +1,7 @@
-import { PrismaClient, Prisma } from '../../generated/prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
+import { Prisma } from '../../../generated/prisma/client';
 import { GraphQLError } from 'graphql';
-import { toEmail, toInt } from './validation'
-
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
-const prisma = new PrismaClient({ adapter });
+import { toEmail, toInt } from '../../domain/validation';
+import { prisma } from '../db/prismaClient';
 
 async function getUserById(parent, { id }, context, info) {
     const numericId = toInt(id)

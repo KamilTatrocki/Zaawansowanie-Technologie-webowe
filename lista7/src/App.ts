@@ -3,7 +3,10 @@ import { createYoga } from 'graphql-yoga'
 import { loadSchemaSync } from '@graphql-tools/load'
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { addResolversToSchema } from '@graphql-tools/schema'
-import { Query, User, TodoItem, Mutation } from './backend/services'
+import { Query } from './application/resolvers/query'
+import { Mutation } from './application/resolvers/mutation'
+import { User } from './application/resolvers/user'
+import { TodoItem } from './application/resolvers/todoItem'
 
 
 const schema = loadSchemaSync('./src/schema.graphql', {
